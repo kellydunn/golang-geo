@@ -8,8 +8,8 @@ import (
 
 // Represents a Physical Point in geographic notation [lat, lng]
 type Point struct {
-	lat float64
-	lng float64
+	lat float32
+	lng float32
 }
 
 // The Mapper interface

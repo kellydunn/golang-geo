@@ -36,4 +36,7 @@ func main() {
 }
 ```
 
+# roadmap
 
+  - Declare your mapping service / api keys and consume Geo data as needed.
+  - Determine if useful to provide a database abstraction layer for convienence 
