@@ -45,11 +45,26 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	return &Point{lat: lat2, lng: lng2}
 }
 
+// Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
+// Calculates the Haversine distance between two points.
 // @param [*Point].  The destination point.
 // @return [float64].  The distance between the origin point and the destination point.
-func (p * Point) DistanceFromPoint(p2 * Point) (float64) {
-	// TODO Implement
-	return 0.0
+func (p * Point) Haversine(p2 * Point) (float64) {
+	r := 6371; // km
+	dLat := (p2.lat-p.lat) * (math.Pi / 180.0)
+	dLon := (p2.lng-p.lng) * (math.Pi / 180.0)
+	
+	lat1 := p.lat * (math.Pi / 180.0)
+	lat2 := p2.lat * (math.Pi / 180.0)
+
+	a1 := math.Sin(dLat/2) * math.Sin(dLat/2) 
+	a2 := math.Sin(dLon/2) * math.Sin(dLon/2) * math.Cos(lat1) * math.Cos(lat2); 
+	
+	a := a1 + a2
+	
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a)); 
+	
+	return r * c;
 }
 
 // The Mapper interface
