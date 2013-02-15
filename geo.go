@@ -8,8 +8,8 @@ import (
 
 // Represents a Physical Point in geographic notation [lat, lng]
 type Point struct {
-	lat float32
-	lng float32
+	lat float64
+	lng float64
 }
 
 // The Mapper interface
@@ -30,7 +30,7 @@ type SQLMapper struct {
 	sqlConn *sql.DB
 }
 
-var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: "user=postgres password=*** dbname=points sslmode=require", table: "points", latCol: "lat", lngCol: "lng"}
+var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: "user=postgres password=*** dbname=points sslmode=disable", table: "points", latCol: "lat", lngCol: "lng"}
 
 // geo.HandleWithSQL
 func HandleWithSQL() (*SQLMapper, error) {
