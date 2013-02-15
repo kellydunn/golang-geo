@@ -39,6 +39,9 @@ func main() {
 
      // You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
      p2 := p.PointAtDistanceAndBearing(7.9, 45)
+
+     // You can also find the Haversine Distance between two points
+     distance := p.Haversine(p2)
 }
 ```
 
