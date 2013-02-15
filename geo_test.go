@@ -11,7 +11,7 @@ func FlushTestDB(s *SQLMapper) {
 
 // @spec:
 //   - Should correctly return a set of [lat, lng] within a certain radius
-func TestWithin(t *testing.T) {
+func TestPointsWithinRadius(t *testing.T) {
 	s, _ := HandleWithSQL()
 
 	// SFO
@@ -28,7 +28,7 @@ func TestWithin(t *testing.T) {
 
 	}
 
-	res, err := s.Within(origin, 8)
+	res, err := s.PointsWithinRadius(origin, 8)
 	if err != nil {
 		panic(err)
 	}

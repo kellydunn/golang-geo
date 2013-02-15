@@ -45,9 +45,16 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	return &Point{lat: lat2, lng: lng2}
 }
 
+// @param [*Point].  The destination point.
+// @return [float64].  The distance between the origin point and the destination point.
+func (p * Point) DistanceFromPoint(p2 * Point) (float64) {
+	// TODO Implement
+	return 0.0
+}
+
 // The Mapper interface
 type Mapper interface {
-	Within(p *Point, radius int) bool
+	PointsWithinRadius(p *Point, radius int) bool
 }
 
 type SQLConf struct {
@@ -83,7 +90,11 @@ func HandleWithSQL() (*SQLMapper, error) {
 }
 
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html
-func (s *SQLMapper) Within(p *Point, radius float32) (*sql.Rows, error) {
+// Uses SQL to retrieve all points within the radius of the origin point passed in.
+// @param [*Point]. The origin point.
+// @param [float64]. The radius (in meters) in which to search for points from the Origin.
+// TODO Potentially fallback to PostgreSQL's earthdistance module: http://www.postgresql.org/docs/8.3/static/earthdistance.html
+func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, error) {
 	select_str := fmt.Sprintf("SELECT * FROM %s a", s.conf.table)
 	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)
 	lng1 := fmt.Sprintf("cos(radians(%f)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(%f))", p.lat, p.lng)

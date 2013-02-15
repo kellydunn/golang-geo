@@ -31,12 +31,19 @@ func main() {
      ...
 
      // Find all of the points of interest that are in a 15 mile radius of [42.333, 121,111]
+     // Granted, you could also probably use PostgreSQL's built in earthdistance module :P http://www.postgresql.org/docs/8.3/static/earthdistance.html
      p := &Point{lat: 42.3333, lng: 121.111}
-     res, _ := db.Within(p, 15)
+     res, _ := db.PointsWithinRadius(p, 15)
+
+     ...
+
+     // You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
+     p2 := p.PointAtDistanceAndBearing(7.9, 45)
 }
 ```
 
 # roadmap
-
+  - Earth Distance between points
+  - Redis Mapper
   - Declare your mapping service / api keys and consume Geo data as needed.
   - Determine if useful to provide a database abstraction layer for convienence 
