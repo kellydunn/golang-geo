@@ -47,9 +47,13 @@ func HandleWithSQL() (*SQLMapper, error) {
 }
 
 func (s *SQLMapper) Within(p *Point, radius float32) (*sql.Rows, error) {
-	// Taken from : http://www.movable-type.co.uk/scripts/latlong.html
-	query := fmt.Sprintf("SELECT * FROM %s a WHERE (acos(sin(a.%s * 0.0175) * sin(%f * 0.0175) + cos(a.%s * 0.0175) * cos(%f * 0.0175) * cos((%f * 0.0175) - (a.%s * 0.0175))) * 3959 <= %f) ", s.conf.table, s.conf.latCol, p.lat, s.conf.latCol, p.lat, p.lng, s.conf.lngCol, radius)
-
+	// Taken from : http://www.movable-type.co.uk/scripts/latlong-db.html
+	select_str := fmt.Sprintf("SELECT * FROM %s a", s.conf.table)
+	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)
+	lng1 := fmt.Sprintf("cos(radians(%f)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(%f))", p.lat, p.lng)
+	where_str := fmt.Sprintf("WHERE acos(%s + %s) * %f <= %f", lat1, lng1, 6356.7523, radius)
+	query := fmt.Sprintf("%s %s", select_str, where_str)
+	
 	res, err := s.sqlConn.Query(query)
 	if err != nil {
 		panic(err)
