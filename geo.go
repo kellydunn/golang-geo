@@ -23,37 +23,47 @@ func GetSQLConf() (*SQLConf, error) {
 	if err != nil && os.IsNotExist(err) {
 		return DefaultSQLConf, nil	
 	} else {
+
+		// Defaults to development environment, you can override by changing the $GO_ENV variable:
+		// `$ export GO_ENV=environment` (where environment can be "production", "test", "staging", etc.
+		// TODO Potentially find a better solution to handling environments
+		// https://github.com/adeven/goenv ?
+		goEnv := os.Getenv("GO_ENV")
+		if goEnv == "" {
+			goEnv = "development"
+		}
+
 		config, readYamlErr := yaml.ReadFile(configPath)
 		if readYamlErr == nil {
 			
 			// TODO Refactor this into a more generic method of retrieving info
 			
 			// Get driver
-			driver, driveError := config.Get(fmt.Sprintf("%s.driver", "development"))
+			driver, driveError := config.Get(fmt.Sprintf("%s.driver", goEnv))
 			if driveError != nil {
 				return nil, driveError
 			}
 
 			// Get openStr
-			openStr, openStrError := config.Get(fmt.Sprintf("%s.openStr", "development"))
+			openStr, openStrError := config.Get(fmt.Sprintf("%s.openStr", goEnv))
 			if openStrError != nil {
 				return nil,openStrError
 			}
 
 			// Get table
-			table, tableError := config.Get(fmt.Sprintf("%s.table", "development"))
+			table, tableError := config.Get(fmt.Sprintf("%s.table", goEnv))
 			if tableError != nil {
 				return nil, tableError
 			}
 
 			// Get latCol
-			latCol, latColError := config.Get(fmt.Sprintf("%s.latCol", "development"))
+			latCol, latColError := config.Get(fmt.Sprintf("%s.latCol", goEnv))
 			if latColError != nil {
 				return nil, latColError
 			}			
 
 			// Get lngCol
-			lngCol, lngColError := config.Get(fmt.Sprintf("%s.lngCol", "development"))
+			lngCol, lngColError := config.Get(fmt.Sprintf("%s.lngCol", goEnv))
 			if lngColError != nil {
 				return nil, lngColError
 			}		
