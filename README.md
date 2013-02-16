@@ -44,7 +44,7 @@ func main() {
      
      // Inspect the point!
      fmt.Printf("LAT: %f\n", p2.lat)
-     fmt.Printf("LNG: %f\n", p2.lat)
+     fmt.Printf("LNG: %f\n", p2.lng)
 
      ...
 
@@ -59,7 +59,7 @@ func main() {
 # notes
 
   - `golang-geo` currently only uses metric measurements to do calculations
-  - You do not _need_ to use the SQL in order to use this library.  Instead, you may import it and just use it on `Point` specific operations like `Haversine` and `PointAtDistanceAndBearing`
+  - You do not _need_ to use SQL in order to use this library.  Instead, you may import it and just use it on `Point` specific operations like `Haversine` and `PointAtDistanceAndBearing`
   - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
 
 # SQL Configuration
