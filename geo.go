@@ -141,11 +141,12 @@ func (p * Point) GreatCircleDistance(p2 * Point) (float64) {
 	return r * c;
 }
 
-// The Mapper interface
+// Provides a Queryable interface for finding Points via some Data Storage mechanism
 type Mapper interface {
 	PointsWithinRadius(p *Point, radius int) bool
 }
 
+// Provides the configuration to query the database as necessary
 type SQLConf struct {
 	driver  string
 	openStr string
@@ -154,8 +155,7 @@ type SQLConf struct {
 	lngCol  string
 }
 
-// A Mapper that uses Standard SQL Syntax 
-// to perform intersting geo-related mapping functions and queries
+// A Mapper that uses Standard SQL Syntax to perform mapping functions and queries
 type SQLMapper struct {
 	conf    *SQLConf
 	sqlConn *sql.DB
@@ -200,29 +200,3 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 
 	return res, err
 }
-
-/*
-TODO Incoporate into README
-func main() {
-	s, err := HandleWithSQL()
-	if err != nil {
-		panic(err)
-	}
-
-	p := &Point{lat: 42.333, lng: 121.111}
-	rows, err2 := s.Within(p, 15)
-	if err2 != nil {
-		panic(err)
-	}
-
-	for rows.Next() {
-		var lat float32
-		var lng float32
-		err = rows.Scan(&lat, &lng)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Printf("[%f, %f]", lat, lng)
-	}
-}
-*/

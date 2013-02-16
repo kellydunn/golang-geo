@@ -3,19 +3,16 @@ package geo
 import (
 	"fmt"
 	"testing"
+	"strconv"
+	"database/sql"
 )
 
-func FlushTestDB(s *SQLMapper) {
-	s.sqlConn.Exec("DELETE FROM points;")
-}
-
-//func TestPointAtDistanceAndBearing(t *testing.T) {
-	// TODO Implement
-//}
-
-// @spec:
+// TODO This paticular test is just one big integration for using the entire library.
+//      Should seperate this out into sperate tests once I determine an effective
+//      And reasonable way to test formulae and configuration handling.
+// @spec: golang-geo should 
 //   - Should correctly return a set of [lat, lng] within a certain radius
-func TestPointsWithinRadius(t *testing.T) {
+func TestFullIntegration(t *testing.T) {
 	s, _ := HandleWithSQL()
 
 	// SFO
@@ -27,8 +24,18 @@ func TestPointsWithinRadius(t *testing.T) {
 		in_point := origin.PointAtDistanceAndBearing(7.9, bearing)
 		s.sqlConn.Exec(fmt.Sprintf("INSERT INTO points(lat, lng) VALUES(%f, %f);", in_point.lat, in_point.lng))
 
+		gcd := RoundFloat(in_point.GreatCircleDistance(origin), 2)
+		if (gcd != 7.9) {
+			t.Error("ERROR: Expected certain Great Circle Distance", gcd)
+		}
+
 		out_point := origin.PointAtDistanceAndBearing(8.1, bearing)
 		s.sqlConn.Exec(fmt.Sprintf("INSERT INTO points(lat, lng) VALUES(%f, %f);", out_point.lat, out_point.lng))
+
+		gcd = RoundFloat(out_point.GreatCircleDistance(origin), 2)
+		if (gcd != 8.1) {
+			t.Error("ERROR: Expected certain Great Circle Distance", gcd)
+		}
 
 	}
 
@@ -38,11 +45,7 @@ func TestPointsWithinRadius(t *testing.T) {
 		panic(err)
 	}
 
-	count := 0
-	// TODO Am I missing a res.Len()?
-	for res.Next() {
-		count += 1
-	}
+	count := ResultsCount(res)
 
 	if count < 360 {
 		t.Error("Expected 360 results to be within 8km of origin.  Got", count)
@@ -54,15 +57,38 @@ func TestPointsWithinRadius(t *testing.T) {
 		panic(err2)
 	}
 
-	count2 := 0
-	// TODO Am I missing a res.Len()?
-	for res2.Next() {
-		count2 +=1
-	}
+	count = ResultsCount(res2)
 
-	if count2 < 720 {
+	if count < 720 {
 		t.Error("Expected 720 results to be within 9km of origin.  Got", count)
 	}
 
+	// Clear Test DB
 	FlushTestDB(s)
+}
+
+// TODO Test sql configuration
+// TODO Test Great Circle Distance
+// TODO Test Point At Distance And Bearing
+
+func FlushTestDB(s *SQLMapper) {
+	s.sqlConn.Exec("DELETE FROM points;")
+}
+
+func ResultsCount(res *sql.Rows) int {
+	count := 0
+
+	// TODO Am I missing a res.Len()?
+	for res.Next() {
+		count += 1
+	}
+
+	return count
+}
+
+// Taken from: http://play.golang.org/p/cwJj8ZJUhl
+func RoundFloat(x float64, prec int) float64 {
+	frep := strconv.FormatFloat(x, 'g', prec, 64)
+	f, _ := strconv.ParseFloat(frep, 64)
+	return f
 }
