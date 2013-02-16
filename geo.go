@@ -123,7 +123,7 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 // Calculates the Haversine distance between two points.
 // @param [*Point].  The destination point.
 // @return [float64].  The distance between the origin point and the destination point.
-func (p * Point) Haversine(p2 * Point) (float64) {
+func (p * Point) GreatCircleDistance(p2 * Point) (float64) {
 	r := 6356.7523; // km
 	dLat := (p2.lat-p.lat) * (math.Pi / 180.0)
 	dLon := (p2.lng-p.lng) * (math.Pi / 180.0)
@@ -185,6 +185,7 @@ func HandleWithSQL() (*SQLMapper, error) {
 // @param [*Point]. The origin point.
 // @param [float64]. The radius (in meters) in which to search for points from the Origin.
 // TODO Potentially fallback to PostgreSQL's earthdistance module: http://www.postgresql.org/docs/8.3/static/earthdistance.html
+// TODO Determine if valuable to just provide an abstract formula and then select accordingly, might be helpful for NOSQL wrapper
 func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, error) {
 	select_str := fmt.Sprintf("SELECT * FROM %s a", s.conf.table)
 	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)

@@ -49,8 +49,8 @@ func main() {
      ...
 
 
-     // You can also find the Haversine Distance between two points
-     distance := p.Haversine(p2)
+     // You can also find the GreatCircleDistance Distance between two points
+     distance := p.GreatCircleDistance(p2)
 
      ...
 }
