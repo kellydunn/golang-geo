@@ -27,7 +27,7 @@ import( _ "github.com/kellydunn/golang-geo")
 
 func main() {
      // Read below for more information on how to configure your SQL setup.
-     db, err := geo.HandleWithSql()
+     db, err := geo.HandleWithSQL()
 
      ...
 
