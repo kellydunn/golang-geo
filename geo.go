@@ -41,7 +41,7 @@ func GetSQLConf() (*SQLConf, error) {
 			}
 
 			// Get table
-			table, tableError := config.Get(fmt.Sprintf("%s.openStr", "development"))
+			table, tableError := config.Get(fmt.Sprintf("%s.table", "development"))
 			if tableError != nil {
 				return nil, tableError
 			}
@@ -51,7 +51,7 @@ func GetSQLConf() (*SQLConf, error) {
 			if latColError != nil {
 				return nil, latColError
 			}			
-			
+
 			// Get lngCol
 			lngCol, lngColError := config.Get(fmt.Sprintf("%s.lngCol", "development"))
 			if lngColError != nil {
