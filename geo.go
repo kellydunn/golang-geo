@@ -5,7 +5,69 @@ import (
 	"fmt"
 	_ "github.com/bmizerany/pq"
 	"math"
+        "github.com/kylelemons/go-gypsy/yaml"
+	"path"
+	"os"
 )
+
+// TODO potentially package into file included with the package
+var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: "user=postgres password=*** dbname=points sslmode=disable", table: "points", latCol: "lat", lngCol: "lng"}
+
+// Attempts to read config/geo.yml, and creates a {SQLConf} as described in the file
+// Returns the DefaultSQLConf if no config/geo.yml is found.
+// @return [*SQLConf].  The SQLConfiguration, as supplied with config/geo.yml
+// @return [Error].  Any error that might occur while grabbing configuration
+func GetSQLConf() (*SQLConf, error) {
+	configPath := path.Join("config/geo.yml")
+	_, err := os.Stat(configPath)
+	if err != nil && os.IsNotExist(err) {
+		return DefaultSQLConf, nil	
+	} else {
+		config, readYamlErr := yaml.ReadFile(configPath)
+		if readYamlErr == nil {
+			
+			// TODO Refactor this into a more generic method of retrieving info
+			
+			// Get driver
+			driver, driveError := config.Get(fmt.Sprintf("%s.driver", "development"))
+			if driveError != nil {
+				return nil, driveError
+			}
+
+			// Get openStr
+			openStr, openStrError := config.Get(fmt.Sprintf("%s.openStr", "development"))
+			if openStrError != nil {
+				return nil,openStrError
+			}
+
+			// Get table
+			table, tableError := config.Get(fmt.Sprintf("%s.openStr", "development"))
+			if tableError != nil {
+				return nil, tableError
+			}
+
+			// Get latCol
+			latCol, latColError := config.Get(fmt.Sprintf("%s.latCol", "development"))
+			if latColError != nil {
+				return nil, latColError
+			}			
+			
+			// Get lngCol
+			lngCol, lngColError := config.Get(fmt.Sprintf("%s.lngCol", "development"))
+			if lngColError != nil {
+				return nil, lngColError
+			}		
+
+			sqlConf := &SQLConf{driver: driver, openStr:openStr, table:table, latCol:latCol, lngCol:lngCol}
+			return sqlConf, nil
+			
+		}
+		
+		return nil, readYamlErr
+	}
+	
+	return nil, err
+}
 
 // Represents a Physical Point in geographic notation [lat, lng]
 type Point struct {
@@ -50,7 +112,7 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 // @param [*Point].  The destination point.
 // @return [float64].  The distance between the origin point and the destination point.
 func (p * Point) Haversine(p2 * Point) (float64) {
-	r := 6371; // km
+	r := 6356.7523; // km
 	dLat := (p2.lat-p.lat) * (math.Pi / 180.0)
 	dLon := (p2.lng-p.lng) * (math.Pi / 180.0)
 	
@@ -87,21 +149,23 @@ type SQLMapper struct {
 	sqlConn *sql.DB
 }
 
-var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: "user=postgres password=*** dbname=points sslmode=disable", table: "points", latCol: "lat", lngCol: "lng"}
-
 // @return [*SQLMapper]. An instantiated SQLMapper struct with the DefaultSQLConf.
 // @return [Error]. Any error that might have occured during instantiating the SQLMapper.  
 func HandleWithSQL() (*SQLMapper, error) {
-	s := &SQLMapper{conf: DefaultSQLConf}
+	sqlConf, sqlConfErr := GetSQLConf()
+	if sqlConfErr == nil {
+		s := &SQLMapper{conf: sqlConf}
+		
+		db, err := sql.Open(s.conf.driver, s.conf.openStr)
+		if err != nil {
+			panic(err)
+		}
 
-	db, err := sql.Open(s.conf.driver, s.conf.openStr)
-	if err != nil {
-		panic(err)
+		s.sqlConn = db
+		return s, err
 	}
 
-	s.sqlConn = db
-
-	return s, err
+	return nil, sqlConfErr
 }
 
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html

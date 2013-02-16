@@ -9,10 +9,9 @@ func FlushTestDB(s *SQLMapper) {
 	s.sqlConn.Exec("DELETE FROM points;")
 }
 
-func TestPointAtDistanceAndBearing(t *testing.T) {
-	origin := &Point{37.619002, -122.37484}
+//func TestPointAtDistanceAndBearing(t *testing.T) {
 	// TODO Implement
-}
+//}
 
 // @spec:
 //   - Should correctly return a set of [lat, lng] within a certain radius
