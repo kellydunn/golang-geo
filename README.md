@@ -88,3 +88,10 @@ Thanks! ｡◕‿◕｡
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
   - Declare your mapping service / api keys for Geocoding purposes
 
+# contributing
+  - Fork
+  - Create a topic branch
+  - Make dem commits!
+  - Write dem tests!
+  - Submit Pull Request once Tests are Passing
+  - do this (づ￣ ³￣)づ
