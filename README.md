@@ -39,14 +39,22 @@ func main() {
 
      // You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
      p2 := p.PointAtDistanceAndBearing(7.9, 45)
+     
+     // Inspect the point!
+     fmt.Printf("LAT: %f\n", p2.lat)
+     fmt.Printf("LNG: %f\n", p2.lat)
+
+     ...
+
 
      // You can also find the Haversine Distance between two points
      distance := p.Haversine(p2)
+
+     ...
 }
 ```
 
 # roadmap
-  - Earth Distance between points
-  - Redis Mapper
+  - Redis / NOSQL Mapper
   - Declare your mapping service / api keys and consume Geo data as needed.
   - Determine if useful to provide a database abstraction layer for convienence 

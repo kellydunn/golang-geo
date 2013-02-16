@@ -80,6 +80,8 @@ func GetSQLConf() (*SQLConf, error) {
 }
 
 // Represents a Physical Point in geographic notation [lat, lng]
+// @field [float64] lat. The geographic latitude representation of this point.
+// @field [float64] lng. The geographic longitude representation of this point.
 type Point struct {
 	lat float64
 	lng float64
