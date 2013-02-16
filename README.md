@@ -16,7 +16,7 @@
 
 Geographical calculations in Go.
 
-Also just an simple experiement for me to play around with in Go.
+Still playing around with the language, seems fun so far! (￣︶￣)♫♪
 
 # usage
 
