@@ -22,8 +22,9 @@ Still playing around with the language, seems fun so far! (￣︶￣)♫♪
 
 Import from github, and get geomancin'
 
+
 ```
-import( _ "github.com/kellydunn/golang-geo")
+import("github.com/kellydunn/golang-geo")
 
 func main() {
      // Read below for more information on how to configure your SQL setup.

@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/bmizerany/pq"
+	"github.com/kylelemons/go-gypsy/yaml"
 	"math"
-        "github.com/kylelemons/go-gypsy/yaml"
-	"path"
 	"os"
+	"path"
 )
 
 // TODO potentially package into file included with the package
@@ -21,7 +21,7 @@ func GetSQLConf() (*SQLConf, error) {
 	configPath := path.Join("config/geo.yml")
 	_, err := os.Stat(configPath)
 	if err != nil && os.IsNotExist(err) {
-		return DefaultSQLConf, nil	
+		return DefaultSQLConf, nil
 	} else {
 
 		// Defaults to development environment, you can override by changing the $GO_ENV variable:
@@ -35,9 +35,9 @@ func GetSQLConf() (*SQLConf, error) {
 
 		config, readYamlErr := yaml.ReadFile(configPath)
 		if readYamlErr == nil {
-			
+
 			// TODO Refactor this into a more generic method of retrieving info
-			
+
 			// Get driver
 			driver, driveError := config.Get(fmt.Sprintf("%s.driver", goEnv))
 			if driveError != nil {
@@ -47,7 +47,7 @@ func GetSQLConf() (*SQLConf, error) {
 			// Get openStr
 			openStr, openStrError := config.Get(fmt.Sprintf("%s.openStr", goEnv))
 			if openStrError != nil {
-				return nil,openStrError
+				return nil, openStrError
 			}
 
 			// Get table
@@ -60,22 +60,22 @@ func GetSQLConf() (*SQLConf, error) {
 			latCol, latColError := config.Get(fmt.Sprintf("%s.latCol", goEnv))
 			if latColError != nil {
 				return nil, latColError
-			}			
+			}
 
 			// Get lngCol
 			lngCol, lngColError := config.Get(fmt.Sprintf("%s.lngCol", goEnv))
 			if lngColError != nil {
 				return nil, lngColError
-			}		
+			}
 
-			sqlConf := &SQLConf{driver: driver, openStr:openStr, table:table, latCol:latCol, lngCol:lngCol}
+			sqlConf := &SQLConf{driver: driver, openStr: openStr, table: table, latCol: latCol, lngCol: lngCol}
 			return sqlConf, nil
-			
+
 		}
-		
+
 		return nil, readYamlErr
 	}
-	
+
 	return nil, err
 }
 
@@ -123,22 +123,22 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 // Calculates the Haversine distance between two points.
 // @param [*Point].  The destination point.
 // @return [float64].  The distance between the origin point and the destination point.
-func (p * Point) GreatCircleDistance(p2 * Point) (float64) {
-	r := 6356.7523; // km
-	dLat := (p2.lat-p.lat) * (math.Pi / 180.0)
-	dLon := (p2.lng-p.lng) * (math.Pi / 180.0)
-	
+func (p *Point) GreatCircleDistance(p2 *Point) float64 {
+	r := 6356.7523 // km
+	dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
+	dLon := (p2.lng - p.lng) * (math.Pi / 180.0)
+
 	lat1 := p.lat * (math.Pi / 180.0)
 	lat2 := p2.lat * (math.Pi / 180.0)
 
-	a1 := math.Sin(dLat/2) * math.Sin(dLat/2) 
-	a2 := math.Sin(dLon/2) * math.Sin(dLon/2) * math.Cos(lat1) * math.Cos(lat2); 
-	
+	a1 := math.Sin(dLat/2) * math.Sin(dLat/2)
+	a2 := math.Sin(dLon/2) * math.Sin(dLon/2) * math.Cos(lat1) * math.Cos(lat2)
+
 	a := a1 + a2
-	
-	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a)); 
-	
-	return r * c;
+
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+
+	return r * c
 }
 
 // Provides a Queryable interface for finding Points via some Data Storage mechanism
@@ -167,7 +167,7 @@ func HandleWithSQL() (*SQLMapper, error) {
 	sqlConf, sqlConfErr := GetSQLConf()
 	if sqlConfErr == nil {
 		s := &SQLMapper{conf: sqlConf}
-		
+
 		db, err := sql.Open(s.conf.driver, s.conf.openStr)
 		if err != nil {
 			panic(err)

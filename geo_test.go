@@ -1,10 +1,10 @@
 package geo
 
 import (
-	"fmt"
-	"testing"
-	"strconv"
 	"database/sql"
+	"fmt"
+	"strconv"
+	"testing"
 )
 
 // TODO This paticular test is just one big integration for using the entire library.
@@ -25,7 +25,7 @@ func TestFullIntegration(t *testing.T) {
 		s.sqlConn.Exec(fmt.Sprintf("INSERT INTO points(lat, lng) VALUES(%f, %f);", in_point.lat, in_point.lng))
 
 		gcd := RoundFloat(in_point.GreatCircleDistance(origin), 2)
-		if (gcd != 7.9) {
+		if gcd != 7.9 {
 			t.Error("ERROR: Expected certain Great Circle Distance", gcd)
 		}
 
@@ -33,7 +33,7 @@ func TestFullIntegration(t *testing.T) {
 		s.sqlConn.Exec(fmt.Sprintf("INSERT INTO points(lat, lng) VALUES(%f, %f);", out_point.lat, out_point.lng))
 
 		gcd = RoundFloat(out_point.GreatCircleDistance(origin), 2)
-		if (gcd != 8.1) {
+		if gcd != 8.1 {
 			t.Error("ERROR: Expected certain Great Circle Distance", gcd)
 		}
 
