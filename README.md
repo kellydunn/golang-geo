@@ -31,11 +31,11 @@ func main() {
 
      ...
 
-     // Find all of the points of interest that are in a 15 mile radius of [42.333, 121,111]
+     // Find all of the points of interest that are in a 5km radius of [42.333, 121,111]
      // You could also probably use PostgreSQL's built-in earth distance module :P 
      // http://www.postgresql.org/docs/8.3/static/earthdistance.html
      p := &Point{lat: 42.3333, lng: 121.111}
-     res, _ := db.PointsWithinRadius(p, 15)
+     res, _ := db.PointsWithinRadius(p, 5)
 
      ...
 
@@ -55,6 +55,12 @@ func main() {
      ...
 }
 ```
+
+# notes
+
+  - `golang-geo` currently only uses metric measurements to do calculations
+  - You do not _need_ to use the SQL in order to use this library.  Instead, you may import it and just use it on `Point` specific operations like `Haversine` and `PointAtDistanceAndBearing`
+  - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
 
 # SQL Configuration
 
@@ -80,3 +86,4 @@ Thanks! ｡◕‿◕｡
   - Redis / NOSQL Mapper
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
   - Declare your mapping service / api keys for Geocoding purposes
+
