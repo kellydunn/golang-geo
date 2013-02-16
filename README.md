@@ -14,7 +14,7 @@
 
 # what 
 
-A set of convience interfaces and methods that makes geo-related calculations easier for Go.
+Geographical calculations in Go.
 
 Also just an simple experiement for me to play around with in Go.
 
