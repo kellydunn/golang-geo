@@ -26,12 +26,14 @@ Import from github, and get geomancin'
 import( _ "github.com/kellydunn/golang-geo")
 
 func main() {
+     // Read below for more information on how to configure your SQL setup.
      db, err := geo.HandleWithSql()
 
      ...
 
      // Find all of the points of interest that are in a 15 mile radius of [42.333, 121,111]
-     // Granted, you could also probably use PostgreSQL's built in earthdistance module :P http://www.postgresql.org/docs/8.3/static/earthdistance.html
+     // You could also probably use PostgreSQL's built-in earth distance module :P 
+     // http://www.postgresql.org/docs/8.3/static/earthdistance.html
      p := &Point{lat: 42.3333, lng: 121.111}
      res, _ := db.PointsWithinRadius(p, 15)
 
@@ -54,7 +56,27 @@ func main() {
 }
 ```
 
+# SQL Configuration
+
+Currently, `golang-geo` will attempt to read a `config/geo.yml` file in the root of your project.  If it does not exist, it will use a Default Server configuration with a user named "postgres" with a password "postgres".  If you want to supply a custom database conifguration, feel free to do so by using the template below:
+
+```
+// config/geo.yml
+development:
+  driver: postgres
+  openStr: user=username password=password dbname=points sslmode=disable
+  table: points
+  latCol: lat
+  lngCol: lng
+```
+
+You can currently configure which `table` the SQLMapper queries on, as well as the latitude and columns it uses to do all of its math (`latCol` and `lngCol`, respectively).
+
+Keep in mind that `golang-geo` does not provision your database.  You must supply migrations, or otherwise manually alter your database to contain the table and columns provided in your SQL Configuration.
+
+Thanks! ｡◕‿◕｡
+
 # roadmap
   - Redis / NOSQL Mapper
-  - Declare your mapping service / api keys and consume Geo data as needed.
-  - Determine if useful to provide a database abstraction layer for convienence 
+  - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
+  - Declare your mapping service / api keys for Geocoding purposes
