@@ -5,9 +5,13 @@ import (
 	"fmt"
 	_ "github.com/bmizerany/pq"
 	"github.com/kylelemons/go-gypsy/yaml"
+	"hash"
+	"encoding/json"
 	"math"
 	"os"
 	"path"
+	"net/http"
+	"io/ioutil"
 )
 
 // TODO potentially package into file included with the package
@@ -199,4 +203,20 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 	}
 
 	return res, err
+}
+
+// Use MapQuest's open service for geocoding
+// @param [String] str.  The query in which to geocode.
+func Geocode(query string) (interface{}, error) {
+	// TODO Implement
+	resp, err := http.Get(fmt.Sprintf("http://nominatim.openstreetmap.com/search?=%s&format=json", query))
+	if err != nil {
+		panic(err)
+		return nil, err
+	}
+
+	results := make([]hash.Hash, 0)
+	data, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(data, results)
+	return results, nil
 }
