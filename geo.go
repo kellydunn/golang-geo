@@ -215,7 +215,8 @@ func Geocode(query string) (interface{}, error) {
 		return nil, err
 	}
 
-	results := make([]hash.Hash, 0)
+	// TODO figure out a better typing for response
+	results := make(map[interface{}]interface{}, 0)
 	data, _ := ioutil.ReadAll(resp.Body)
 	json.Unmarshal(data, results)
 	return results, nil
