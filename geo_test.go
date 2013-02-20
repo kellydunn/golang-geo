@@ -1,4 +1,4 @@
-package geo
+package main
 
 import (
 	"database/sql"

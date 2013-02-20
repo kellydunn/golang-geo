@@ -1,4 +1,5 @@
-package geo
+// package geo
+package main
 
 import (
 	"database/sql"
@@ -9,6 +10,7 @@ import (
 	"io/ioutil"
 	"math"
 	"net/http"
+        "net/url"
 	"os"
 	"path"
 )
@@ -206,18 +208,48 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 
 // Use MapQuest's open service for geocoding
 // @param [String] str.  The query in which to geocode.
-func Geocode(query string) (interface{}, error) {
+func Geocode(query string) (map[interface{}]interface{}, error) {
 	// TODO Implement
 
+        /*
 	resp, err := http.Get(fmt.Sprintf("http://nominatim.openstreetmap.org/search?q=%s&format=json", query))
 	if err != nil {
 		panic(err)
 		return nil, err
 	}
 
+        */
+
+        client := &http.Client{}
+        url_safe_query := url.QueryEscape(query)
+        url := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/search.php?q=%s&format=json", url_safe_query)
+        fmt.Printf("%s\n", url)
+        req, _ := http.NewRequest("GET", url, nil)
+        resp, requestErr := client.Do(req)
+        if requestErr != nil {
+           panic(requestErr)
+        }       
+
 	// TODO figure out a better typing for response
 	results := make(map[interface{}]interface{})
-	data, _ := ioutil.ReadAll(resp.Body)
+	data, dataReadErr := ioutil.ReadAll(resp.Body)
+        if dataReadErr != nil {
+           panic(dataReadErr)
+        }
+        fmt.Printf("%s\n", string(data))
 	json.Unmarshal(data, results)
 	return results, nil
+}
+
+func main() {
+     res, err := Geocode("273 SW 193rd PL Normandy Park WA")
+     if err != nil {
+        panic(err)
+     }
+
+     for k, v := range res {
+         fmt.Printf("key: %v, value: %v\n", k, v)
+     }
+
+     fmt.Printf("Woah\n")
 }
