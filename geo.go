@@ -1,5 +1,4 @@
-// package geo
-package main
+package geo
 
 import (
 	"database/sql"
@@ -239,11 +238,4 @@ func Geocode(query string) (*Point, error) {
         p := &Point{lat: lat_val, lng: lng_val}
 
 	return p, nil
-}
-
-func main() {
-	res, err := Geocode("273 SW 193rd PL Normandy Park WA")
-	if err != nil {
-		panic(err)
-	}
 }
