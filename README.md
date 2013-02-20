@@ -88,6 +88,14 @@ Thanks! ｡◕‿◕｡
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
   - Declare your mapping service / api keys for Geocoding purposes
 
+# testing
+
+To test, be sure to provide a `config/geo.yml` file with your test environment database configuration, then run the following:
+
+```
+GO_ENV=test go test
+```
+
 # contributing
   - Fork
   - Create a topic branch
