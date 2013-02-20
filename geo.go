@@ -10,9 +10,10 @@ import (
 	"io/ioutil"
 	"math"
 	"net/http"
-        "net/url"
+	"net/url"
 	"os"
 	"path"
+        "strconv"
 )
 
 // TODO potentially package into file included with the package
@@ -208,48 +209,41 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 
 // Use MapQuest's open service for geocoding
 // @param [String] str.  The query in which to geocode.
-func Geocode(query string) (map[interface{}]interface{}, error) {
-	// TODO Implement
+func Geocode(query string) (*Point, error) {
+	client := &http.Client{}
 
-        /*
-	resp, err := http.Get(fmt.Sprintf("http://nominatim.openstreetmap.org/search?q=%s&format=json", query))
-	if err != nil {
-		panic(err)
-		return nil, err
+	url_safe_query := url.QueryEscape(query)
+	url := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/search.php?q=%s&format=json", url_safe_query)
+
+        // TODO Refactor into an api caller perhaps :P
+	req, _ := http.NewRequest("GET", url, nil)
+	resp, requestErr := client.Do(req)
+
+	if requestErr != nil {
+		panic(requestErr)
 	}
 
-        */
-
-        client := &http.Client{}
-        url_safe_query := url.QueryEscape(query)
-        url := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/search.php?q=%s&format=json", url_safe_query)
-        fmt.Printf("%s\n", url)
-        req, _ := http.NewRequest("GET", url, nil)
-        resp, requestErr := client.Do(req)
-        if requestErr != nil {
-           panic(requestErr)
-        }       
-
 	// TODO figure out a better typing for response
-	results := make(map[interface{}]interface{})
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
-        if dataReadErr != nil {
-           panic(dataReadErr)
-        }
-        fmt.Printf("%s\n", string(data))
-	json.Unmarshal(data, results)
-	return results, nil
+
+	if dataReadErr != nil {
+		panic(dataReadErr)
+	}
+
+	res := make([]map[string]interface{}, 0)
+	json.Unmarshal(data, &res)
+        
+        lat_val, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
+        lng_val, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
+	
+        p := &Point{lat: lat_val, lng: lng_val}
+
+	return p, nil
 }
 
 func main() {
-     res, err := Geocode("273 SW 193rd PL Normandy Park WA")
-     if err != nil {
-        panic(err)
-     }
-
-     for k, v := range res {
-         fmt.Printf("key: %v, value: %v\n", k, v)
-     }
-
-     fmt.Printf("Woah\n")
+	res, err := Geocode("273 SW 193rd PL Normandy Park WA")
+	if err != nil {
+		panic(err)
+	}
 }

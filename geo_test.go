@@ -75,8 +75,8 @@ func TestGeocode(t *testing.T) {
 
 	if res == nil {
 		t.Error("Incorrect data response from Geocode")
-	} 
-	
+	}
+
 }
 
 // TODO Test sql configuration
