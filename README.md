@@ -9,7 +9,7 @@
    /\____/                                /\____/          /\____/             
    \_/__/                                 \_/__/           \_/__/              
 
-
+♫ around the world ♪
 ```
 
 # what 
@@ -22,39 +22,54 @@ Still playing around with the language, seems fun so far! (￣︶￣)♫♪
 
 Import from github, and get geomancin'
 
-
 ```
 import("github.com/kellydunn/golang-geo")
+```
 
-func main() {
-     // Read below for more information on how to configure your SQL setup.
-     db, err := geo.HandleWithSQL()
+Currently, `golang-geo` provides the following functionality:
 
-     ...
+  - Querying for points within a radius using your own SQL data tables
+  - Calculate a point transposed from a distance at a specific bearing
+  - Calculate the Great Circle Distance bewteen two points
+  - Geocode an Address using Nominatim, the open street map resource (ala open.mapquestapi.com).
 
-     // Find all of the points of interest that are in a 5km radius of [42.333, 121,111]
-     // You could also probably use PostgreSQL's built-in earth distance module :P 
-     // http://www.postgresql.org/docs/8.3/static/earthdistance.html
-     p := &Point{lat: 42.3333, lng: 121.111}
-     res, _ := db.PointsWithinRadius(p, 5)
+## Finding points within a radius
 
-     ...
+### Using SQL
 
-     // You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
-     p2 := p.PointAtDistanceAndBearing(7.9, 45)
-     
-     // Inspect the point!
-     fmt.Printf("LAT: %f\n", p2.lat)
-     fmt.Printf("LNG: %f\n", p2.lng)
+```
+db, err := geo.HandleWithSQL()
+```
 
-     ...
+Find all of the points of interest that are in a 5km radius of [42.333, 121,111]
+You could also probably use PostgreSQL's built-in earth distance module :P 
+http://www.postgresql.org/docs/8.3/static/earthdistance.html
 
+```
+p := &Point{lat: 42.3333, lng: 121.111}
+res, _ := db.PointsWithinRadius(p, 5)
+```
 
-     // You can also find the GreatCircleDistance Distance between two points
-     distance := p.GreatCircleDistance(p2)
+## Transposing points with a distance and bearing
 
-     ...
-}
+You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
+
+```
+p2 := p.PointAtDistanceAndBearing(7.9, 45)
+```     
+
+## Great Circle Distance
+
+You can also find the GreatCircleDistance Distance between two points
+
+```
+distance := p.GreatCircleDistance(p2)
+```
+
+## Geocoding
+
+```
+geo.Geocode("San Francisco International Airport")
 ```
 
 # notes
