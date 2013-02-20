@@ -2,16 +2,15 @@ package geo
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	_ "github.com/bmizerany/pq"
 	"github.com/kylelemons/go-gypsy/yaml"
-	"hash"
-	"encoding/json"
+	"io/ioutil"
 	"math"
+	"net/http"
 	"os"
 	"path"
-	"net/http"
-	"io/ioutil"
 )
 
 // TODO potentially package into file included with the package
@@ -209,7 +208,8 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 // @param [String] str.  The query in which to geocode.
 func Geocode(query string) (interface{}, error) {
 	// TODO Implement
-	resp, err := http.Get(fmt.Sprintf("http://nominatim.openstreetmap.com/search?=%s&format=json", query))
+
+	resp, err := http.Get(fmt.Sprintf("http://nominatim.openstreetmap.org/search?q=%s&format=json", query))
 	if err != nil {
 		panic(err)
 		return nil, err

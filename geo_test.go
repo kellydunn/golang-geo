@@ -67,6 +67,18 @@ func TestFullIntegration(t *testing.T) {
 	FlushTestDB(s)
 }
 
+func TestGeocode(t *testing.T) {
+	res, err := Geocode("Japantown San Francisco, CA")
+	if err != nil {
+		t.Error("Error calling Geocode!")
+	}
+
+	if res == nil {
+		t.Error("Incorrect data response from Geocode")
+	} 
+	
+}
+
 // TODO Test sql configuration
 // TODO Test Great Circle Distance
 // TODO Test Point At Distance And Bearing
