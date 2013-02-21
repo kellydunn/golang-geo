@@ -1,4 +1,5 @@
-package geo
+// package geo
+package main
 
 import (
 	"database/sql"
@@ -12,7 +13,7 @@ import (
 //      And reasonable way to test formulae and configuration handling.
 // @spec: golang-geo should 
 //   - Should correctly return a set of [lat, lng] within a certain radius
-func TestFullIntegration(t *testing.T) {
+func TestPointsWithinRadiusIntegration(t *testing.T) {
 	s, _ := HandleWithSQL()
 
 	// SFO
@@ -67,14 +68,36 @@ func TestFullIntegration(t *testing.T) {
 	FlushTestDB(s)
 }
 
-func TestGeocode(t *testing.T) {
-	res, err := Geocode("Japantown San Francisco, CA")
-	if err != nil {
-		t.Error("Error calling Geocode!")
+func TestMapQuestGeocoderIntegration(t *testing.T) {
+	m := &MapQuestGeocoder{}
+	
+	p1, geocodeErr := m.Geocode("Japantown San Francisco, CA")
+	if geocodeErr != nil {
+		t.Error("Error Geocoding!")
 	}
 
-	if res == nil {
+	if p1 == nil {
 		t.Error("Incorrect data response from Geocode")
+	}
+
+	res, reverseGeocodeErr := m.ReverseGeocode(p1)
+	if reverseGeocodeErr != nil {
+		t.Error("Error Reverse Geocoding")
+	}
+	
+	p2, geocodeErr2 := m.Geocode(res)
+	if geocodeErr2 != nil {
+		t.Error("Error Geocoding Again!")
+	}
+
+	if p1.lat != p2.lat {
+		fmt.Printf("%f, %f\n", p1.lat, p2.lat)
+		t.Error("Longitudes do not match after Geocoding and Reverse Geocoding")
+	}
+
+	if p1.lng != p2.lng {
+		fmt.Printf("%f, %f\n", p1.lng, p2.lng)
+		t.Error("Latitudes do not match after Geocoding and Reverse Geocoding")
 	}
 
 }

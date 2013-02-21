@@ -1,4 +1,5 @@
-package geo
+// package geo
+package main
 
 import (
 	"database/sql"
@@ -206,16 +207,25 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 	return res, err
 }
 
-// Use MapQuest's open service for geocoding
-// @param [String] str.  The query in which to geocode.
-func Geocode(query string) (*Point, error) {
+// Geocoder interface
+type Geocoder interface {
+	Geocode(query string) (*Point, error)
+	ReverseGeocode(p *Point) (string, error)
+}
+
+// A Geocoder that makes use of open street map's geocoding service
+type MapQuestGeocoder struct {
+	// TODO Figure out a better way to initialize mapquest geocoders
+	//   - client ???
+	//   - apiUrl ???
+}
+
+func (g * MapQuestGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
-
-	url_safe_query := url.QueryEscape(query)
-	url := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/search.php?q=%s&format=json", url_safe_query)
-
+	
+	fullUrl := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/%s", url)
         // TODO Refactor into an api caller perhaps :P
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest("GET", fullUrl, nil)
 	resp, requestErr := client.Do(req)
 
 	if requestErr != nil {
@@ -226,7 +236,20 @@ func Geocode(query string) (*Point, error) {
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
 
 	if dataReadErr != nil {
-		panic(dataReadErr)
+		//panic(dataReadErr)
+		return nil, dataReadErr
+	}	
+
+	return data, nil
+}
+
+// Use MapQuest's open service for geocoding
+// @param [String] str.  The query in which to geocode.
+func (g * MapQuestGeocoder) Geocode(query string) (*Point, error) {
+	url_safe_query := url.QueryEscape(query)
+	data, err := g.Request(fmt.Sprintf("search.php?q=%s&format=json", url_safe_query))
+	if err != nil {
+		return nil, err
 	}
 
 	res := make([]map[string]interface{}, 0)
@@ -238,4 +261,35 @@ func Geocode(query string) (*Point, error) {
         p := &Point{lat: lat_val, lng: lng_val}
 
 	return p, nil
+}
+
+func (g* MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
+	data, err := g.Request(fmt.Sprintf("reverse.php?lat=%f&lon=%f&format=json", p.lat, p.lng))
+	if err != nil {
+		return "", err
+	}
+
+	res := make(map[string]map[string]string)
+	json.Unmarshal(data, &res)
+
+	// TODO determine if it's better to have channels to receive this data on
+	//      Provides for concurrency during HTTP requests, etc ~
+	road, _ := res["address"]["road"]
+	city, _ := res["address"]["city"]
+	state, _ := res["address"]["state"]
+	postcode, _ := res["address"]["postcode"]
+	country_code, _ := res["address"]["country_code"]
+
+	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, country_code)
+
+	return resStr, nil
+}
+
+func main () {
+	m := &MapQuestGeocoder{}
+	p, _ := m.Geocode("273 SW 193rd PL Normandy Park, WA")
+	fmt.Printf("[%f, %f]\n", p.lat, p.lng)
+
+	s, _ := m.ReverseGeocode(p)
+	fmt.Printf("%s\n", s)
 }
