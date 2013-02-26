@@ -8,6 +8,36 @@ import (
 	"testing"
 )
 
+// Seems brittle :\
+func TestGreatCircleDistance(t *testing.T) {
+	// Test that SEA and SFO are ~ 1091km apart, accurate to 100 meters.
+	sea := &Point{lat: 47.44745785, lng: -122.308065668024}
+	sfo := &Point{lat: 37.6160933, lng: -122.3924223}
+	sfoToSea := 1090.7
+
+	dist := sea.GreatCircleDistance(sfo)
+	
+	if !(dist < (sfoToSea + 0.1) && dist > (sfoToSea - 0.1)) {
+		t.Error("Unnacceptable result.", dist)
+	} 	
+}
+
+func TestPointAtDistanceAndBearing(t *testing.T) {
+	sea := &Point{lat: 47.44745785, lng: -122.308065668024}
+	p:= sea.PointAtDistanceAndBearing(1090.7, 180)
+	
+	// Find lat and long
+	resultLat := 37.616572
+	resultLng := -122.308066
+
+	withinLatBounds := p.lat < resultLat +0.001 && p.lat > resultLat - 0.001
+	withinLngBounds := p.lng < resultLng +0.001 && p.lng > resultLng - 0.001
+	if !(withinLatBounds && withinLngBounds) {
+		t.Error("Unnacceptable result.", fmt.Sprintf("[%f, %f]", p.lat, p.lng))
+	}
+}
+
+
 // TODO This paticular test is just one big integration for using the entire library.
 //      Should seperate this out into sperate tests once I determine an effective
 //      And reasonable way to test formulae and configuration handling.
@@ -66,40 +96,6 @@ func TestPointsWithinRadiusIntegration(t *testing.T) {
 
 	// Clear Test DB
 	FlushTestDB(s)
-}
-
-func TestMapQuestGeocoderIntegration(t *testing.T) {
-	m := &MapQuestGeocoder{}
-	
-	p1, geocodeErr := m.Geocode("Japantown San Francisco, CA")
-	if geocodeErr != nil {
-		t.Error("Error Geocoding!")
-	}
-
-	if p1 == nil {
-		t.Error("Incorrect data response from Geocode")
-	}
-
-	res, reverseGeocodeErr := m.ReverseGeocode(p1)
-	if reverseGeocodeErr != nil {
-		t.Error("Error Reverse Geocoding")
-	}
-	
-	p2, geocodeErr2 := m.Geocode(res)
-	if geocodeErr2 != nil {
-		t.Error("Error Geocoding Again!")
-	}
-
-	if p1.lat != p2.lat {
-		fmt.Printf("%f, %f\n", p1.lat, p2.lat)
-		t.Error("Longitudes do not match after Geocoding and Reverse Geocoding")
-	}
-
-	if p1.lng != p2.lng {
-		fmt.Printf("%f, %f\n", p1.lng, p2.lng)
-		t.Error("Latitudes do not match after Geocoding and Reverse Geocoding")
-	}
-
 }
 
 // TODO Test sql configuration
