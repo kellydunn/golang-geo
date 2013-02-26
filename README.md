@@ -28,10 +28,11 @@ import("github.com/kellydunn/golang-geo")
 
 Currently, `golang-geo` provides the following functionality:
 
-  - Querying for points within a radius using your own SQL data tables
-  - Calculate a point transposed from a distance at a specific bearing
-  - Calculate the Great Circle Distance bewteen two points
+  - Querying for points within a radius using your own SQL data tables.
+  - Calculate a point transposed from a distance at a specific bearing.
+  - Calculate the Great Circle Distance bewteen two points.
   - Geocode an Address using Nominatim, the open street map resource (ala open.mapquestapi.com).
+  - Geocode a Point using the same service.
 
 ## Finding points within a radius
 
@@ -68,10 +69,11 @@ distance := p.GreatCircleDistance(p2)
 
 ## Geocoding
 
-Currently, `golang-geo` only makes use of the openstreetmap API, as provided by mapquest.  Future implementations aim to include Google Maps Geocoding, Bing Maps, and potentially others!
+Currently, `golang-geo` only makes use of the openstreetmap API, as provided by mapquest.  Future implementations aim to include Google Maps Geocoding, Bing Maps, and potentially others!  Make sure that you create a MapQuestGeocoder struct first!
 
 ```
-p := geo.Geocode("San Francisco International Airport")
+m := &MapQuestGeocoder{}
+p, _ := m.Geocode("San Francisco International Airport")
 ```
 
 ## Reverse Geocoding
@@ -79,7 +81,7 @@ p := geo.Geocode("San Francisco International Airport")
 As mentioned above, `golang-geo` currently only supports Reverse Geocoding as it is offered by nominatim, the openstreetmap API.
 
 ```
-address := geo.ReverseGeocode(p)
+address, _ := m.ReverseGeocode(p)
 ```
 
 # notes

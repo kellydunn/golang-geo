@@ -297,12 +297,3 @@ func (g * MapQuestGeocoder) extractAddressFromResponse(data []byte) (string) {
 	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, country_code)
 	return resStr
 }
-
-func main () {
-	m := &MapQuestGeocoder{}
-	p, _ := m.Geocode("273 SW 193rd PL Normandy Park, WA")
-	fmt.Printf("[%f, %f]\n", p.lat, p.lng)
-
-	s, _ := m.ReverseGeocode(p)
-	fmt.Printf("%s\n", s)
-}
