@@ -26,7 +26,8 @@ func TestPointAtDistanceAndBearing(t *testing.T) {
 	sea := &Point{lat: 47.44745785, lng: -122.308065668024}
 	p:= sea.PointAtDistanceAndBearing(1090.7, 180)
 	
-	// Find lat and long
+	// Expected results of transposing point 
+	// ~1091km at bearing of 180 degrees
 	resultLat := 37.616572
 	resultLng := -122.308066
 

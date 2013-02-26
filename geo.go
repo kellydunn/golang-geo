@@ -252,15 +252,24 @@ func (g * MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
+	lat, lng := g.extractLatLngFromResponse(data)
+        p := &Point{lat: lat, lng: lng}
+
+	return p, nil
+}
+
+// private
+// @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
+// @return [float64] lat.  The first point's latitude in the response. 
+// @return [float64] lng.  The first point's longitude in the response. 
+func (g * MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
         
-        lat_val, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
-        lng_val, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
-	
-        p := &Point{lat: lat_val, lng: lng_val}
+        lat, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
+        lng, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
 
-	return p, nil
+	return lat, lng
 }
 
 func (g* MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
@@ -269,6 +278,12 @@ func (g* MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
+	resStr := g.extractAddressFromResponse(data)
+
+	return resStr, nil
+}
+
+func (g * MapQuestGeocoder) extractAddressFromResponse(data []byte) (string) {
 	res := make(map[string]map[string]string)
 	json.Unmarshal(data, &res)
 
@@ -281,8 +296,7 @@ func (g* MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	country_code, _ := res["address"]["country_code"]
 
 	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, country_code)
-
-	return resStr, nil
+	return resStr
 }
 
 func main () {
