@@ -60,7 +60,7 @@ p2 := p.PointAtDistanceAndBearing(7.9, 45)
 
 ## Great Circle Distance
 
-You can also find the GreatCircleDistance Distance between two points
+You can also find the GreatCircleDistance Distance between two points!  
 
 ```
 distance := p.GreatCircleDistance(p2)
@@ -68,8 +68,18 @@ distance := p.GreatCircleDistance(p2)
 
 ## Geocoding
 
+Currently, `golang-geo` only makes use of the openstreetmap API, as provided by mapquest.  Future implementations aim to include Google Maps Geocoding, Bing Maps, and potentially others!
+
 ```
-geo.Geocode("San Francisco International Airport")
+p := geo.Geocode("San Francisco International Airport")
+```
+
+## Reverse Geocoding
+
+As mentioned above, `golang-geo` currently only supports Reverse Geocoding as it is offered by nominatim, the openstreetmap API.
+
+```
+address := geo.ReverseGeocode(p)
 ```
 
 # notes
@@ -99,7 +109,10 @@ Keep in mind that `golang-geo` does not provision your database.  You must suppl
 Thanks! ｡◕‿◕｡
 
 # roadmap
+  - More sane file structure!
+  - More Tests!
   - Redis / NOSQL Mapper
+  - Google Maps, Bing Maps!
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
   - Declare your mapping service / api keys for Geocoding purposes
 
