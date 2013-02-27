@@ -116,12 +116,10 @@ Keep in mind that `golang-geo` does not provision your database.  You must suppl
 Thanks! ｡◕‿◕｡
 
 # roadmap
-  - More sane file structure!
   - More Tests!
   - Redis / NOSQL Mapper
-  - Google Maps, Bing Maps!
+  - Bing Maps?
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
-  - Declare your mapping service / api keys for Geocoding purposes
 
 # testing
 
