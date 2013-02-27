@@ -31,7 +31,7 @@ Currently, `golang-geo` provides the following functionality:
   - Querying for points within a radius using your own SQL data tables.
   - Calculate a point transposed from a distance at a specific bearing.
   - Calculate the Great Circle Distance bewteen two points.
-  - Geocode an Address using Nominatim, the open street map resource (ala open.mapquestapi.com).
+  - Geocode an Address and Reverse Geocode Points using Google Maps API or Open Street Maps API.
   - Geocode a Point using the same service.
 
 ## Finding points within a radius
