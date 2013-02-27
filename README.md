@@ -69,19 +69,24 @@ distance := p.GreatCircleDistance(p2)
 
 ## Geocoding
 
-Currently, `golang-geo` only makes use of the openstreetmap API, as provided by mapquest.  Future implementations aim to include Google Maps Geocoding, Bing Maps, and potentially others!  Make sure that you create a MapQuestGeocoder struct first!
+There are now two possible Geocoders you can use with `golang-geo`
+
+  - Google Maps 
+  - Open Street Maps (as provided by MapQuest)
+
+Both adhere to the Geocoder interface, which currently specifies a `Geocode` and `ReverseGeocode` method.  `Geocode` Accepts a string address and returns to you the first point found in the json response of each service:
 
 ```
-m := &MapQuestGeocoder{}
-p, _ := m.Geocode("San Francisco International Airport")
+g := &GoogleGeocoder{}
+p, _ := g.Geocode("San Francisco International Airport")
 ```
 
 ## Reverse Geocoding
 
-As mentioned above, `golang-geo` currently only supports Reverse Geocoding as it is offered by nominatim, the openstreetmap API.
+Reverse geocoding accepts a `Point`, and returns the address of the first point found in the json response of the services.
 
 ```
-address, _ := m.ReverseGeocode(p)
+address, _ := g.ReverseGeocode(p)
 ```
 
 # notes

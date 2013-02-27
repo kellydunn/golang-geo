@@ -3,7 +3,6 @@ package geo
 import (
 	"encoding/json"
 	"fmt"
-	_ "github.com/bmizerany/pq"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -33,7 +32,6 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
 
 	if dataReadErr != nil {
-		//panic(dataReadErr)
 		return nil, dataReadErr
 	}
 
