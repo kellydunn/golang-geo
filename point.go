@@ -1,6 +1,8 @@
 package geo
 
-import("math")
+import (
+	"math"
+)
 
 // Represents a Physical Point in geographic notation [lat, lng]
 // @field [float64] lat. The geographic latitude representation of this point.

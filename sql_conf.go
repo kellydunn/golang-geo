@@ -1,10 +1,10 @@
 package geo
 
 import (
+	"fmt"
 	"github.com/kylelemons/go-gypsy/yaml"
 	"os"
 	"path"
-	"fmt"
 )
 
 // Provides the configuration to query the database as necessary

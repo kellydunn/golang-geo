@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-type GoogleGeocoder struct {}
+type GoogleGeocoder struct{}
 
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	client := &http.Client{}
@@ -22,9 +22,9 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	if requestErr != nil {
 		panic(requestErr)
 	}
-	
+
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
-	
+
 	if dataReadErr != nil {
 		return nil, dataReadErr
 	}
@@ -32,7 +32,7 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	return data, nil
 }
 
-func(g * GoogleGeocoder) Geocode(query string) (*Point, error) {
+func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 	data, err := g.Request(fmt.Sprintf("address=%s", url_safe_query))
 	if err != nil {
@@ -50,7 +50,7 @@ func(g * GoogleGeocoder) Geocode(query string) (*Point, error) {
 // @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
 // @return [float64] lat.  The first point's latitude in the response. 
 // @return [float64] lng.  The first point's longitude in the response. 
-func (g * GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
+func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
 	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
 
@@ -60,7 +60,7 @@ func (g * GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float
 	return lat, lng
 }
 
-func (g * GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
+func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	data, err := g.Request(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
 	if err != nil {
 		return "", err
@@ -71,7 +71,7 @@ func (g * GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	return resStr, nil
 }
 
-func (g * GoogleGeocoder) extractAddressFromResponse(data []byte) string {
+func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
 	res := make(map[string][]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
 

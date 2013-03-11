@@ -1,7 +1,9 @@
 package geo
 
-import ( "database/sql" 
-	"fmt" )
+import (
+	"database/sql"
+	"fmt"
+)
 
 // A Mapper that uses Standard SQL Syntax to perform mapping functions and queries
 type SQLMapper struct {
