@@ -17,7 +17,8 @@ type SQLConf struct {
 }
 
 // TODO potentially package into file included with the package
-var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: "user=postgres password=postgres dbname=points sslmode=disable", table: "points", latCol: "lat", lngCol: "lng"}
+var defaultOpenStr = "user=postgres password=postgres dbname=points sslmode=disable"
+var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
 
 // Attempts to read config/geo.yml, and creates a {SQLConf} as described in the file
 // Returns the DefaultSQLConf if no config/geo.yml is found.

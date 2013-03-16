@@ -13,7 +13,10 @@ import (
 // @spec: golang-geo should 
 //   - Should correctly return a set of [lat, lng] within a certain radius
 func TestPointsWithinRadiusIntegration(t *testing.T) {
-	s, _ := HandleWithSQL()
+	s, sqlErr := HandleWithSQL()
+	if sqlErr != nil {
+		t.Error("ERROR: %s", sqlErr)
+	}
 
 	// SFO
 	origin := &Point{37.619002, -122.37484}
