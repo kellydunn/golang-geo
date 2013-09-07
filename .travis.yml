@@ -14,13 +14,9 @@ before_script:
   
   # TODO make use of test specific database values once we refactor out SQLConf design
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database points;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create table points (lat float, lng float);' -U postgres; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database points;'; fi"
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'use points;'; fi"
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create table points (lat float, lng float);'; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then sqlite3 points; fi"
-  - sh -c "if [ '$DB' = 'sqlite' ]; then sqlite3 'create table points (lat float, lng float);'; fi"
   # TODO Goose should handle migrations, but it currently has issues applying migrations
-  #- sh -c "/home/travis/gopath/bin/goose -path db/$DB -env test up"
+  - sh -c "/home/travis/gopath/bin/goose -path db/$DB -env test up"
 
 script: go test
