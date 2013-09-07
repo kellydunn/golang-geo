@@ -32,6 +32,8 @@ func GetSQLConf() (*SQLConf, error) {
 		DefaultSQLConf = &SQLConf{driver: "postgres", openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
 	}
 
+	// TODO This should be redesigned so that the user specifies where the config file is
+	//      We can still handle the issue where it doesn't exist, but that way it's not hardcoded.
 	configPath := path.Join("config/geo.yml")
 	_, err := os.Stat(configPath)
 	if err != nil && os.IsNotExist(err) {
