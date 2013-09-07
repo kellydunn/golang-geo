@@ -15,6 +15,7 @@ before_script:
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database golang_geo_test;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create table points (lat float, lng float);' -U postgres; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database golang_geo_test;'; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'use golang_geo_test;'; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create table points (lat float, lng float);'; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then sqlite3 golang_geo_test; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then sqlite3 'create table points (lat float, lng float);'; fi"

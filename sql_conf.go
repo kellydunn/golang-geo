@@ -17,7 +17,7 @@ type SQLConf struct {
 }
 
 // TODO potentially package into file included with the package
-var defaultOpenStr = "user=golang_geo_test dbname=points sslmode=disable"
+var defaultOpenStr = "user=postgres dbname=points sslmode=disable"
 var dbEnv = os.Getenv("DB")
 var DefaultSQLConf = &SQLConf{}
 
