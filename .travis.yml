@@ -3,6 +3,7 @@ go: 1.1
 
 install:
   - go get bitbucket.org/liamstask/goose
+  - go get 
 
 env:
   - DB=postgres
