@@ -17,14 +17,21 @@ type SQLConf struct {
 }
 
 // TODO potentially package into file included with the package
-var defaultOpenStr = "user=postgres password=postgres dbname=points sslmode=disable"
-var DefaultSQLConf = &SQLConf{driver: "postgres", openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
+var defaultOpenStr = "user=golang_geo_test dbname=points sslmode=disable"
+var dbEnv = os.Getenv("DB")
+var DefaultSQLConf = &SQLConf{}
 
 // Attempts to read config/geo.yml, and creates a {SQLConf} as described in the file
 // Returns the DefaultSQLConf if no config/geo.yml is found.
 // @return [*SQLConf].  The SQLConfiguration, as supplied with config/geo.yml
 // @return [Error].  Any error that might occur while grabbing configuration
 func GetSQLConf() (*SQLConf, error) {
+	if dbEnv != "" {
+		DefaultSQLConf = &SQLConf{driver: dbEnv, openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
+	} else {
+		DefaultSQLConf = &SQLConf{driver: "postgres", openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
+	}
+
 	configPath := path.Join("config/geo.yml")
 	_, err := os.Stat(configPath)
 	if err != nil && os.IsNotExist(err) {

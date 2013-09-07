@@ -10,7 +10,7 @@ import (
 // TODO This paticular test is just one big integration for using the entire library.
 //      Should seperate this out into sperate tests once I determine an effective
 //      And reasonable way to test formulae and configuration handling.
-// @spec: golang-geo should 
+// @spec: golang-geo should
 //   - Should correctly return a set of [lat, lng] within a certain radius
 func TestPointsWithinRadiusIntegration(t *testing.T) {
 	s, sqlErr := HandleWithSQL()

@@ -55,8 +55,8 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 
 // private
 // @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
-// @return [float64] lat.  The first point's latitude in the response. 
-// @return [float64] lng.  The first point's longitude in the response. 
+// @return [float64] lat.  The first point's latitude in the response.
+// @return [float64] lng.  The first point's longitude in the response.
 func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
