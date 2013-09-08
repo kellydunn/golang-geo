@@ -2,7 +2,7 @@ language: go
 go: 1.1
 
 before_install:
-  - export PATH=$GOPATH:$PATH
+  - export PATH=$GOPATH/bin:$PATH
 
 install:
   - go get bitbucket.org/liamstask/goose
