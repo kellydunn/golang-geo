@@ -11,7 +11,7 @@
 
 ♫ around the world ♪
 ```
-
+[![Build Status](https://travis-ci.org/kellydunn/go-art.png)](https://travis-ci.org/kellydunn/golang-geo)
 # what 
 
 Geographical calculations in Go.
