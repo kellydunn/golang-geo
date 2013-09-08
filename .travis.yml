@@ -7,7 +7,6 @@ before_install:
 install:
   - go get bitbucket.org/liamstask/goose
   - go get github.com/lib/pq
-  - go build
 
 env:
   - DB=postgres
