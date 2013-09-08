@@ -6,14 +6,11 @@ before_install:
 
 install:
   - go get bitbucket.org/liamstask/goose
-  - go get github.com/lib/pq
 
 env:
   - DB=postgres
 
 before_script: 
-  - sh -c "ls -a /home/travis/gopath/bin"
-  - sh -c "cat $TRAVIS_BUILD_DIR/geo.go"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database points;' -U postgres; fi"
   - sh -c "goose -path db/$DB -env test up"
 
