@@ -1,3 +1,2 @@
 test:
-  open: user=golang_geo_test dbname=points sslmode=disable
   driver: mysql
