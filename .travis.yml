@@ -12,6 +12,7 @@ env:
   - DB=postgres
 
 before_script: 
+  - sh -c "ls -a /home/travis/gopath/bin"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database points;' -U postgres; fi"
   - sh -c "goose -path db/$DB -env test up"
 
