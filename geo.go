@@ -2,7 +2,7 @@ package geo
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
+	_ "github.com/kellydunn/pq"
 )
 
 // @return [*SQLMapper]. An instantiated SQLMapper struct with the DefaultSQLConf.
