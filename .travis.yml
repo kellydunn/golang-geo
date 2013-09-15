@@ -5,7 +5,7 @@ before_install:
   - export PATH=/home/travis/gopath/bin:$PATH
 
 install:
-  - go get bitbucket.org/kellydunn/goose
+  - go get bitbucket.org/liamstask/goose
 
 env:
   - DB=postgres
