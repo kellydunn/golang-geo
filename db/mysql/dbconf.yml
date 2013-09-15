@@ -1,2 +1,3 @@
 test:
-  driver: mysql
+  driver: mymysql
+  open: "points/travis/"
