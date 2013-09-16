@@ -3,7 +3,7 @@ package geo
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
-	_ "github.com/ziutek/mymysql/mysql"
+	_ "github.com/ziutek/mymysql/godrv"
 )
 
 // @return [*SQLMapper]. An instantiated SQLMapper struct with the DefaultSQLConf.
