@@ -3,6 +3,8 @@ package geo
 import (
 	_ "database/sql"
 	"fmt"
+	"github.com/erikstmartin/go-testdb"
+	"os"
 	"strconv"
 	"testing"
 )
@@ -13,7 +15,14 @@ import (
 // @spec: golang-geo should
 //   - Should correctly return a set of [lat, lng] within a certain radius
 func TestPointsWithinRadiusIntegration(t *testing.T) {
+	// TODO Determine if we actually need to test SQL logic across databases.
+	dbEnv := os.Getenv("DB")
+	if dbEnv == "test" {
+		stubPointsWithinRadiusQueries()
+	}
+
 	s, sqlErr := HandleWithSQL()
+
 	if sqlErr != nil {
 		t.Error("ERROR: %s", sqlErr)
 	}
@@ -38,11 +47,15 @@ func TestPointsWithinRadiusIntegration(t *testing.T) {
 		panic(err)
 	}
 
+	// TODO Write a test to check for expected results of PointAtDistanceAndBearing
+
 	// Should get both the first point and second point
 	_, err2 := s.PointsWithinRadius(origin, 9)
 	if err2 != nil {
 		panic(err2)
 	}
+
+	// TODO Write a test to check for expected results of PointAtDistanceAndBearing
 
 	// Clear Test DB
 	FlushTestDB(s)
@@ -61,4 +74,12 @@ func RoundFloat(x float64, prec int) float64 {
 	frep := strconv.FormatFloat(x, 'g', prec, 64)
 	f, _ := strconv.ParseFloat(frep, 64)
 	return f
+}
+
+func stubPointsWithinRadiusQueries() {
+	insideRangeQuery := "SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * 6356.752300 <= 8.000000"
+	testdb.StubQuery(insideRangeQuery, nil)
+
+	outsideRangeQuery := "SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * 6356.752300 <= 9.000000"
+	testdb.StubQuery(outsideRangeQuery, nil)
 }

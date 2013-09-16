@@ -19,16 +19,19 @@ type SQLConf struct {
 const (
 	DEFAULT_PGSQL_OPEN_STR = "user=postgres dbname=points sslmode=disable"
 	DEFAULT_MYSQL_OPEN_STR = "points/root/"
+	DEFAULT_TEST_OPEN_STR  = ""
 )
 
 // Returns a SQLConf based on the $DB environment variable
 // Returns a PostgreSQL configuration as a default
-func sqlConfFromEnv() (*SQLConf) {
+func sqlConfFromEnv() *SQLConf {
 	var dbEnv = os.Getenv("DB")
 
 	switch dbEnv {
 	case "mysql":
 		return &SQLConf{driver: "mymysql", openStr: DEFAULT_MYSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
+	case "test":
+		return &SQLConf{driver: "testdb", openStr: DEFAULT_TEST_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
 	default:
 		return &SQLConf{driver: "postgres", openStr: DEFAULT_PGSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
 	}

@@ -2,6 +2,7 @@ package geo
 
 import (
 	"database/sql"
+	_ "github.com/erikstmartin/go-testdb"
 	_ "github.com/lib/pq"
 	_ "github.com/ziutek/mymysql/godrv"
 )
