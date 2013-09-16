@@ -14,7 +14,11 @@
 [![Build Status](https://travis-ci.org/kellydunn/go-art.png)](https://travis-ci.org/kellydunn/golang-geo)
 # what 
 
-Geographical calculations in Go.
+This library provides convience functions for applying translations, geocoding, and finding distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails`, and aims to help make dealing with geographical data a little bit easier.
+
+# documentation
+
+You can read the documentation [here](http://godoc.org/github.com/kellydunn/golang-geo)
 
 # usage
 
@@ -35,6 +39,8 @@ Currently, `golang-geo` provides the following functionality:
 ## Finding points within a radius
 
 ### Using SQL
+
+Currently, the only function that relies on SQL is `PointsWithinRadius`.  You can configure your database acces by providing a `config/geo.yml` file at the root level of your project and connect to your database with the following line of code:
 
 ```
 db, err := geo.HandleWithSQL()
@@ -90,7 +96,6 @@ address, _ := g.ReverseGeocode(p)
 # notes
 
   - `golang-geo` currently only uses metric measurements to do calculations
-  - You do not _need_ to use SQL in order to use this library.  Instead, you may import it and just use it on `Point` specific operations like `GreatCircleDistance` and `PointAtDistanceAndBearing`
   - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
 
 # SQL Configuration
