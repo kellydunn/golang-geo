@@ -16,21 +16,29 @@ type SQLConf struct {
 	lngCol  string
 }
 
-// TODO potentially package into file included with the package
-var defaultOpenStr = "user=postgres dbname=points sslmode=disable"
-var dbEnv = os.Getenv("DB")
-var DefaultSQLConf = &SQLConf{}
+const (
+	DEFAULT_PGSQL_OPEN_STR = "user=postgres dbname=points sslmode=disable"
+	DEFAULT_MYSQL_OPEN_STR = "points/root"
+)
+
+// Returns a Sql Conf
+func sqlConfFromEnv() (*SQLConf) {
+	var dbEnv = os.Getenv("DB")	
+
+	switch dbEnv {
+	case "mysql":
+		return &SQLConf{driver: dbEnv, openStr: DEFAULT_PGSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
+	default:
+		return &SQLConf{driver: "postgres", openStr: DEFAULT_PGSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}		
+	}
+}
 
 // Attempts to read config/geo.yml, and creates a {SQLConf} as described in the file
 // Returns the DefaultSQLConf if no config/geo.yml is found.
 // @return [*SQLConf].  The SQLConfiguration, as supplied with config/geo.yml
 // @return [Error].  Any error that might occur while grabbing configuration
 func GetSQLConf() (*SQLConf, error) {
-	if dbEnv != "" {
-		DefaultSQLConf = &SQLConf{driver: dbEnv, openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
-	} else {
-		DefaultSQLConf = &SQLConf{driver: "postgres", openStr: defaultOpenStr, table: "points", latCol: "lat", lngCol: "lng"}
-	}
+	DefaultSQLConf := sqlConfFromEnv()
 
 	// TODO This should be redesigned so that the user specifies where the config file is
 	//      We can still handle the issue where it doesn't exist, but that way it's not hardcoded.
