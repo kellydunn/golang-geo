@@ -6,6 +6,7 @@ before_install:
 
 install:
   - go get bitbucket.org/liamstask/goose
+  - go get github.com/erikstmartin/go-testdb  
 
 env:
   - DB=postgres
