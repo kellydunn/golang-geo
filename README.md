@@ -16,8 +16,6 @@
 
 Geographical calculations in Go.
 
-Still playing around with the language, seems fun so far! (￣︶￣)♫♪
-
 # usage
 
 Import from github, and get geomancin'
@@ -31,8 +29,8 @@ Currently, `golang-geo` provides the following functionality:
   - Querying for points within a radius using your own SQL data tables.
   - Calculate a point transposed from a distance at a specific bearing.
   - Calculate the Great Circle Distance bewteen two points.
-  - Geocode an Address and Reverse Geocode Points using Google Maps API or Open Street Maps API.
-  - Geocode a Point using the same service.
+  - Geocode an Address using Google Maps API or Open Street Maps API.
+  - Reverse Geocode a Point using the same services.
 
 ## Finding points within a radius
 
@@ -123,10 +121,10 @@ Thanks! ｡◕‿◕｡
 
 # testing
 
-To test, be sure to provide a `config/geo.yml` file with your test environment database configuration, then run the following:
+By default, `golang-geo` will attempt to run its test suite against a PostgreSQL database.  However, you may run the tests with mocked SQL queries by specifying that you want to run against a mocked database connection via the command line:
 
 ```
-GO_ENV=test go test
+DB=mock go test
 ```
 
 # contributing

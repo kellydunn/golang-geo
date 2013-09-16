@@ -30,7 +30,7 @@ func sqlConfFromEnv() *SQLConf {
 	switch dbEnv {
 	case "mysql":
 		return &SQLConf{driver: "mymysql", openStr: DEFAULT_MYSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
-	case "test":
+	case "mock":
 		return &SQLConf{driver: "testdb", openStr: DEFAULT_TEST_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}
 	default:
 		return &SQLConf{driver: "postgres", openStr: DEFAULT_PGSQL_OPEN_STR, table: "points", latCol: "lat", lngCol: "lng"}

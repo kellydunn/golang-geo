@@ -17,7 +17,7 @@ import (
 func TestPointsWithinRadiusIntegration(t *testing.T) {
 	// TODO Determine if we actually need to test SQL logic across databases.
 	dbEnv := os.Getenv("DB")
-	if dbEnv == "test" {
+	if dbEnv == "mock" {
 		stubPointsWithinRadiusQueries()
 	}
 
