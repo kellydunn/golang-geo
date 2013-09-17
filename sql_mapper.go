@@ -13,7 +13,7 @@ type SQLMapper struct {
 
 // Uses SQL to retrieve all points within the radius (in meters) passed in from the origin point passed in.
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html
-// Returns Rows of sql as a result, or an error if one occurs during the query.
+// Returns a pointer to a sql.Rows as a result, or an error if one occurs during the query.
 func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, error) {
 	select_str := fmt.Sprintf("SELECT * FROM %v a", s.conf.table)
 	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)
