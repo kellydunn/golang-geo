@@ -7,8 +7,8 @@ import (
 	_ "github.com/ziutek/mymysql/godrv"
 )
 
-// @return [*SQLMapper]. An instantiated SQLMapper struct with the DefaultSQLConf.
-// @return [Error]. Any error that might have occured during instantiating the SQLMapper.
+// Retrieves the SQL configuration specified in the config.yml file that resides at the root level of the project.
+// Returns a pointer to a SQLMapper if successful, or an error if there is an issue opening a database connection.
 func HandleWithSQL() (*SQLMapper, error) {
 	sqlConf, sqlConfErr := GetSQLConf()
 	if sqlConfErr == nil {
