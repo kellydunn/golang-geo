@@ -14,6 +14,21 @@ const (
 	EARTH_RADIUS = 6356.7523 // Earth's radius ~= 6,356.7523km
 )
 
+// Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
+func NewPoint(lat float64, lng float64) *Point {
+	return &Point{lat: lat, lng: lng}
+}
+
+// Returns Point p's latitude.
+func (p *Point) Lat() float64 {
+	return p.lat
+}
+
+// Returns Point p's longitude.
+func (p *Point) Lng() float64 {
+	return p.lng
+}
+
 // Returns a Point populated with the lat and lng coordinates of transposing the origin point the distance (in meters) supplied by the compass bearing (in degrees) supplied.
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point {
