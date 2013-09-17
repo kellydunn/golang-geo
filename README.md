@@ -36,7 +36,7 @@ Currently, `golang-geo` provides the following functionality:
   - Geocoding an Address using Google Maps API or Open Street Maps API.
   - Reverse Geocoding a Point using the same services.
 
-Keep in mind that tou do not need to use SQL in order to perform [simple Point operations](http://godoc.org/github.com/kellydunn/golang-geo#Point) and the only function that relies on SQL is `[PointsWithinRadius](http://godoc.org/github.com/kellydunn/golang-geo#SQLMapper.PointsWithinRadius)`. 
+Keep in mind that tou do not need to use SQL in order to perform [simple Point operations](http://godoc.org/github.com/kellydunn/golang-geo#Point) and the only function that relies on SQL is [`PointsWithinRadius`](http://godoc.org/github.com/kellydunn/golang-geo#SQLMapper.PointsWithinRadius). 
 
 ## using SQL
 
