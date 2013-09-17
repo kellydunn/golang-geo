@@ -14,7 +14,7 @@
 [![Build Status](https://travis-ci.org/kellydunn/go-art.png)](https://travis-ci.org/kellydunn/golang-geo)
 # what 
 
-This library provides convience functions for applying translations, geocoding, and finding distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails`, and aims to help make dealing with geographical data a little bit easier.
+This library provides convenience functions for applying translations, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make dealing with geographical data a little bit easier.
 
 # documentation
 
@@ -31,20 +31,18 @@ import("github.com/kellydunn/golang-geo")
 Currently, `golang-geo` provides the following functionality:
 
   - Querying for points within a radius using your own SQL data tables.
-  - Calculate a point transposed from a distance at a specific bearing.
-  - Calculate the Great Circle Distance bewteen two points.
-  - Geocode an Address using Google Maps API or Open Street Maps API.
-  - Reverse Geocode a Point using the same services.
+  - Transposing a point for a given distance and bearing.
+  - Calculating the Great Circle Distance bewteen two points.
+  - Geocoding an Address using Google Maps API or Open Street Maps API.
+  - Reverse Geocoding a Point using the same services.
 
 ## using SQL
 
-Currently, the only function that relies on SQL is `PointsWithinRadius`.  You can configure your database acces by providing a `config/geo.yml` file at the root level of your project and connect to your database with the following line of code:
+Currently, the only function that relies on SQL is `PointsWithinRadius`.  You do not need to use SQL in order to perform [simple Point operations](http://godoc.org/github.com/kellydunn/golang-geo#Point).
 
-```
-db, err := geo.HandleWithSQL()
-```
+The project is configured to connect to a SQL database by reading a `config/geo.yml` file in the root level of your project.  If it does not exist, it will use a Default SQL configuration that will use the postgres driver as described by [lib/pq](http://github.com/lib/pq) as a user named "postgres" with a password "postgres".  
 
-The project is configured to connect to a SQL database by reading a `config/geo.yml` file in the root level of your project.  If it does not exist, it will use a Default SQL configuration that will use the postgres driver as described by [lib/pq](http://github.com/lib/pq) as a user named "postgres" with a password "postgres".  If you want to supply a custom database conifguration, feel free to do so by using the template below:
+If you want to supply a custom database conifguration, feel free to do so by using the template below:
 
 ```
 development:
@@ -66,6 +64,12 @@ development:
   lngCol: lng  
 ```
 
+Once you've supplied your configuration, you may connect to your database with the following line of code:
+
+```
+db, err := geo.HandleWithSQL()
+```
+
 ## geocoding
 
 There are now two possible Geocoders you can use with `golang-geo`
@@ -79,12 +83,6 @@ Both adhere to the Geocoder interface, which currently specifies a `Geocode` and
 
   - `golang-geo` currently only uses metric measurements to do calculations
   - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
-
-# SQL Configuration
-
-You can currently configure which `table` the SQLMapper queries on, as well as the latitude and columns it uses to do all of its math (`latCol` and `lngCol`, respectively).
-
-Keep in mind that `golang-geo` does not provision your database.  You must supply migrations, or otherwise manually alter your database to contain the table and columns provided in your SQL Configuration.
 
 Thanks! ｡◕‿◕｡
 
