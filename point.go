@@ -4,23 +4,21 @@ import (
 	"math"
 )
 
-// Represents a Physical Point in geographic notation [lat, lng]
-// @field [float64] lat. The geographic latitude representation of this point.
-// @field [float64] lng. The geographic longitude representation of this point.
+// Represents a Physical Point in geographic notation [lat, lng].
 type Point struct {
 	lat float64
 	lng float64
 }
 
+const (
+	EARTH_RADIUS = 6356.7523 // Earth's radius ~= 6,356.7523km
+)
+
+// Returns a Point populated with the lat and lng coordinates of transposing the origin point the distance (in meters) supplied by the compass bearing (in degrees) supplied.
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
-// @param [float64] dist.  The arc distance in which to transpose the origin point (in meters).
-// @param [float64] bearing.  The compass bearing in which to transpose the origin point (in degrees).
-// @return [*Point].  Returns a Point struct populated with the lat and lng coordinates
-//                    of transposing the origin point a certain arc distance at a certain bearing.
 func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point {
-	// Earth's radius ~= 6,356.7523km
-	// TODO Constantize
-	dr := dist / 6356.7523
+
+	dr := dist / EARTH_RADIUS
 
 	bearing = (bearing * (math.Pi / 180.0))
 
@@ -44,12 +42,10 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	return &Point{lat: lat2, lng: lng2}
 }
 
-// Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 // Calculates the Haversine distance between two points.
-// @param [*Point].  The destination point.
-// @return [float64].  The distance between the origin point and the destination point.
+// Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) GreatCircleDistance(p2 *Point) float64 {
-	r := 6356.7523 // km
+	//r := 6356.7523 // km
 	dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
 	dLon := (p2.lng - p.lng) * (math.Pi / 180.0)
 
@@ -63,5 +59,5 @@ func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 
 	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 
-	return r * c
+	return EARTH_RADIUS * c
 }
