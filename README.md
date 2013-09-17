@@ -33,10 +33,10 @@ Currently, `golang-geo` provides the following functionality:
   - Querying for points within a radius using your own SQL data tables.
   - Transposing a point for a given distance and bearing.
   - Calculating the Great Circle Distance bewteen two points.
-  - Geocoding an Address using Google Maps API or Open Street Maps API.
+  - Geocoding an address using Google Maps API or Open Street Maps API.
   - Reverse Geocoding a Point using the same services.
 
-Keep in mind that tou do not need to use SQL in order to perform [simple Point operations](http://godoc.org/github.com/kellydunn/golang-geo#Point) and the only function that relies on SQL is [`PointsWithinRadius`](http://godoc.org/github.com/kellydunn/golang-geo#SQLMapper.PointsWithinRadius). 
+Keep in mind that you do not need to use SQL in order to perform [simple Point operations](http://godoc.org/github.com/kellydunn/golang-geo#Point) and the only function that relies on SQL is [`PointsWithinRadius`](http://godoc.org/github.com/kellydunn/golang-geo#SQLMapper.PointsWithinRadius). 
 
 ## using SQL
 
