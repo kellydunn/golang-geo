@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-// Provides the configuration to query the database as necessary
+// Provides a set of configuration variables that describe how to interact with a SQL database.
 type SQLConf struct {
 	driver  string
 	openStr string
@@ -37,10 +37,8 @@ func sqlConfFromEnv() *SQLConf {
 	}
 }
 
-// Attempts to read config/geo.yml, and creates a {SQLConf} as described in the file
-// Returns the DefaultSQLConf if no config/geo.yml is found.
-// @return [*SQLConf].  The SQLConfiguration, as supplied with config/geo.yml
-// @return [Error].  Any error that might occur while grabbing configuration
+// Attempts to read config/geo.yml, and creates a SQLConf as described therein.
+// Returns the DefaultSQLConf if no config/geo.yml is found, or an error if one arises during the process of parsing the configuration file.
 func GetSQLConf() (*SQLConf, error) {
 	DefaultSQLConf := sqlConfFromEnv()
 
