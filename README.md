@@ -18,7 +18,7 @@ This library provides convience functions for applying translations, geocoding, 
 
 # documentation
 
-You can read the documentation [here](http://godoc.org/github.com/kellydunn/golang-geo)
+You can read the documentation [here](http://godoc.org/github.com/kellydunn/golang-geo).
 
 # usage
 
@@ -36,9 +36,7 @@ Currently, `golang-geo` provides the following functionality:
   - Geocode an Address using Google Maps API or Open Street Maps API.
   - Reverse Geocode a Point using the same services.
 
-## Finding points within a radius
-
-### Using SQL
+## using SQL
 
 Currently, the only function that relies on SQL is `PointsWithinRadius`.  You can configure your database acces by providing a `config/geo.yml` file at the root level of your project and connect to your database with the following line of code:
 
@@ -46,64 +44,9 @@ Currently, the only function that relies on SQL is `PointsWithinRadius`.  You ca
 db, err := geo.HandleWithSQL()
 ```
 
-Find all of the points of interest that are in a 5km radius of [42.333, 121,111]
-You could also probably use PostgreSQL's built-in earth distance module :P 
-http://www.postgresql.org/docs/8.3/static/earthdistance.html
+The project is configured to connect to a SQL database by reading a `config/geo.yml` file in the root level of your project.  If it does not exist, it will use a Default SQL configuration that will use the postgres driver as described by [lib/pq](http://github.com/lib/pq) as a user named "postgres" with a password "postgres".  If you want to supply a custom database conifguration, feel free to do so by using the template below:
 
 ```
-p := &Point{lat: 42.3333, lng: 121.111}
-res, _ := db.PointsWithinRadius(p, 5)
-```
-
-## Transposing points with a distance and bearing
-
-You can also find a point after transposing another a certain distance(km) with a certain bearing(degrees)
-
-```
-p2 := p.PointAtDistanceAndBearing(7.9, 45)
-```     
-
-## Great Circle Distance
-
-You can also find the GreatCircleDistance Distance between two points!  
-
-```
-distance := p.GreatCircleDistance(p2)
-```
-
-## Geocoding
-
-There are now two possible Geocoders you can use with `golang-geo`
-
-  - Google Maps 
-  - Open Street Maps (as provided by MapQuest)
-
-Both adhere to the Geocoder interface, which currently specifies a `Geocode` and `ReverseGeocode` method.  `Geocode` Accepts a string address and returns to you the first point found in the json response of each service:
-
-```
-g := &GoogleGeocoder{}
-p, _ := g.Geocode("San Francisco International Airport")
-```
-
-## Reverse Geocoding
-
-Reverse geocoding accepts a `Point`, and returns the address of the first point found in the json response of the services.
-
-```
-address, _ := g.ReverseGeocode(p)
-```
-
-# notes
-
-  - `golang-geo` currently only uses metric measurements to do calculations
-  - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
-
-# SQL Configuration
-
-Currently, `golang-geo` will attempt to read a `config/geo.yml` file in the root of your project.  If it does not exist, it will use a Default Server configuration with a user named "postgres" with a password "postgres".  If you want to supply a custom database conifguration, feel free to do so by using the template below:
-
-```
-// config/geo.yml
 development:
   driver: postgres
   openStr: user=username password=password dbname=points sslmode=disable
@@ -111,6 +54,33 @@ development:
   latCol: lat
   lngCol: lng
 ```
+
+Or if you want to connect via MySQL, you can do that as well!
+
+```
+development:
+  driver: mysql
+  openStr: points/username/password
+  table: points
+  latCol: lat
+  lngCol: lng  
+```
+
+## geocoding
+
+There are now two possible Geocoders you can use with `golang-geo`
+
+  - Google Maps 
+  - Open Street Maps (as provided by MapQuest)
+
+Both adhere to the Geocoder interface, which currently specifies a `Geocode` and `ReverseGeocode` method.  
+
+# notes
+
+  - `golang-geo` currently only uses metric measurements to do calculations
+  - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
+
+# SQL Configuration
 
 You can currently configure which `table` the SQLMapper queries on, as well as the latitude and columns it uses to do all of its math (`latCol` and `lngCol`, respectively).
 
