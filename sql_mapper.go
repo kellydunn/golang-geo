@@ -11,12 +11,9 @@ type SQLMapper struct {
 	sqlConn *sql.DB
 }
 
+// Uses SQL to retrieve all points within the radius (in meters) passed in from the origin point passed in.
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html
-// Uses SQL to retrieve all points within the radius of the origin point passed in.
-// @param [*Point]. The origin point.
-// @param [float64]. The radius (in meters) in which to search for points from the Origin.
-// TODO Potentially fallback to PostgreSQL's earthdistance module: http://www.postgresql.org/docs/8.3/static/earthdistance.html
-// TODO Determine if valuable to just provide an abstract formula and then select accordingly, might be helpful for NOSQL wrapper
+// Returns Rows of sql as a result, or an error if one occurs during the query.
 func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, error) {
 	select_str := fmt.Sprintf("SELECT * FROM %v a", s.conf.table)
 	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)
