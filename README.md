@@ -83,11 +83,13 @@ db, err := geo.HandleWithSQL()
 
 # testing
 
-By default, `golang-geo` will attempt to run its test suite against a PostgreSQL database.  However, you may run the tests with mocked SQL queries by specifying that you want to run against a mocked database connection via the command line:
+By default, `golang-geo` will attempt to run its test suite against a PostgreSQL database.  However, you may run the tests with mocked SQL queries by specifying that you want to do so on the command line:
 
 ```
 DB=mock go test
 ```
+
+The `$DB` environment variable is used to specify which database you'd like to run the tests against.  You may specify `postgres`, `mysql`, or `mock`.  The [Travis CI builds](https://travis-ci.org/kellydunn/golang-geo) for this project currently runs against all of these when running the test suite.
 
 # contributing
   - Fork
