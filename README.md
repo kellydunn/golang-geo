@@ -14,7 +14,7 @@
 [![Build Status](https://travis-ci.org/kellydunn/go-art.png)](https://travis-ci.org/kellydunn/golang-geo)
 # what 
 
-This library provides convenience functions for applying translations, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make dealing with geographical data a little bit easier.
+This library provides convenience functions for translating, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make dealing with geographical data a little bit easier.
 
 # documentation
 
@@ -70,21 +70,10 @@ Once you've supplied your configuration, you may connect to your database with t
 db, err := geo.HandleWithSQL()
 ```
 
-## geocoding
-
-There are now two possible Geocoders you can use with `golang-geo`
-
-  - Google Maps 
-  - Open Street Maps (as provided by MapQuest)
-
-Both adhere to the Geocoder interface, which currently specifies a `Geocode` and `ReverseGeocode` method.  
-
 # notes
 
   - `golang-geo` currently only uses metric measurements to do calculations
   - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
-
-Thanks! ｡◕‿◕｡
 
 # roadmap
   - More Tests!
@@ -107,3 +96,5 @@ DB=mock go test
   - Write dem tests!
   - Submit Pull Request once Tests are Passing
   - do this (づ￣ ³￣)づ
+
+Thanks! ｡◕‿◕｡
