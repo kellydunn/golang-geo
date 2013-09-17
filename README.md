@@ -73,7 +73,7 @@ db, err := geo.HandleWithSQL()
 # notes
 
   - `golang-geo` currently only uses metric measurements to do calculations
-  - The `GO_ENV` environment variable it used to determine what environment should be used to query your database.  If you wish to run `golang-geo` in a different environment, please specify this variable by either exporting it, adding it to your profile, or prepending your command line executable with `GO_ENV=environment`
+  - The `$GO_ENV` environment variable is used to determine which configuration group in `config.yml` is to be used.  For example, if you wanted to use the PostgreSQL configuration listed above, you could specify `GO_ENV=development` which would read `config.yml` and use the configuration under the root-level key `development`.
 
 # roadmap
   - More Tests!
