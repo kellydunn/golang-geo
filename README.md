@@ -40,7 +40,7 @@ Keep in mind that you do not need to use SQL in order to perform [simple Point o
 
 ## using SQL
 
-The project is configured to connect to a SQL database by reading a `config/geo.yml` file in the root level of your project.  If it does not exist, it will use a Default SQL configuration that will use the postgres driver as described by [lib/pq](http://github.com/lib/pq) as a user named "postgres" with a password "postgres".  
+The project is configured to connect to a SQL database by reading a `config/geo.yml` file in the root level of your project.  If it does not exist, it will use a Default SQL configuration that will use the postgres driver as described by [lib/pq](http://github.com/lib/pq).  The Default SQL configuration will attempt to connect as a user named "postgres" and with the password "postgres" to a database named "points".  
 
 If you want to supply a custom database conifguration, feel free to do so by using the template below:
 
