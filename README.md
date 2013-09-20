@@ -11,7 +11,7 @@
 
 ♫ around the world ♪
 ```
-[![Build Status](https://travis-ci.org/kellydunn/go-art.png)](https://travis-ci.org/kellydunn/golang-geo)
+[![Build Status](https://travis-ci.org/kellydunn/golang-geo.png)](https://travis-ci.org/kellydunn/golang-geo)
 # what 
 
 This library provides convenience functions for translating, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make dealing with geographical data a little bit easier.
