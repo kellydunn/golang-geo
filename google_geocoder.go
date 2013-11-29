@@ -10,6 +10,8 @@ import (
 
 type GoogleGeocoder struct{}
 
+// Issues a request to the google geocoding service and forwards the passed in params string
+// as URL-encoded entities.  Returns an array of byes as a result, or any error incurred along the way
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	client := &http.Client{}
 
@@ -32,6 +34,8 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	return data, nil
 }
 
+// Geocodes the passed in query string and returns a pointer to a new Point struct.
+// Returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 	data, err := g.Request(fmt.Sprintf("address=%s", url_safe_query))
@@ -60,6 +64,8 @@ func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float6
 	return lat, lng
 }
 
+// Reverse geocodes the pointer to a Point struct and returns the first address that matches
+// or returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	data, err := g.Request(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
 	if err != nil {
