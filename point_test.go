@@ -47,9 +47,9 @@ func TestLng(t *testing.T) {
 // Seems brittle :\
 func TestGreatCircleDistance(t *testing.T) {
 	// Test that SEA and SFO are ~ 1091km apart, accurate to 100 meters.
-	sea := &Point{lat: 47.44745785, lng: -122.308065668024}
+	sea := &Point{lat: 47.4489, lng: -122.3094}
 	sfo := &Point{lat: 37.6160933, lng: -122.3924223}
-	sfoToSea := 1090.7
+	sfoToSea := 1093.379199082169
 
 	dist := sea.GreatCircleDistance(sfo)
 
@@ -64,7 +64,7 @@ func TestPointAtDistanceAndBearing(t *testing.T) {
 
 	// Expected results of transposing point
 	// ~1091km at bearing of 180 degrees
-	resultLat := 37.616572
+	resultLat := 37.638557
 	resultLng := -122.308066
 
 	withinLatBounds := p.lat < resultLat+0.001 && p.lat > resultLat-0.001

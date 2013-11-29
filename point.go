@@ -11,7 +11,7 @@ type Point struct {
 }
 
 const (
-	EARTH_RADIUS = 6356.7523 // Earth's radius ~= 6,356.7523km
+	EARTH_RADIUS = 6371 // Earth's radius ~= 6,371km, according to wikipedia
 )
 
 // Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
