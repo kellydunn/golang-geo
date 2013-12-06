@@ -114,3 +114,6 @@ The `$DB` environment variable is used to specify which database you'd like to r
   - do this (づ￣ ³￣)づ
 
 Thanks! ｡◕‿◕｡
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kellydunn/golang-geo/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
