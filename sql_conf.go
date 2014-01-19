@@ -41,13 +41,14 @@ func sqlConfFromEnv() *SQLConf {
 // Returns the DefaultSQLConf if no config/geo.yml is found, or an error
 // if one arises during the process of parsing the configuration file.
 func GetSQLConf() (*SQLConf, error) {
-	DefaultSQLConf := sqlConfFromEnv()
+	return GetSQLConfFromFile("config/geo.yml")
+}
 
-	// TODO This should be redesigned so that the user specifies where the config file is
-	//      We can still handle the issue where it doesn't exist,
-	//      but that way it's not hardcoded.
-	configPath := path.Join("config/geo.yml")
+func GetSQLConfFromFile(filename string) (*SQLConf, error) {
+	DefaultSQLConf := sqlConfFromEnv()
+	configPath := path.Join(filename)
 	_, err := os.Stat(configPath)
+
 	if err != nil && os.IsNotExist(err) {
 		return DefaultSQLConf, nil
 	} else {
