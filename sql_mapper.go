@@ -11,7 +11,23 @@ type SQLMapper struct {
 	sqlConn *sql.DB
 }
 
-// Uses SQL to retrieve all points within the radius (in meters) passed in from the origin point passed in.
+// Creates and returns a pointer to a new geo.SQLMapper.
+func NewSQLMapper(confPath string, conn *sql.DB) (*SQLMapper, error) {
+	conf, confErr := GetSQLConf()
+	if confErr != nil {
+		return nil, confErr
+	}
+
+	return &SQLMapper{conf: conf, sqlConn: conn}, nil
+}
+
+// Returns a pointer to the SQLMapper's SQL Database Connection.
+func (s *SQLMapper) SqlDbConn() *sql.DB {
+	return s.sqlConn
+}
+
+// Uses SQL to retrieve all points within the radius (in meters)
+// passed in from the origin point passed in.
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html
 // Returns a pointer to a sql.Rows as a result, or an error if one occurs during the query.
 func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, error) {
