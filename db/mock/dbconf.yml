@@ -1,0 +1,6 @@
+test:
+  open: 
+  driver: testdb
+  table: points
+  latCol: lat
+  lngCol: lng
