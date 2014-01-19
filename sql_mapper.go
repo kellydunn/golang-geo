@@ -12,8 +12,8 @@ type SQLMapper struct {
 }
 
 // Creates and returns a pointer to a new geo.SQLMapper.
-func NewSQLMapper(confPath string, conn *sql.DB) (*SQLMapper, error) {
-	conf, confErr := GetSQLConf()
+func NewSQLMapper(filename string, conn *sql.DB) (*SQLMapper, error) {
+	conf, confErr := GetSQLConfFromFile(filename)
 	if confErr != nil {
 		return nil, confErr
 	}
