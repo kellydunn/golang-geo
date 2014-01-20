@@ -18,7 +18,7 @@ func (s *SQLMapper) PointsWithinRadius(p *Point, radius float64) (*sql.Rows, err
 	select_str := fmt.Sprintf("SELECT * FROM %v a", s.conf.table)
 	lat1 := fmt.Sprintf("sin(radians(%f)) * sin(radians(a.lat))", p.lat)
 	lng1 := fmt.Sprintf("cos(radians(%f)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(%f))", p.lat, p.lng)
-	where_str := fmt.Sprintf("WHERE acos(%s + %s) * %f <= %f", lat1, lng1, 6356.7523, radius)
+	where_str := fmt.Sprintf("WHERE acos(%s + %s) * %f <= %f", lat1, lng1, EARTH_RADIUS, radius)
 	query := fmt.Sprintf("%s %s", select_str, where_str)
 
 	res, err := s.sqlConn.Query(query)
