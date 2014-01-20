@@ -19,7 +19,7 @@ type SQLConf struct {
 const (
 	DEFAULT_PGSQL_OPEN_STR = "user=postgres dbname=points sslmode=disable"
 	DEFAULT_MYSQL_OPEN_STR = "points/root/"
-	DEFAULT_TEST_OPEN_STR  = ""
+	DEFAULT_TEST_OPEN_STR  = "\"\""
 )
 
 // Returns a SQLConf based on the $DB environment variable

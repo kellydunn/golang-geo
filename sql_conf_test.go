@@ -11,7 +11,12 @@ import (
 func TestGetSQLConfFromFile(t *testing.T) {
 	env := os.Getenv("DB")
 	path := fmt.Sprintf("db/%s/dbconf.yml", env)
-	conf, _ := GetSQLConfFromFile(path)
+	conf, err := GetSQLConfFromFile(path)
+
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		t.Error("Did not expect for an error when supplying an existing configuration file")
+	}
 
 	expected := sqlConfFromEnv()
 
