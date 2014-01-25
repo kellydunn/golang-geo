@@ -1,3 +1,6 @@
 test:
   openStr: user=postgres dbname=points sslmode=disable
   driver: postgres
+  table: points
+  latCol: lat
+  lngCol: lng

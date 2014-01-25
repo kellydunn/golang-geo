@@ -1,3 +1,6 @@
 test:
   driver: mymysql
   openStr: points/root/
+  table: points
+  latCol: lat
+  lngCol: lng
