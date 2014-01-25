@@ -77,9 +77,9 @@ func RoundFloat(x float64, prec int) float64 {
 }
 
 func stubPointsWithinRadiusQueries() {
-	insideRangeQuery := "SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * 6356.752300 <= 8.000000"
+	insideRangeQuery := fmt.Sprintf("SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * %f <= 8.000000", float64(EARTH_RADIUS))
 	testdb.StubQuery(insideRangeQuery, nil)
 
-	outsideRangeQuery := "SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * 6356.752300 <= 9.000000"
+	outsideRangeQuery := fmt.Sprintf("SELECT * FROM points a WHERE acos(sin(radians(37.619002)) * sin(radians(a.lat)) + cos(radians(37.619002)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(-122.374840))) * %f <= 9.000000", float64(EARTH_RADIUS))
 	testdb.StubQuery(outsideRangeQuery, nil)
 }
