@@ -82,18 +82,22 @@ development:
   lngCol: lng  
 ```
 
-# notes
+## notes
 
   - `golang-geo` currently only uses metric measurements to do calculations
   - The `$GO_ENV` environment variable is used to determine which configuration group in `config.yml` is to be used.  For example, if you wanted to use the PostgreSQL configuration listed above, you could specify `GO_ENV=development` which would read `config.yml` and use the configuration under the root-level key `development`.
 
-# roadmap
+### installing older versions of golang-geo
+
+With the advent of [gopin.org](http://gopin.org/), you can now install older versions of `golang-geo`!  Consult [CHANGELOG.md](https://github.com/kellydunn/golang-geo/blob/master/CHANGELOG.md) for the commit hash of the version you wish to build against.
+
+## roadmap
   - More Tests!
   - Redis / NOSQL Mapper
   - Bing Maps?
   - Add an abstraction layer for PostgreSQL earthdistance / PostGIS
 
-# testing
+## testing
 
 By default, `golang-geo` will attempt to run its test suite against a PostgreSQL database.  However, you may run the tests with mocked SQL queries by specifying that you want to do so on the command line:
 
@@ -103,7 +107,7 @@ DB=mock go test
 
 The `$DB` environment variable is used to specify which database you'd like to run the tests against.  You may specify `postgres`, `mysql`, or `mock`.  The [Travis CI builds](https://travis-ci.org/kellydunn/golang-geo) for this project currently runs against all of these when running the test suite.
 
-# contributing
+## contributing
   - Fork the project
   - Create a topic branch (preferably the in the `gitflow` style of `feature/`, `hotfix/`, etc)
   - Make your changes and write complimentary tests to ensure coverage.
