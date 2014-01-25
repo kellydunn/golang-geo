@@ -1,6 +1,10 @@
 test:
   driver: mymysql
   openStr: points/root/
+
+  # TODO: investigate as to why goose requires an 'open' key instead of 'openStr'
+  open: points/root/
+
   table: points
   latCol: lat
   lngCol: lng

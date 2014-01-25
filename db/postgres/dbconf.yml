@@ -1,5 +1,9 @@
 test:
   openStr: user=postgres dbname=points sslmode=disable
+
+  # TODO: investigate as to why goose requires an 'open' key instead of 'openStr'
+  open: user=postgres dbname=points sslmode=disable
+
   driver: postgres
   table: points
   latCol: lat
