@@ -86,10 +86,10 @@ func (p *Point) BearingTo (p2 *Point) float64 {
 	lat1 := p.lat * math.Pi / 180.0
 	lat2 := p2.lat * math.Pi / 180.0
 
-    y := math.Sin(dLon) * math.Cos(lat2)
-    x := math.Cos(lat1) * math.Sin(lat2) -
-        math.Sin(lat1) * math.Cos(lat2) * math.Cos(dLon)
-    brng := math.Atan2(y, x) * 180.0 / math.Pi
+	y := math.Sin(dLon) * math.Cos(lat2)
+	x := math.Cos(lat1) * math.Sin(lat2) -
+		math.Sin(lat1) * math.Cos(lat2) * math.Cos(dLon)
+	brng := math.Atan2(y, x) * 180.0 / math.Pi
 
-    return brng
+	return brng
 }

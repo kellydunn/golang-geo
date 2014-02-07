@@ -75,9 +75,9 @@ func TestPointAtDistanceAndBearing(t *testing.T) {
 }
 
 func TestBearingTo(t *testing.T) {
-    p1 := &Point{lat: 40.7486, lng: -73.9864}
-    p2 := &Point{lat: 0.0, lng: 0.0}
-    bearing := p1.BearingTo(p2)
+	p1 := &Point{lat: 40.7486, lng: -73.9864}
+	p2 := &Point{lat: 0.0, lng: 0.0}
+	bearing := p1.BearingTo(p2)
 
 	// Expected bearing 60 degrees
 	resultBearing := 100.610833
