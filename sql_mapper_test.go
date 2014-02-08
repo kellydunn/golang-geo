@@ -28,7 +28,7 @@ func TestNewSQLMapper(t *testing.T) {
 
 // Ensures that creating a new SQLMapper and getting its SQL DB Connection
 // is the same *sql.DB used in initialization.
-func TestSqlDbConn(t * testing.T) {
+func TestSqlDbConn(t *testing.T) {
 	conf := sqlConfFromEnv()
 	db, _ := sql.Open(conf.driver, conf.openStr)
 

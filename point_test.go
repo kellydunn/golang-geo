@@ -73,3 +73,17 @@ func TestPointAtDistanceAndBearing(t *testing.T) {
 		t.Error("Unnacceptable result.", fmt.Sprintf("[%f, %f]", p.lat, p.lng))
 	}
 }
+
+func TestBearingTo(t *testing.T) {
+	p1 := &Point{lat: 40.7486, lng: -73.9864}
+	p2 := &Point{lat: 0.0, lng: 0.0}
+	bearing := p1.BearingTo(p2)
+
+	// Expected bearing 60 degrees
+	resultBearing := 100.610833
+
+	withinBearingBounds := bearing < resultBearing+0.001 && bearing > resultBearing-0.001
+	if !withinBearingBounds {
+		t.Error("Unnacceptable result.", fmt.Sprintf("%f", bearing))
+	}
+}
