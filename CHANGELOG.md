@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.2.0](https://github.com/kellydunn/golang-geo/tree/v0.2.0) Februrary 10, 2014
+
+  - Introduces `*Point.BearingTo`, which finds the initial bearing (or forward azimuth) from one point to another
+
 ## [0.1.0](https://github.com/kellydunn/golang-geo/tree/v0.1.0) January 25, 2014
 
   - Introducing `geo.NewSQLMapper`, which creates and returns a pointer to a new `geo.SQLMapper`.  This solved issues where users had to create extraneous `*sql.DB` in order to perform Mapper operations.  The introduction of this method signature marks `geo.HandleWithSQL` a canidate for removal in a Major Patch verison.
