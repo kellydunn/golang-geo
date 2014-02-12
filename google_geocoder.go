@@ -2,6 +2,7 @@ package geo
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -43,7 +44,11 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng := g.extractLatLngFromResponse(data)
+	lat, lng, err := g.extractLatLngFromResponse(data)
+	if err != nil {
+		return err
+	}
+
 	p := &Point{lat: lat, lng: lng}
 
 	return p, nil
@@ -54,14 +59,18 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 // @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
 // @return [float64] lat.  The first point's latitude in the response.
 // @return [float64] lng.  The first point's longitude in the response.
-func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
+func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
 	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
+
+	if len(res["results"]) == 0 {
+		return 0, 0, errors.New("ZERO_RESULTS")
+	}
 
 	lat, _ := res["results"][0]["geometry"]["location"]["lat"].(float64)
 	lng, _ := res["results"][0]["geometry"]["location"]["lng"].(float64)
 
-	return lat, lng
+	return lat, lng, nil
 }
 
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches
