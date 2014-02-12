@@ -46,7 +46,7 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 
 	lat, lng, err := g.extractLatLngFromResponse(data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	p := &Point{lat: lat, lng: lng}
