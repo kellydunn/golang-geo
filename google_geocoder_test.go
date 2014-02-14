@@ -42,6 +42,21 @@ func TestExtractLatLngFromRequest(t *testing.T) {
 	}
 }
 
+// TODO Test extracting LatLng from Google Geocoding Response when no results are returned
+func TestExtractLatLngFromRequestZeroResults(t *testing.T) {
+	g := &GoogleGeocoder{}
+
+	data, err := GetMockResponse("test/helpers/google_geocode_zero_results.json")
+	if err != nil {
+		t.Error("%v\n", err)
+	}
+
+	_, _, err = g.extractLatLngFromResponse(data)
+	if err != googleZeroResultsError {
+		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), googleZeroResultsError, err)
+	}
+}
+
 func GetMockResponse(s string) ([]byte, error) {
 	dataPath := path.Join(s)
 	_, readErr := os.Stat(dataPath)
