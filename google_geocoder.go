@@ -11,6 +11,8 @@ import (
 
 type GoogleGeocoder struct{}
 
+var googleZeroResultsError = errors.New("ZERO_RESULTS")
+
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as URL-encoded entities.  Returns an array of byes as a result, or any error incurred along the way
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
@@ -64,7 +66,7 @@ func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float6
 	json.Unmarshal(data, &res)
 
 	if len(res["results"]) == 0 {
-		return 0, 0, errors.New("ZERO_RESULTS")
+		return 0, 0, googleZeroResultsError
 	}
 
 	lat, _ := res["results"][0]["geometry"]["location"]["lat"].(float64)
