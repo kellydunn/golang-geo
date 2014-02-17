@@ -16,11 +16,14 @@ type MapQuestGeocoder struct {
 	//   - apiUrl ???
 }
 
+// Issues a request to the open mapquest api geocoding services using the passed in url query.
+// Returns an array of bytes as the result of the api call or an error if one occurs during the process.
 func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
-
 	fullUrl := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/%s", url)
-	// TODO Refactor into an api caller perhaps :P
+
+	// TODO Refactor into an api driver of some sort
+	//      It seems odd that golang-geo should be responsible of versioning of APIs, etc.
 	req, _ := http.NewRequest("GET", fullUrl, nil)
 	resp, requestErr := client.Do(req)
 
@@ -38,8 +41,8 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	return data, nil
 }
 
-// Use MapQuest's open service for geocoding
-// @param [String] str.  The query in which to geocode.
+// Returns the first point returned by MapQuest's geocoding service or an error
+// if one occurs during the geocoding request.
 func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 	data, err := g.Request(fmt.Sprintf("search.php?q=%s&format=json", url_safe_query))
@@ -54,9 +57,6 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 }
 
 // private
-// @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
-// @return [float64] lat.  The first point's latitude in the response.
-// @return [float64] lng.  The first point's longitude in the response.
 func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
