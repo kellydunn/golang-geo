@@ -57,6 +57,8 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 }
 
 // private
+
+// Extracts the first lat and lng values from a MapQuest response body.
 func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
@@ -67,6 +69,8 @@ func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, floa
 	return lat, lng
 }
 
+// Returns the first most available address that corresponds to the passed in point.
+// It may also return an error if one occurs during execution.
 func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	data, err := g.Request(fmt.Sprintf("reverse.php?lat=%f&lon=%f&format=json", p.lat, p.lng))
 	if err != nil {
@@ -78,6 +82,7 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	return resStr, nil
 }
 
+// Return sthe first address in the passed in byte array.
 func (g *MapQuestGeocoder) extractAddressFromResponse(data []byte) string {
 	res := make(map[string]map[string]string)
 	json.Unmarshal(data, &res)
