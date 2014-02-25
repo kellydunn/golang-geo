@@ -3,6 +3,7 @@ package geo
 import (
 	"encoding/json"
 	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -10,11 +11,9 @@ import (
 )
 
 // A Geocoder that makes use of open street map's geocoding service
-type MapQuestGeocoder struct {
-	// TODO Figure out a better way to initialize mapquest geocoders
-	//   - client ???
-	//   - apiUrl ???
-}
+type MapQuestGeocoder struct {}
+
+var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
 // Issues a request to the open mapquest api geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
@@ -50,7 +49,11 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng := g.extractLatLngFromResponse(data)
+	lat, lng, extractErr := g.extractLatLngFromResponse(data)
+	if extractErr != nil {
+		return nil, extractErr
+	}
+
 	p := &Point{lat: lat, lng: lng}
 
 	return p, nil
@@ -59,14 +62,18 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 // private
 
 // Extracts the first lat and lng values from a MapQuest response body.
-func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64) {
+func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
+
+	if len(res) == 0 {
+		return 0, 0, mapquestZeroResultsError
+	}
 
 	lat, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
 	lng, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
 
-	return lat, lng
+	return lat, lng, nil
 }
 
 // Returns the first most available address that corresponds to the passed in point.
