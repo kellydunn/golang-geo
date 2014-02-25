@@ -11,7 +11,8 @@ type Point struct {
 }
 
 const (
-	EARTH_RADIUS = 6371 // Earth's radius ~= 6,371km, according to wikipedia
+	// According to Wikipedia, the Earth's radius is about 6,371km
+	EARTH_RADIUS = 6371 
 )
 
 // Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
@@ -80,7 +81,6 @@ func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) BearingTo(p2 *Point) float64 {
 
-	//dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
 	dLon := (p2.lng - p.lng) * math.Pi / 180.0
 
 	lat1 := p.lat * math.Pi / 180.0

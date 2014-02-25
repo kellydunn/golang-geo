@@ -14,7 +14,7 @@ type GoogleGeocoder struct{}
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
 
 // Issues a request to the google geocoding service and forwards the passed in params string
-// as URL-encoded entities.  Returns an array of byes as a result, or any error incurred along the way
+// as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	client := &http.Client{}
 
@@ -56,11 +56,8 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	return p, nil
 }
 
-// private
-// TODO Refactor out of MapQuestGeocoder
-// @param [[]byte] data.  The response struct from the earlier mapquest request as an array of bytes.
-// @return [float64] lat.  The first point's latitude in the response.
-// @return [float64] lng.  The first point's longitude in the response.
+
+// Extracts the first lat and lng values from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
 	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
@@ -88,6 +85,7 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	return resStr, nil
 }
 
+// Returns an Address from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
 	res := make(map[string][]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
