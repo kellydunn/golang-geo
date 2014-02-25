@@ -56,7 +56,6 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	return p, nil
 }
 
-
 // Extracts the first lat and lng values from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
 	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
