@@ -1,5 +1,10 @@
 # golang-geo changelog
 
+## [0.2.1](https://github.com/kellydunn/golang-geo/tree/v0.2.1) Februrary 24, 2014
+
+  - Introduces some bugfixes for google maps and mapquest api error handling
+  - Improved some documentation
+
 ## [0.2.0](https://github.com/kellydunn/golang-geo/tree/v0.2.0) Februrary 10, 2014
 
   - Introduces `*Point.BearingTo`, which finds the initial bearing (or forward azimuth) from one point to another
