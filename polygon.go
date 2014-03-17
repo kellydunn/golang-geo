@@ -43,19 +43,19 @@ func (c Contour) Contains(p *Point) bool {
 		}
 		next := c[ii]
 
-		if (p.lng >= next.lng || p.lng <= curr.lng) &&
-			(p.lng >= curr.lng || p.lng <= next.lng) {
+		if (p.Lng() >= next.Lng() || p.Lng() <= curr.Lng()) &&
+			(p.Lng() >= curr.Lng() || p.Lng() <= next.Lng()) {
 			continue
 		}
 		// Edge is from curr to next.
-		if p.lat >= math.Max(curr.lat, next.lat) ||
-			next.lng == curr.lng {
+		if p.Lat() >= math.Max(curr.Lat(), next.Lat()) ||
+			next.Lng() == curr.Lng() {
 			continue
 		}
 
 		// Find where the line intersects...
-		xint := (p.lng-curr.lng)*(next.lat-curr.lat)/(next.lng-curr.lng) + curr.lat
-		if curr.lat != next.lat && p.lat > xint {
+		xint := (p.Lng()-curr.Lng())*(next.Lat()-curr.Lat())/(next.Lng()-curr.Lng()) + curr.Lat()
+		if curr.Lat() != next.Lat() && p.lat > xint {
 			continue
 		}
 
