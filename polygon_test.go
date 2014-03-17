@@ -53,7 +53,7 @@ func TestPointInPolygonWithHole(t *testing.T) {
 		t.Error("Sydney should be in NSW")
 	}
 
-	losangeles := Point{118.28333, 34.01667}
+	losangeles := Point{lng : 118.28333, lat : 34.01667}
 	isnsw = nswmulti.Contains(&losangeles)	
 	if isnsw == true {
 		t.Error("Los Angeles should not be in NSW")
