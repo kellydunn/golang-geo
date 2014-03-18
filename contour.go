@@ -1,20 +1,20 @@
 package geo
 
 import (
+	"encoding/json"
 	"math"
 	"os"
-	"encoding/json"
 )
 
 // Contour represents a sequence of vertices connected by line segments, forming a closed shape.
 type Contour struct {
-	Points 	[]*Point
+	Points []*Point
 }
 
 // Can't unpack JSON into normal Point{} as the fields are unexported. Need to unpack here first
 type TestPoint struct {
-	Lat float64			`json:"lat"`
-	Lng float64			`json:"lng"`
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
 }
 
 type TestPoints struct {
@@ -69,18 +69,18 @@ func json2contour(filename string) (*Contour, error) {
 	cont := new(Contour)
 	ps := new(TestPoints)
 	file, err := os.Open(filename)
-    if err != nil {
-        return cont, err
-    }
+	if err != nil {
+		return cont, err
+	}
 
-    jsonParser := json.NewDecoder(file)
-    if err = jsonParser.Decode(&ps); err != nil {
-        return cont, err
-    }
-    // Note: Have to do this as we can't unpack a contour point directly from JSON.
-    for _, p := range ps.Points {
-    	np := NewPoint(p.Lat, p.Lng)
-    	cont.Add(np)
-    } 
-    return cont, err
+	jsonParser := json.NewDecoder(file)
+	if err = jsonParser.Decode(&ps); err != nil {
+		return cont, err
+	}
+	// Note: Have to do this as we can't unpack a contour point directly from JSON.
+	for _, p := range ps.Points {
+		np := NewPoint(p.Lat, p.Lng)
+		cont.Add(np)
+	}
+	return cont, err
 }

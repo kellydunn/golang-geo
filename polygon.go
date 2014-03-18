@@ -15,7 +15,6 @@ func (p *Polygon) Add(c *Contour) {
 	p.Contours = append(p.Contours, c)
 }
 
-
 // For geoJSON polygons, the first polygon is the outer polygon, all secondary
 // polygons are internal cut outs. e.g. the centre of a donut.
 func (poly Polygon) Contains(p *Point) bool {

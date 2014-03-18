@@ -2,8 +2,8 @@ package geo
 
 import (
 	"encoding/json"
-	"fmt"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -11,7 +11,7 @@ import (
 )
 
 // A Geocoder that makes use of open street map's geocoding service
-type MapQuestGeocoder struct {}
+type MapQuestGeocoder struct{}
 
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
