@@ -1,7 +1,9 @@
 package geo
 
 import (
+	"encoding/json"
 	"testing"
+	"os"
 )
 
 // Tests a point is in a real geo polygon
@@ -58,4 +60,35 @@ func TestPointInPolygonWithHole(t *testing.T) {
 		t.Error("Los Angeles should not be in NSW")
 	}
 
+}
+
+// Can't unpack JSON into normal Point{} as the fields are unexported. Need to unpack here first
+type TestPoint struct {
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
+}
+
+type TestPoints struct {
+	Points []*TestPoint
+}
+
+// Open a JSON file and unpack the polygon
+func json2contour(filename string) (*Contour, error) {
+	cont := new(Contour)
+	ps := new(TestPoints)
+	file, err := os.Open(filename)
+	if err != nil {
+		return cont, err
+	}
+
+	jsonParser := json.NewDecoder(file)
+	if err = jsonParser.Decode(&ps); err != nil {
+		return cont, err
+	}
+	// Note: Have to do this as we can't unpack a contour point directly from JSON.
+	for _, p := range ps.Points {
+		np := NewPoint(p.Lat, p.Lng)
+		cont.Add(np)
+	}
+	return cont, err
 }
