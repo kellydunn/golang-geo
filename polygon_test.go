@@ -2,8 +2,8 @@ package geo
 
 import (
 	"encoding/json"
-	"testing"
 	"os"
+	"testing"
 )
 
 // Tests a point is in a real geo polygon

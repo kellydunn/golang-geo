@@ -1,7 +1,9 @@
 package geo
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -85,5 +87,33 @@ func TestBearingTo(t *testing.T) {
 	withinBearingBounds := bearing < resultBearing+0.001 && bearing > resultBearing-0.001
 	if !withinBearingBounds {
 		t.Error("Unnacceptable result.", fmt.Sprintf("%f", bearing))
+	}
+}
+
+func TestMarshalJSON(t *testing.T) {
+	p := NewPoint(40.7486, -73.9864)
+	res, err := json.Marshal(p)
+
+	if err != nil {
+		log.Print(err)
+		t.Error("Should not encounter an error when attempting to Marshal a Point to JSON")
+	}
+
+	if string(res) == "{lat:40.7486, lng:-73.9864}" {
+		t.Error("Point should correctly Marshal to JSON")
+	}
+}
+
+func TestUnmarshalJSON(t *testing.T) {
+	data := []byte(`{"lat":40.7486, "lng":-73.9864}`)
+	p := &Point{}
+	err := p.UnmarshalJSON(data)
+
+	if err != nil {
+		t.Errorf("Should not encounter an error when attempting to Unmarshal a Point from JSON")
+	}
+
+	if p.Lat() != 40.7486 || p.Lng() != -73.9864 {
+		t.Errorf("Point has mismatched data after Unmarshalling from JSON")
 	}
 }
