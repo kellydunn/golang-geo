@@ -13,11 +13,27 @@ func TestPointInPolygon(t *testing.T) {
 	if err != nil {
 		t.Error("brunei json file failed to parse: ", err)
 	}
+
 	// See if the capital city of brunei is inside the Brunei polygon?
 	point := Point{lng: 114.9480600, lat: 4.9402900}
 	if !brunei.Contains(&point) {
 		t.Error("Expected the capital of Brunei to be in Brunei, but it wasn't.")
 	}
+}
+
+func TestPointNotInPolygon(t *testing.T) {
+	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
+	brunei, err := json2contour("test/data/brunei.json")
+	if err != nil {
+		t.Error("brunei json file failed to parse: ", err)
+	}
+
+	// Seattle, WA should not be inside of Brunei
+	point := NewPoint(47.45, 122.30)
+	if brunei.Contains(point) {
+		t.Error("Seattle, WA [47.45, 122.30] should not be inside of Brunei")
+	}
+	
 }
 
 // Tests a point is in a real geo polygon that has a hole in it, e.g. a donut
@@ -26,6 +42,7 @@ func TestPointInPolygonWithHole(t *testing.T) {
 	if err != nil {
 		t.Error("nsw json file failed to parse: ", err)
 	}
+
 	act, err := json2contour("test/data/act.json")
 	if err != nil {
 		t.Error("act json file failed to parse: ", err)
