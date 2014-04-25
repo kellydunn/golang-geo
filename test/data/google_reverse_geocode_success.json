@@ -1,0 +1,182 @@
+{
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "285",
+          "short_name": "285",
+          "types": [
+            "street_number"
+          ]
+        },
+        {
+          "long_name": "Bedford Avenue",
+          "short_name": "Bedford Ave",
+          "types": [
+            "route"
+          ]
+        },
+        {
+          "long_name": "Williamsburg",
+          "short_name": "Williamsburg",
+          "types": [
+            "neighborhood",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Brooklyn",
+          "short_name": "Brooklyn",
+          "types": [
+            "sublocality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "New York",
+          "short_name": "New York",
+          "types": [
+            "locality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Kings",
+          "short_name": "Kings",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "New York",
+          "short_name": "NY",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "United States",
+          "short_name": "US",
+          "types": [
+            "country",
+            "political"
+          ]
+        },
+        {
+          "long_name": "11211",
+          "short_name": "11211",
+          "types": [
+            "postal_code"
+          ]
+        }
+      ],
+      "formatted_address": "285 Bedford Avenue, Brooklyn, NY 11211, USA",
+      "geometry": {
+        "location": {
+          "lat": 40.7141289,
+          "lng": -73.9614074
+        },
+        "location_type": "ROOFTOP",
+        "viewport": {
+          "northeast": {
+            "lat": 40.71547788029149,
+            "lng": -73.96005841970849
+          },
+          "southwest": {
+            "lat": 40.7127799197085,
+            "lng": -73.96275638029151
+          }
+        }
+      },
+      "types": [
+        "street_address"
+      ]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Grand St - Bedford Av",
+          "short_name": "Grand St - Bedford Av",
+          "types": [
+            "bus_station",
+            "transit_station",
+            "establishment"
+          ]
+        },
+        {
+          "long_name": "Williamsburg",
+          "short_name": "Williamsburg",
+          "types": [
+            "neighborhood",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Brooklyn",
+          "short_name": "Brooklyn",
+          "types": [
+            "sublocality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Kings",
+          "short_name": "Kings",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "New York",
+          "short_name": "NY",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "United States",
+          "short_name": "US",
+          "types": [
+            "country",
+            "political"
+          ]
+        },
+        {
+          "long_name": "11211",
+          "short_name": "11211",
+          "types": [
+            "postal_code"
+          ]
+        }
+      ],
+      "formatted_address": "Grand St - Bedford Av, Brooklyn, NY 11211, USA",
+      "geometry": {
+        "location": {
+          "lat": 40.714321,
+          "lng": -73.961151
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 40.71566998029149,
+            "lng": -73.95980201970849
+          },
+          "southwest": {
+            "lat": 40.7129720197085,
+            "lng": -73.96249998029151
+          }
+        }
+      },
+      "types": [
+        "bus_station",
+        "transit_station",
+        "establishment"
+      ]
+    }
+  ],
+  "status": "OK"
+}
