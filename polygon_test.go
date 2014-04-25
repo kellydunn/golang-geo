@@ -62,14 +62,8 @@ func TestPointInPolygonWithHole(t *testing.T) {
 
 }
 
-// Can't unpack JSON into normal Point{} as the fields are unexported. Need to unpack here first
-type TestPoint struct {
-	Lat float64 `json:"lat"`
-	Lng float64 `json:"lng"`
-}
-
 type TestPoints struct {
-	Points []*TestPoint
+	Points []*Point
 }
 
 // Open a JSON file and unpack the polygon
@@ -85,10 +79,11 @@ func json2contour(filename string) (*Contour, error) {
 	if err = jsonParser.Decode(&ps); err != nil {
 		return cont, err
 	}
+
 	// Note: Have to do this as we can't unpack a contour point directly from JSON.
 	for _, p := range ps.Points {
-		np := NewPoint(p.Lat, p.Lng)
-		cont.Add(np)
+		cont.Add(p)
 	}
+
 	return cont, err
 }
