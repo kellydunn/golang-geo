@@ -90,6 +90,7 @@ func TestBearingTo(t *testing.T) {
 	}
 }
 
+// Enures that a point can be marhalled into JSON
 func TestMarshalJSON(t *testing.T) {
 	p := NewPoint(40.7486, -73.9864)
 	res, err := json.Marshal(p)
@@ -104,6 +105,7 @@ func TestMarshalJSON(t *testing.T) {
 	}
 }
 
+// Enures that a point can be unmarhalled from JSON
 func TestUnmarshalJSON(t *testing.T) {
 	data := []byte(`{"lat":40.7486, "lng":-73.9864}`)
 	p := &Point{}
