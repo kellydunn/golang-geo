@@ -21,6 +21,8 @@ func TestPointInPolygon(t *testing.T) {
 	}
 }
 
+// Ensures that the polygon logic can correctly identify if a polygon 
+// does not contain a point.
 func TestPointNotInPolygon(t *testing.T) {
 	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
 	brunei, err := json2contour("test/data/brunei.json")
@@ -32,6 +34,13 @@ func TestPointNotInPolygon(t *testing.T) {
 	point := NewPoint(47.45, 122.30)
 	if brunei.Contains(point) {
 		t.Error("Seattle, WA [47.45, 122.30] should not be inside of Brunei")
+	}
+
+	// A point just outside of the successful bounds in Brunei
+	// Should not be contained in the Polygon
+	precision := NewPoint(114.659596, 4.007636)
+	if brunei.Contains(precision) {
+		t.Error("A point just outside of Brunei should not be contained in the Polygon")
 	}
 	
 }
