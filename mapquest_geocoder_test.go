@@ -9,7 +9,7 @@ import (
 func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 	g := &MapQuestGeocoder{}
 
-	data, err := GetMockResponse("test/helpers/mapquest_geocode_success.json")
+	data, err := GetMockResponse("test/data/mapquest_geocode_success.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}
@@ -28,7 +28,7 @@ func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 func TestMapQuestExtractLatLngFromRequestZeroResults(t *testing.T) {
 	g := &MapQuestGeocoder{}
 
-	data, err := GetMockResponse("test/helpers/mapquest_geocode_zero_results.json")
+	data, err := GetMockResponse("test/data/mapquest_geocode_zero_results.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}
