@@ -21,7 +21,7 @@ func TestPointInPolygon(t *testing.T) {
 	}
 }
 
-// Ensures that the polygon logic can correctly identify if a polygon 
+// Ensures that the polygon logic can correctly identify if a polygon
 // does not contain a point.
 func TestPointNotInPolygon(t *testing.T) {
 	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
@@ -42,7 +42,7 @@ func TestPointNotInPolygon(t *testing.T) {
 	if brunei.Contains(precision) {
 		t.Error("A point just outside of Brunei should not be contained in the Polygon")
 	}
-	
+
 }
 
 // Tests a point is in a real geo polygon that has a hole in it, e.g. a donut
