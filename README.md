@@ -89,7 +89,7 @@ development:
 
 ### installing older versions of golang-geo
 
-With the advent of [gopin.org](http://gopin.org/), you can now install older versions of `golang-geo`!  Consult [CHANGELOG.md](https://github.com/kellydunn/golang-geo/blob/master/CHANGELOG.md) for the commit hash of the version you wish to build against.
+With the advent of [gopkg.in](http://gopkg.in/), you can now install older versions of `golang-geo`!  Consult [CHANGELOG.md](https://github.com/kellydunn/golang-geo/blob/master/CHANGELOG.md) for the version you wish to build against.
 
 ## roadmap
   - More Tests!
