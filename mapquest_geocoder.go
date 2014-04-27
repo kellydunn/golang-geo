@@ -19,7 +19,7 @@ var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
 // Good for mocking in tests
 func SetMapquestGeocodeURL(newGeocodeURL string) {
-	googleGeocodeURL = newGeocodeURL
+	mapquestGeocodeURL = newGeocodeURL
 }
 
 // Issues a request to the open mapquest api geocoding services using the passed in url query.
