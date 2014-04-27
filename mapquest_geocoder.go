@@ -10,14 +10,21 @@ import (
 	"strconv"
 )
 
-// A Geocoder that makes use of open street map's geocoding service
+// This struct contains all the funcitonality
+// of interacting with the MapQuest Geocoding Service
 type MapQuestGeocoder struct{}
 
+// This is the error that consumers receive when there 
+// are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
+// This contains the base URL for the Mapquest Geocoder APII.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
-// Good for mocking in tests
+// Note:  In the next major revision (1.0.0), it is planned
+//        That Geocoders should adhere to the `geo.Geocoder`
+//        interface and provide versioning of APIs accordingly.
+// Sets the base URL for the Google Geocoding API.
 func SetMapquestGeocodeURL(newGeocodeURL string) {
 	mapquestGeocodeURL = newGeocodeURL
 }
@@ -65,8 +72,6 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 
 	return p, nil
 }
-
-// private
 
 // Extracts the first lat and lng values from a MapQuest response body.
 func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {

@@ -9,13 +9,21 @@ import (
 	"net/url"
 )
 
+// This struct contains all the funcitonality
+// of interacting with the Google Maps Geocoding Service
 type GoogleGeocoder struct{}
 
+// This is the error that consumers receive when there 
+// are no results from the geocoding request.
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
 
+// This contains the base URL for the Google Geocoder API.
 var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
 
-// Good for mocking in tests
+// Note:  In the next major revision (1.0.0), it is planned
+//        That Geocoders should adhere to the `geo.Geocoder`
+//        interface and provide versioning of APIs accordingly.
+// Sets the base URL for the Google Geocoding API.  
 func SetGoogleGeocodeURL(newGeocodeURL string) {
 	googleGeocodeURL = newGeocodeURL
 }
@@ -65,6 +73,8 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 
 // Extracts the first lat and lng values from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
+
+	// TODO  This is an obvious hack and needs to be redesigned.
 	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
 
