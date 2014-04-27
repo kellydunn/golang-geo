@@ -13,12 +13,19 @@ type GoogleGeocoder struct{}
 
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
 
+var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
+
+// Good for mocking in tests
+func SetGoogleGeocodeURL(newGeocodeURL string) {
+	googleGeocodeURL = newGeocodeURL
+}
+
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	client := &http.Client{}
 
-	fullUrl := fmt.Sprintf("http://maps.googleapis.com/maps/api/geocode/json?sensor=false&%s", params)
+	fullUrl := fmt.Sprintf("%s?sensor=false&%s", googleGeocodeURL, params)
 
 	// TODO Potentially refactor out from MapQuestGeocoder as well
 	req, _ := http.NewRequest("GET", fullUrl, nil)
