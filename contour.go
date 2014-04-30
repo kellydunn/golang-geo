@@ -19,7 +19,7 @@ func (c *Contour) Add(p *Point) {
 // convex or concave.
 // See: http://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm
 // Returns true if p is inside the polygon defined by contour.
-func (c Contour) Contains(p *Point) bool {
+func (c *Contour) Contains(p *Point) bool {
 	// Cast ray from p.x towards the right
 	intersections := 0
 	for i := range c.Points {
