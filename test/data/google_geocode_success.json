@@ -1,0 +1,95 @@
+{
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "San Francisco Airport",
+          "short_name": "San Francisco Airport",
+          "types": [
+            "establishment"
+          ]
+        },
+        {
+          "long_name": "South Airport Boulevard",
+          "short_name": "South Airport Boulevard",
+          "types": [
+            "route"
+          ]
+        },
+        {
+          "long_name": "San Francisco",
+          "short_name": "SF",
+          "types": [
+            "locality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "San Mateo",
+          "short_name": "San Mateo",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "California",
+          "short_name": "CA",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "United States",
+          "short_name": "US",
+          "types": [
+            "country",
+            "political"
+          ]
+        },
+        {
+          "long_name": "94128",
+          "short_name": "94128",
+          "types": [
+            "postal_code"
+          ]
+        }
+      ],
+      "formatted_address": "San Francisco Airport (SFO), South Airport Boulevard, San Francisco, CA 94128, USA",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 37.6397017,
+            "lng": -122.3549197
+          },
+          "southwest": {
+            "lat": 37.604291,
+            "lng": -122.4015428
+          }
+        },
+        "location": {
+          "lat": 37.615223,
+          "lng": -122.389979
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 37.6397017,
+            "lng": -122.3549197
+          },
+          "southwest": {
+            "lat": 37.604291,
+            "lng": -122.4015428
+          }
+        }
+      },
+      "types": [
+        "airport",
+        "transit_station",
+        "establishment"
+      ]
+    }
+  ],
+  "status": "OK"
+}

@@ -12,7 +12,7 @@ import (
 func TestExtractAddressFromResponse(t *testing.T) {
 	g := &GoogleGeocoder{}
 
-	data, err := GetMockResponse("test/helpers/google_reverse_geocode_success.json")
+	data, err := GetMockResponse("test/data/google_reverse_geocode_success.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}
@@ -27,7 +27,7 @@ func TestExtractAddressFromResponse(t *testing.T) {
 func TestExtractLatLngFromRequest(t *testing.T) {
 	g := &GoogleGeocoder{}
 
-	data, err := GetMockResponse("test/helpers/google_geocode_success.json")
+	data, err := GetMockResponse("test/data/google_geocode_success.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}
@@ -46,7 +46,7 @@ func TestExtractLatLngFromRequest(t *testing.T) {
 func TestExtractLatLngFromRequestZeroResults(t *testing.T) {
 	g := &GoogleGeocoder{}
 
-	data, err := GetMockResponse("test/helpers/google_geocode_zero_results.json")
+	data, err := GetMockResponse("test/data/google_geocode_zero_results.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}

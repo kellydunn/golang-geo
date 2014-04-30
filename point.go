@@ -1,6 +1,10 @@
 package geo
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"log"
 	"math"
 )
 
@@ -12,7 +16,7 @@ type Point struct {
 
 const (
 	// According to Wikipedia, the Earth's radius is about 6,371km
-	EARTH_RADIUS = 6371 
+	EARTH_RADIUS = 6371
 )
 
 // Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
@@ -30,7 +34,9 @@ func (p *Point) Lng() float64 {
 	return p.lng
 }
 
-// Returns a Point populated with the lat and lng coordinates of transposing the origin point the distance (in meters) supplied by the compass bearing (in degrees) supplied.
+// Returns a Point populated with the lat and lng coordinates 
+// by transposing the origin point the passed in distance (in meters) 
+// by the passed in compass bearing (in degrees).
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point {
 
@@ -92,4 +98,29 @@ func (p *Point) BearingTo(p2 *Point) float64 {
 	brng := math.Atan2(y, x) * 180.0 / math.Pi
 
 	return brng
+}
+
+// Renders the current Point to valid JSON.
+// Implements the json.Marshaller Interface.
+func (p *Point) MarshalJSON() ([]byte, error) {
+	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.Lat(), p.Lng())
+	return []byte(res), nil
+}
+
+// Decodes the current Point from a JSON body.
+// Throws an error if the body of the point cannot be interpreted by the JSON body
+func (p *Point) UnmarshalJSON(data []byte) error {
+	// TODO throw an error if there is an issue parsing the body.
+	dec := json.NewDecoder(bytes.NewReader(data))
+	var values map[string]float64
+	err := dec.Decode(&values)
+
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+
+	*p = *NewPoint(values["lat"], values["lng"])
+
+	return nil
 }

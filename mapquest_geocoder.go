@@ -2,24 +2,38 @@ package geo
 
 import (
 	"encoding/json"
-	"fmt"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
 )
 
-// A Geocoder that makes use of open street map's geocoding service
-type MapQuestGeocoder struct {}
+// This struct contains all the funcitonality
+// of interacting with the MapQuest Geocoding Service
+type MapQuestGeocoder struct{}
 
+// This is the error that consumers receive when there
+// are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
+
+// This contains the base URL for the Mapquest Geocoder APII.
+var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
+
+// Note:  In the next major revision (1.0.0), it is planned
+//        That Geocoders should adhere to the `geo.Geocoder`
+//        interface and provide versioning of APIs accordingly.
+// Sets the base URL for the Google Geocoding API.
+func SetMapquestGeocodeURL(newGeocodeURL string) {
+	mapquestGeocodeURL = newGeocodeURL
+}
 
 // Issues a request to the open mapquest api geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
 func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
-	fullUrl := fmt.Sprintf("http://open.mapquestapi.com/nominatim/v1/%s", url)
+	fullUrl := fmt.Sprintf("%s/%s", mapquestGeocodeURL, url)
 
 	// TODO Refactor into an api driver of some sort
 	//      It seems odd that golang-geo should be responsible of versioning of APIs, etc.
@@ -58,8 +72,6 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 
 	return p, nil
 }
-
-// private
 
 // Extracts the first lat and lng values from a MapQuest response body.
 func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
