@@ -40,7 +40,6 @@ func TestPointNotInPolygon(t *testing.T) {
 	if brunei.Contains(precision) {
 		t.Error("A point just outside of Brunei should not be contained in the Polygon")
 	}
-
 }
 
 // Ensures that a point can be contained in a complex polygon (e.g. a donut) 
@@ -92,6 +91,41 @@ func TestPointInPolygonWithHole(t *testing.T) {
 		t.Error("Los Angeles should not be in NSW")
 	}
 
+}
+
+// Ensures that jumping over the equator and the greenwich meridian
+// Doesn't give us any false positives or false negatives
+func TestEquatorGreenwichContains(t *testing.T) {
+	point1 := NewPoint(0.0, 0.0)
+	point2 := NewPoint(0.1, 0.1)
+	point3 := NewPoint(0.1, -0.1)
+	point4 := NewPoint(-0.1, -0.1)
+	point5 := NewPoint(-0.1, 0.1)
+	polygon, err := polygonFromFile("test/data/equator_greenwich.json")
+
+	if err != nil {
+		t.Errorf("error parsing polygon", err)
+	}
+
+	if !polygon.Contains(point1) {
+		t.Errorf("Should contain middle point of earth")
+	}
+
+	if !polygon.Contains(point2) {
+		t.Errorf("Should contain point %v", point2)
+	}
+
+	if !polygon.Contains(point3) {
+		t.Errorf("Should contain point %v", point3)
+	}
+
+	if !polygon.Contains(point4) {
+		t.Errorf("Should contain point %v", point4)
+	}
+
+	if !polygon.Contains(point5) {
+		t.Errorf("Should contain point %v", point5)
+	}
 }
 
 // A test struct used to encapsulate and 
