@@ -9,6 +9,7 @@
   - Improves documentation and testing coverage.
   - Indicates that consumers should use [gopkg.in](http://gopkg.in) in order to download older versions of the library.
   - Increases testing flexibilty by giving Geocoders the ability to specify their own base URL (Thanks, @adams-sarah!)
+  - Points now implement the `json.Marshaler` and `json.Unmarshaler` interface!
 
 ## [0.2.1](https://github.com/kellydunn/golang-geo/tree/v0.2.1) Februrary 24, 2014
 
