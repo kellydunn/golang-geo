@@ -13,7 +13,7 @@ import (
 // of interacting with the Google Maps Geocoding Service
 type GoogleGeocoder struct{}
 
-// This is the error that consumers receive when there 
+// This is the error that consumers receive when there
 // are no results from the geocoding request.
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
 
@@ -23,7 +23,7 @@ var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
-// Sets the base URL for the Google Geocoding API.  
+// Sets the base URL for the Google Geocoding API.
 func SetGoogleGeocodeURL(newGeocodeURL string) {
 	googleGeocodeURL = newGeocodeURL
 }

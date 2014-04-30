@@ -14,7 +14,7 @@ import (
 // of interacting with the MapQuest Geocoding Service
 type MapQuestGeocoder struct{}
 
-// This is the error that consumers receive when there 
+// This is the error that consumers receive when there
 // are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
