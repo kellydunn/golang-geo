@@ -46,10 +46,10 @@ func (p *Polygon) Contains(point *Point) bool {
 	start := len(p.points) - 1
 	end := 0
 
-	contains := p.rayIntersectsSegment(point, p.points[start], p.points[end])
+	contains := p.intersectsWithRaycast(point, p.points[start], p.points[end])
 
 	for i := 1; i < len(p.points); i++ {
-		if p.rayIntersectsSegment(point, p.points[i-1], p.points[i]) {
+		if p.intersectsWithRaycast(point, p.points[i-1], p.points[i]) {
 			contains = !contains
 		}
 	}
@@ -57,7 +57,7 @@ func (p *Polygon) Contains(point *Point) bool {
 	return contains
 }
 
-func (p *Polygon) rayIntersectsSegment(point *Point, start *Point, end *Point) bool {
+func (p *Polygon) intersectsWithRaycast(point *Point, start *Point, end *Point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
 	if start.Lng() > end.Lng() {
