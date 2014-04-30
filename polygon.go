@@ -12,10 +12,15 @@ type Polygon struct {
 	points []*Point
 }
 
+// Creates and returns a new pointer to a Polygon
+// composed of the passed in points.  Points are 
+// considered to be in order such that the last point
+// forms an edge with the first point.
 func NewPolygon(points []*Point) *Polygon {
 	return &Polygon{points: points}
 }
 
+// Returns the points of the current Polygon.
 func (p *Polygon) Points() []*Point {
 	return p.points
 }
@@ -57,6 +62,9 @@ func (p *Polygon) Contains(point *Point) bool {
 	return contains
 }
 
+// Using the raycast algorithm, this returns whether or not the passed in point
+// Intersects with the edge drawn by the passed in start and end points.
+// Original implementation: http://rosettacode.org/wiki/Ray-casting_algorithm#Go
 func (p *Polygon) intersectsWithRaycast(point *Point, start *Point, end *Point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
