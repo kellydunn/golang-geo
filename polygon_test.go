@@ -9,7 +9,7 @@ import (
 // Tests a point is in a real geo polygon
 func TestPointInPolygon(t *testing.T) {
 	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
-	brunei, err := json2contour("test/data/brunei.json")
+	brunei, err := polygonFromFile("test/data/brunei.json")
 	if err != nil {
 		t.Error("brunei json file failed to parse: ", err)
 	}
@@ -25,7 +25,7 @@ func TestPointInPolygon(t *testing.T) {
 // does not contain a point.
 func TestPointNotInPolygon(t *testing.T) {
 	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
-	brunei, err := json2contour("test/data/brunei.json")
+	brunei, err := polygonFromFile("test/data/brunei.json")
 	if err != nil {
 		t.Error("brunei json file failed to parse: ", err)
 	}
@@ -47,12 +47,12 @@ func TestPointNotInPolygon(t *testing.T) {
 
 // Tests a point is in a real geo polygon that has a hole in it, e.g. a donut
 func TestPointInPolygonWithHole(t *testing.T) {
-	nsw, err := json2contour("test/data/nsw.json")
+	nsw, err := polygonFromFile("test/data/nsw.json")
 	if err != nil {
 		t.Error("nsw json file failed to parse: ", err)
 	}
 
-	act, err := json2contour("test/data/act.json")
+	act, err := polygonFromFile("test/data/act.json")
 	if err != nil {
 		t.Error("act json file failed to parse: ", err)
 	}
@@ -66,9 +66,15 @@ func TestPointInPolygonWithHole(t *testing.T) {
 	}
 
 	// Using NSW as a multi-contour polygon
-	nswmulti := new(Polygon)
-	nswmulti.Add(nsw)
-	nswmulti.Add(act)
+	nswmulti := &Polygon{}
+	for _, p := range nsw.Points() {
+		nswmulti.Add(p)
+	}
+
+	for _, p := range act.Points() {
+		nswmulti.Add(p)
+	}
+
 	isnsw = nswmulti.Contains(&canberra)
 	if isnsw {
 		t.Error("Canberra should not be in NSW as it falls in the donut contour of the ACT")
@@ -82,34 +88,34 @@ func TestPointInPolygonWithHole(t *testing.T) {
 
 	losangeles := Point{lng: 118.28333, lat: 34.01667}
 	isnsw = nswmulti.Contains(&losangeles)
+
 	if isnsw {
 		t.Error("Los Angeles should not be in NSW")
 	}
 
 }
 
-type TestPoints struct {
+type Points struct {
 	Points []*Point
 }
 
 // Open a JSON file and unpack the polygon
-func json2contour(filename string) (*Contour, error) {
-	cont := new(Contour)
-	ps := new(TestPoints)
+func polygonFromFile(filename string) (*Polygon, error) {
+	p := &Polygon{}
 	file, err := os.Open(filename)
 	if err != nil {
-		return cont, err
+		return nil, err
 	}
 
+	points := new(Points)
 	jsonParser := json.NewDecoder(file)
-	if err = jsonParser.Decode(&ps); err != nil {
-		return cont, err
+	if err = jsonParser.Decode(&points); err != nil {
+		return nil, err
 	}
 
-	// Note: Have to do this as we can't unpack a contour point directly from JSON.
-	for _, p := range ps.Points {
-		cont.Add(p)
+	for _, point := range points.Points {
+		p.Add(point)
 	}
 
-	return cont, err
+	return p, nil
 }
