@@ -6,25 +6,23 @@ import (
 	"testing"
 )
 
-// Tests a point is in a real geo polygon
+// Ensures that the library can detect if a point is in a polygon.
+// Uses Brunei and the capital of Brunei as a set of test points.
 func TestPointInPolygon(t *testing.T) {
-	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
 	brunei, err := polygonFromFile("test/data/brunei.json")
 	if err != nil {
 		t.Error("brunei json file failed to parse: ", err)
 	}
 
-	// See if the capital city of brunei is inside the Brunei polygon?
 	point := Point{lng: 114.9480600, lat: 4.9402900}
 	if !brunei.Contains(&point) {
 		t.Error("Expected the capital of Brunei to be in Brunei, but it wasn't.")
 	}
 }
 
-// Ensures that the polygon logic can correctly identify if a polygon
-// does not contain a point.
+// Ensures that the polygon logic can correctly identify if a polygon does not contain a point.
+// Uses Brunei, Seattle, and a point directly outside of Brunei limits as test points.
 func TestPointNotInPolygon(t *testing.T) {
-	// Contour is the outline polygon of Brunei made up of points: (Long, Lat)
 	brunei, err := polygonFromFile("test/data/brunei.json")
 	if err != nil {
 		t.Error("brunei json file failed to parse: ", err)
@@ -45,7 +43,8 @@ func TestPointNotInPolygon(t *testing.T) {
 
 }
 
-// Tests a point is in a real geo polygon that has a hole in it, e.g. a donut
+// Ensures that a point can be contained in a complex polygon (e.g. a donut) 
+// This particular Polygon has a hole in it.
 func TestPointInPolygonWithHole(t *testing.T) {
 	nsw, err := polygonFromFile("test/data/nsw.json")
 	if err != nil {
@@ -95,11 +94,13 @@ func TestPointInPolygonWithHole(t *testing.T) {
 
 }
 
-type Points struct {
+// A test struct used to encapsulate and 
+// Unmarshal JSON into.
+type testPoints struct {
 	Points []*Point
 }
 
-// Open a JSON file and unpack the polygon
+// Opens a JSON file and unmarshals the data into a Polygon
 func polygonFromFile(filename string) (*Polygon, error) {
 	p := &Polygon{}
 	file, err := os.Open(filename)
@@ -107,7 +108,7 @@ func polygonFromFile(filename string) (*Polygon, error) {
 		return nil, err
 	}
 
-	points := new(Points)
+	points := new(testPoints)
 	jsonParser := json.NewDecoder(file)
 	if err = jsonParser.Decode(&points); err != nil {
 		return nil, err
