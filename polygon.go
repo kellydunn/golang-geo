@@ -13,7 +13,7 @@ type Polygon struct {
 }
 
 // Creates and returns a new pointer to a Polygon
-// composed of the passed in points.  Points are 
+// composed of the passed in points.  Points are
 // considered to be in order such that the last point
 // forms an edge with the first point.
 func NewPolygon(points []*Point) *Polygon {

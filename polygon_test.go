@@ -42,7 +42,7 @@ func TestPointNotInPolygon(t *testing.T) {
 	}
 }
 
-// Ensures that a point can be contained in a complex polygon (e.g. a donut) 
+// Ensures that a point can be contained in a complex polygon (e.g. a donut)
 // This particular Polygon has a hole in it.
 func TestPointInPolygonWithHole(t *testing.T) {
 	nsw, err := polygonFromFile("test/data/nsw.json")
@@ -128,7 +128,7 @@ func TestEquatorGreenwichContains(t *testing.T) {
 	}
 }
 
-// A test struct used to encapsulate and 
+// A test struct used to encapsulate and
 // Unmarshal JSON into.
 type testPoints struct {
 	Points []*Point

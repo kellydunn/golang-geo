@@ -1,5 +1,15 @@
 # golang-geo changelog
 
+## [0.3.0](https://github.com/kellydunn/golang-geo/tree/v0.3.0) April 29, 2014
+
+  - Introduces `geo.Polygon`, which is composed of many `geo.Points`. (Thanks, @mish15!)
+  - Introduces the ability to create a `geo.Polygon` with `NewPolygon` by passing in `[]*geo.Point`
+  - Introduces the ability to figure out of a point is contained in a polygon with `*geo.Polygon.Contains`
+  - Introduces `*geo.Polygon.IsClosed` which determines if a polygon is a closed shape or not.
+  - Improves documentation and testing coverage.
+  - Indicates that consumers should use [gopkg.in](http://gopkg.in) in order to download older versions of the library.
+  - Increases testing flexibilty by giving Geocoders the ability to specify their own base URL (Thanks, @adams-sarah!)
+
 ## [0.2.1](https://github.com/kellydunn/golang-geo/tree/v0.2.1) Februrary 24, 2014
 
   - Introduces some bugfixes for google maps and mapquest api error handling
