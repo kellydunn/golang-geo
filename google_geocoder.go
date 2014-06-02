@@ -13,6 +13,19 @@ import (
 // of interacting with the Google Maps Geocoding Service
 type GoogleGeocoder struct{}
 
+// This struct contains selected fields from Google's Geocoding Service response
+type googleGeocodeResponse struct {
+	Results []struct {
+		FormattedAddress string `json:"formatted_address"`
+		Geometry         struct {
+			Location struct {
+				Lat float64
+				Lng float64
+			}
+		}
+	}
+}
+
 // This is the error that consumers receive when there
 // are no results from the geocoding request.
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
@@ -73,17 +86,15 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 
 // Extracts the first lat and lng values from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
-
-	// TODO  This is an obvious hack and needs to be redesigned.
-	res := make(map[string][]map[string]map[string]map[string]interface{}, 0)
+	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
-	if len(res["results"]) == 0 {
+	if len(res.Results) == 0 {
 		return 0, 0, googleZeroResultsError
 	}
 
-	lat, _ := res["results"][0]["geometry"]["location"]["lat"].(float64)
-	lng, _ := res["results"][0]["geometry"]["location"]["lng"].(float64)
+	lat := res.Results[0].Geometry.Location.Lat
+	lng := res.Results[0].Geometry.Location.Lng
 
 	return lat, lng, nil
 }
@@ -103,9 +114,8 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 
 // Returns an Address from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
-	res := make(map[string][]map[string]interface{}, 0)
+	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
-	resStr := res["results"][0]["formatted_address"].(string)
-	return resStr
+	return res.Results[0].FormattedAddress
 }
