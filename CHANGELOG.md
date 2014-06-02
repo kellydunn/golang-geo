@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.3.1](https://github.com/kellydunn/golang-geo/tree/v0.3.1) June 1, 2014
+
+  - Cleans up some implementation details of how `geo.GoogleGeocoder` query results are handled.
+
 ## [0.3.0](https://github.com/kellydunn/golang-geo/tree/v0.3.0) April 29, 2014
 
   - Introduces `geo.Polygon`, which is composed of many `geo.Points`. (Thanks, @mish15!)
