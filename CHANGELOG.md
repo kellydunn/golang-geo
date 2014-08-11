@@ -1,5 +1,10 @@
 # golang-geo changelog
 
+## [0.3.2](https://github.com/kellydunn/golang-geo/tree/v0.3.2) August 11, 2014
+
+  - Resolves an issue where Reverse Geocoding with a google Geocoder was panicing unexpectedly.
+  - Fixes some test conditions for marshalling Points as JSON
+
 ## [0.3.1](https://github.com/kellydunn/golang-geo/tree/v0.3.1) June 1, 2014
 
   - Cleans up some implementation details of how `geo.GoogleGeocoder` query results are handled.
