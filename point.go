@@ -35,7 +35,7 @@ func (p *Point) Lng() float64 {
 }
 
 // Returns a Point populated with the lat and lng coordinates
-// by transposing the origin point the passed in distance (in meters)
+// by transposing the origin point the passed in distance (in kilometers)
 // by the passed in compass bearing (in degrees).
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point {
