@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.3.3](https://github.com/kellydunn/golang-geo/tree/v0.3.3) September 1, 2014
+
+  - Fixes some inconsistent documentation.
+
 ## [0.3.2](https://github.com/kellydunn/golang-geo/tree/v0.3.2) August 11, 2014
 
   - Resolves an issue where Reverse Geocoding with a google Geocoder was panicing unexpectedly.
