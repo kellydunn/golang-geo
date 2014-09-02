@@ -64,7 +64,7 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	return &Point{lat: lat2, lng: lng2}
 }
 
-// Calculates the Haversine distance between two points.
+// Calculates the Haversine distance between two points in kilometers.
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 	dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
