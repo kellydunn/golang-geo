@@ -1,0 +1,87 @@
+{
+   "results" : [
+      {
+         "annotations" : {
+            "OSM" : {
+               "url" : "http://www.openstreetmap.org/?mlat=-23.53737&mlon=-46.83746#map=17/-23.53737/-46.83746"
+            },
+            "callingcode" : 55,
+            "geohash" : "6gydn5nhb587vf642f07",
+            "timezone" : {
+               "name" : "America/Sao_Paulo",
+               "now_in_dst" : 1,
+               "offset_sec" : -7200,
+               "offset_string" : -200,
+               "short_name" : "BRST"
+            },
+            "what3words" : {
+               "words" : "basket.hoping.asteroid"
+            }
+         },
+         "bounds" : {
+            "northeast" : {
+               "lat" : -23.5370283,
+               "lng" : -46.8357228
+            },
+            "southwest" : {
+               "lat" : -23.5373732,
+               "lng" : -46.8374628
+            }
+         },
+         "components" : {
+            "city" : "Carapicu\u00edba",
+            "country" : "Brazil",
+            "country_code" : "br",
+            "county" : "RMSP",
+            "road" : "Rua Cafel\u00e2ndia",
+            "state" : "SP"
+         },
+         "confidence" : 10,
+         "formatted" : "Rua Cafel\u00e2ndia, Carapicu\u00edba - SP, Brazil",
+         "geometry" : {
+            "lat" : -23.5373732,
+            "lng" : -46.8374628
+         }
+      },
+      {
+         "annotations" : {
+            "OSM" : {
+               "url" : "http://www.openstreetmap.org/?mlat=-23.52272&mlon=-46.83500#map=17/-23.52272/-46.83500"
+            },
+            "geohash" : "6gydnjzf1rhvdd06fkwg",
+            "timezone" : {
+               "name" : "America/Sao_Paulo",
+               "now_in_dst" : 1,
+               "offset_sec" : -7200,
+               "offset_string" : -200,
+               "short_name" : "BRST"
+            },
+            "what3words" : {
+               "words" : "villas.overhead.orchids"
+            }
+         },
+         "bounds" : {
+            "northeast" : {
+               "lat" : -23.4767875671,
+               "lng" : -46.7804718018
+            },
+            "southwest" : {
+               "lat" : -23.5870838165,
+               "lng" : -46.8663024902
+            }
+         },
+         "components" : {
+            "country" : "Brazil",
+            "county" : "Carapicu\u00edba",
+            "state" : "S\u00e3o Paulo",
+            "town" : "Carapicu\u00edba"
+         },
+         "confidence" : 6,
+         "formatted" : "Carapicu\u00edba, Carapicu\u00edba, Brazil",
+         "geometry" : {
+            "lat" : -23.52272,
+            "lng" : -46.835
+         }
+      }
+   ]
+}
