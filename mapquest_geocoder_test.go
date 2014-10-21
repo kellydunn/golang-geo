@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// TODO Test extracting LatLng from Google Geocoding Response
+// TODO Test extracting LatLng from Mapquest Response
 func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 	g := &MapQuestGeocoder{}
 
@@ -24,7 +24,7 @@ func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 	}
 }
 
-// TODO Test extracting LatLng from Google Geocoding Response when no results are returned
+// TODO Test extracting LatLng from Mapquest Response when no results are returned
 func TestMapQuestExtractLatLngFromRequestZeroResults(t *testing.T) {
 	g := &MapQuestGeocoder{}
 
