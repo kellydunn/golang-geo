@@ -18,13 +18,13 @@ type MapQuestGeocoder struct{}
 // are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
-// This contains the base URL for the Mapquest Geocoder APII.
+// This contains the base URL for the Mapquest Geocoder API.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
-// Sets the base URL for the Google Geocoding API.
+// Sets the base URL for the MapQuest Geocoding API.
 func SetMapquestGeocodeURL(newGeocodeURL string) {
 	mapquestGeocodeURL = newGeocodeURL
 }
