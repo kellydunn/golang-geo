@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.4.1](https://github.com/kellydunn/golang-geo/tree/v0.4.1) December 1, 2014
+
+  - Improves geocoder testing.
+	
 ## [0.4.0](https://github.com/kellydunn/golang-geo/tree/v0.4.0) November 2, 2014
 
   - Introduces the OpenCage Geocoder
