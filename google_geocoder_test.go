@@ -37,7 +37,7 @@ func TestExtractLatLngFromRequest(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	if lat != 37.615223 && lng != -122.389979 {
+	if lat != 37.615223 || lng != -122.389979 {
 		t.Error(fmt.Sprintf("Expected: [37.615223, -122.389979], Got: [%f, %f]", lat, lng))
 	}
 }

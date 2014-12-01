@@ -19,7 +19,7 @@ func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	if lat != 37.62181845 && lng != -122.383992092462 {
+	if lat != 37.62181845 || lng != -122.383992092462 {
 		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%f, %f]", lat, lng))
 	}
 }
