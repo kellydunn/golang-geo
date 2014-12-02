@@ -115,7 +115,7 @@ func TestUnmarshalJSON(t *testing.T) {
 		t.Errorf("Should not encounter an error when attempting to Unmarshal a Point from JSON")
 	}
 
-	if p.Lat() != 40.7486 || p.Lng() != -73.9864 {
+	if p.lat != 40.7486 || p.lng != -73.9864 {
 		t.Errorf("Point has mismatched data after Unmarshalling from JSON")
 	}
 }

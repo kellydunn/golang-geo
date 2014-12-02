@@ -32,13 +32,13 @@ func TestExtractLatLngFromRequest(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	lat, lng, err := g.extractLatLngFromResponse(data)
+	point, err := g.extractLatLngFromResponse(data)
 	if err != nil {
 		t.Error("%v\n", err)
 	}
 
-	if lat != 37.615223 || lng != -122.389979 {
-		t.Error(fmt.Sprintf("Expected: [37.615223, -122.389979], Got: [%f, %f]", lat, lng))
+	if point.lat != 37.615223 || point.lng != -122.389979 {
+		t.Error(fmt.Sprintf("Expected: [37.615223, -122.389979], Got: [%f, %f]", point.lat, point.lng))
 	}
 }
 
@@ -51,7 +51,7 @@ func TestExtractLatLngFromRequestZeroResults(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	_, _, err = g.extractLatLngFromResponse(data)
+	_, err = g.extractLatLngFromResponse(data)
 	if err != googleZeroResultsError {
 		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), googleZeroResultsError, err)
 	}

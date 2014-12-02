@@ -74,29 +74,27 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng, err := g.extractLatLngFromResponse(data)
+	point, err := g.extractLatLngFromResponse(data)
 	if err != nil {
 		return nil, err
 	}
 
-	p := &Point{lat: lat, lng: lng}
-
-	return p, nil
+	return &point, nil
 }
 
-// Extracts the first lat and lng values from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
+// Extracts the first location from a Google Geocoder Response body.
+func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
 	if len(res.Results) == 0 {
-		return 0, 0, googleZeroResultsError
+		return Point{}, googleZeroResultsError
 	}
 
 	lat := res.Results[0].Geometry.Location.Lat
 	lng := res.Results[0].Geometry.Location.Lng
 
-	return lat, lng, nil
+	return Point{lat, lng}, nil
 }
 
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches
