@@ -63,29 +63,27 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng, extractErr := g.extractLatLngFromResponse(data)
+	point, extractErr := g.extractLatLngFromResponse(data)
 	if extractErr != nil {
 		return nil, extractErr
 	}
 
-	p := &Point{lat: lat, lng: lng}
-
-	return p, nil
+	return &point, nil
 }
 
-// Extracts the first lat and lng values from a MapQuest response body.
-func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
+// Extracts the first location from a MapQuest response body.
+func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := make([]map[string]interface{}, 0)
 	json.Unmarshal(data, &res)
 
 	if len(res) == 0 {
-		return 0, 0, mapquestZeroResultsError
+		return Point{}, mapquestZeroResultsError
 	}
 
 	lat, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
 	lng, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
 
-	return lat, lng, nil
+	return Point{lat, lng}, nil
 }
 
 // Returns the first most available address that corresponds to the passed in point.

@@ -103,7 +103,7 @@ func (p *Point) BearingTo(p2 *Point) float64 {
 // Renders the current Point to valid JSON.
 // Implements the json.Marshaller Interface.
 func (p *Point) MarshalJSON() ([]byte, error) {
-	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.Lat(), p.Lng())
+	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.lat, p.lng)
 	return []byte(res), nil
 }
 
