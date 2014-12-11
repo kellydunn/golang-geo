@@ -17,12 +17,13 @@ type OpenCageGeocoder struct{}
 type opencageGeocodeResponse struct {
 	Results []struct {
 		Formatted string `json:"formatted"`
-		Geometry struct {
+		Geometry  struct {
 			Lat float64
 			Lng float64
 		}
 	}
 }
+
 // This is the error that consumers receive when there
 // are no results from the geocoding request.
 var opencageZeroResultsError = errors.New("ZERO_RESULTS")
@@ -72,33 +73,30 @@ func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng, extractErr := g.extractLatLngFromResponse(data)
+	point, extractErr := g.extractLatLngFromResponse(data)
 	if extractErr != nil {
 		return nil, extractErr
 	}
 
-	p := &Point{lat: lat, lng: lng}
-
-	return p, nil
+	return &point, nil
 }
 
-// Extracts the first lat and lng values from a OpenCage response body.
-func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
+// Extracts the first location from a OpenCage response body.
+func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &opencageGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
 	// fmt.Printf("%s\n", data)
 	// fmt.Printf("%v\n", res)
 
-
 	if len(res.Results) == 0 {
-		return 0, 0, opencageZeroResultsError
+		return Point{}, opencageZeroResultsError
 	}
 
 	lat := res.Results[0].Geometry.Lat
 	lng := res.Results[0].Geometry.Lng
 
-	return lat, lng, nil
+	return Point{lat, lng}, nil
 }
 
 // Returns the first most available address that corresponds to the passed in point.
