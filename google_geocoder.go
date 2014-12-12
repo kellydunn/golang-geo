@@ -74,27 +74,22 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	point, err := g.extractLatLngFromResponse(data)
+	res := &googleGeocodeResponse{}
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
 
-	return &point, nil
-}
-
-// Extracts the first location from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
-	res := &googleGeocodeResponse{}
-	json.Unmarshal(data, &res)
-
-	if len(res.Results) == 0 {
-		return Point{}, googleZeroResultsError
+	// TODO: Geocoders should return a list of points; 
+	//       This operation shouldn't blindly just pick the first point.
+	//       But this is a backwards incompatible change to the interface,
+	//       So we will have to introduce this as a part of v1.0.0.
+	p := &Point{
+		lat: res.Results[0].Geometry.Location.Lat,
+		lng: res.Results[0].Geometry.Location.Lng,
 	}
 
-	lat := res.Results[0].Geometry.Location.Lat
-	lng := res.Results[0].Geometry.Location.Lng
-
-	return Point{lat, lng}, nil
+	return p, nil
 }
 
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches
@@ -105,15 +100,16 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	resStr := g.extractAddressFromResponse(data)
-
-	return resStr, nil
-}
-
-// Returns an Address from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &googleGeocodeResponse{}
-	json.Unmarshal(data, &res)
 
-	return res.Results[0].FormattedAddress
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return "", err
+	}
+
+	// TODO: Geocoders should return a list of adresses; 
+	//       This operation shouldn't blindly just pick the first point.
+	//       But this is a backwards incompatible change to the interface,
+	//       So we will have to introduce this as a part of v1.0.0.
+	return res.Results[0].FormattedAddress, nil
 }
