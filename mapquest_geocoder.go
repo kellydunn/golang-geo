@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // This struct contains all the funcitonality
@@ -95,9 +96,19 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, mapquestZeroResultsError
 	}
 
+	lat, err := strconv.Atoi(res.Results[0].Lat)
+	if err != nil {
+		return nil, err
+	}
+
+	lng, err := strconv.Atoi(res.Results[0].Lng)
+	if err != nil {
+		return nil, err
+	}
+
 	p := &Point{
-		lat: res.Results[0].Lat, 
-		lng: res.Results[0].Lng,
+		lat: lat,
+		lng: lng,
 	}
 
 	return p, nil
