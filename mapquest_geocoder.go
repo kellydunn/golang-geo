@@ -121,11 +121,11 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", mapquestZeroResultsError
 	}
 	
-	road := res.Results[0].Road
-	city := res.Results[0].City
-	state := res.Results[0].State
-	postCode := res.Results[0].PostCode
-	countryCode := res.Results[0].CountryCode
+	road := res.Results[0].Address.Road
+	city := res.Results[0].Address.City
+	state := res.Results[0].Address.State
+	postCode := res.Results[0].Address.PostCode
+	countryCode := res.Results[0].Address.CountryCode
 
 	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postCode, countryCode)
 
