@@ -11,8 +11,10 @@ This document provides a proposal for various features that aim to satisfy a maj
   - [ ] [Indexers](#indexers)
   - [ ] [Point](#point)
 - [ ] [API Changes](#api-changes)
-  - [ ] [Point](#point)
+  - [ ] [Point](#api-changes-point)
     - [ ] [Exported Fields](#point-exported-fields)
+  - [ ] [Geocoders](#api-changes-geocoders)
+    - [ ] [Methods](#geocoder-methods)
 
 <a href="sub-packages" />
 ## Sub Packages
@@ -45,7 +47,7 @@ The `point` package will provide all interesting `Point` operations.
 <a href="api-changes" />
 ## API Changes
 
-<a href="point" />
+<a href="api-changes-point" />
 ### Point
 
 The following parts of the `Point` in this library will be changed wit the release of `1.0.0`:
@@ -55,3 +57,14 @@ The following parts of the `Point` in this library will be changed wit the relea
 
 - **Lat**: Previously unexported as `lat`, this field will now be exported.  
 - **Lng**: Previously unexported as `lng`, this field will now be exported.
+
+<a href="api-changes-geocoders" />
+### Geocoders
+
+The following illustrates the proposed changes `Geocoders` will receive with the release of `1.0.0`:
+
+<a href="geocoder-methods">
+#### Methods
+
+  - `Geocode(string) ([]Point, error)`: `Geocoder`s will now return a slice of `Point` or an `error` when geocoding.
+  - `ReverseGeocode(*Point) ([]string, err)`: `Geocoder`s will now return a slice of `string` or an `error` when reverse geocoding.
