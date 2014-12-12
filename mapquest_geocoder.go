@@ -99,13 +99,11 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	return resStr, nil
 }
 
-// Return sthe first address in the passed in byte array.
+// Returns the first address in the passed in byte array.
 func (g *MapQuestGeocoder) extractAddressFromResponse(data []byte) string {
 	res := make(map[string]map[string]string)
 	json.Unmarshal(data, &res)
 
-	// TODO determine if it's better to have channels to receive this data on
-	//      Provides for concurrency during HTTP requests, etc ~
 	road, _ := res["address"]["road"]
 	city, _ := res["address"]["city"]
 	state, _ := res["address"]["state"]

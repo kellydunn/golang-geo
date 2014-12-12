@@ -73,30 +73,22 @@ func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	point, extractErr := g.extractLatLngFromResponse(data)
-	if extractErr != nil {
-		return nil, extractErr
-	}
-
-	return &point, nil
-}
-
-// Extracts the first location from a OpenCage response body.
-func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &opencageGeocodeResponse{}
-	json.Unmarshal(data, &res)
-
-	// fmt.Printf("%s\n", data)
-	// fmt.Printf("%v\n", res)
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return nil, err
+	}
 
 	if len(res.Results) == 0 {
-		return Point{}, opencageZeroResultsError
+		return nil, opencageZeroResultsError
 	}
 
-	lat := res.Results[0].Geometry.Lat
-	lng := res.Results[0].Geometry.Lng
+	p := &Point{
+		lat: res.Results[0].Geometry.Lat,
+		lng: res.Results[0].Geometry.Lng,
+	}
 
-	return Point{lat, lng}, nil
+	return p, nil
 }
 
 // Returns the first most available address that corresponds to the passed in point.
@@ -109,14 +101,13 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 
 	resStr := g.extractAddressFromResponse(data)
 
-	return resStr, nil
-}
-
-// Return sthe first address in the passed in byte array.
-func (g *OpenCageGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &opencageGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return "", err
+	}
 
 	resStr := res.Results[0].Formatted
-	return resStr
+
+	return resStr, nil
 }
