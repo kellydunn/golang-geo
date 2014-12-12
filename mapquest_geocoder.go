@@ -96,18 +96,18 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, mapquestZeroResultsError
 	}
 
-	lat, err := strconv.Atoi(res.Results[0].Lat)
+	lat, err := strconv.ParseFloat(res.Results[0].Lat, 64)
 	if err != nil {
 		return nil, err
 	}
 
-	lng, err := strconv.Atoi(res.Results[0].Lng)
+	lng, err := strconv.ParseFloat(res.Results[0].Lng, 64)
 	if err != nil {
 		return nil, err
 	}
 
 	p := &Point{
-		lat: lat,
+		lat: lat, 
 		lng: lng,
 	}
 
