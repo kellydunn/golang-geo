@@ -99,8 +99,6 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	resStr := g.extractAddressFromResponse(data)
-
 	res := &opencageGeocodeResponse{}
 	err = json.Unmarshal(data, &res)
 	if err != nil {

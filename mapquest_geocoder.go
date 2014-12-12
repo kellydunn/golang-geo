@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 // This struct contains all the funcitonality
@@ -86,11 +85,6 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	point, extractErr := g.extractLatLngFromResponse(data)
-	if extractErr != nil {
-		return nil, extractErr
-	}
-	
 	res := &mapQuestGeocodeResponse{}
 	err = json.Unmarshal(data, &res)
 	if err != nil {
@@ -123,11 +117,17 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	if res == nil {
-		return nil, mapquestZeroResultsError
+	if len(res.Results) == 0 {
+		return "", mapquestZeroResultsError
 	}
+	
+	road := res.Results[0].Road
+	city := res.Results[0].City
+	state := res.Results[0].State
+	postCode := res.Results[0].PostCode
+	countryCode := res.Results[0].CountryCode
 
-	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, country_code)
+	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postCode, countryCode)
 
 	return resStr, nil
 }
