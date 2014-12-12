@@ -91,13 +91,13 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	if len(res) == 0 {
+	if len(res.Results) == 0 {
 		return nil, mapquestZeroResultsError
 	}
 
 	p := &Point{
-		lat: res[0].Lat, 
-		lng: res[0].Lng,
+		lat: res.Results[0].Lat, 
+		lng: res.Results[0].Lng,
 	}
 
 	return p, nil
