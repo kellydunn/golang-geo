@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.5.0](https://github.com/kellydunn/golang-geo/tree/v0.5.0) January 14, 2015
+
+  - Exposes `GoogleGeocoder.HttpClient` so that clients may be able to swap out underlying http client implementations.
+
 ## [0.4.1](https://github.com/kellydunn/golang-geo/tree/v0.4.1) December 1, 2014
 
   - Improves geocoder testing.

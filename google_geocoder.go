@@ -11,7 +11,9 @@ import (
 
 // This struct contains all the funcitonality
 // of interacting with the Google Maps Geocoding Service
-type GoogleGeocoder struct{}
+type GoogleGeocoder struct{
+	HttpClient *http.Client
+}
 
 // This struct contains selected fields from Google's Geocoding Service response
 type googleGeocodeResponse struct {
@@ -44,7 +46,11 @@ func SetGoogleGeocodeURL(newGeocodeURL string) {
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
-	client := &http.Client{}
+	if g.HttpClient == nil {
+		g.HttpClient = &http.Client{}
+	}
+
+	client := g.HttpClient
 
 	fullUrl := fmt.Sprintf("%s?sensor=false&%s", googleGeocodeURL, params)
 
@@ -74,29 +80,27 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	lat, lng, err := g.extractLatLngFromResponse(data)
+	point, err := g.extractLatLngFromResponse(data)
 	if err != nil {
 		return nil, err
 	}
 
-	p := &Point{lat: lat, lng: lng}
-
-	return p, nil
+	return &point, nil
 }
 
-// Extracts the first lat and lng values from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (float64, float64, error) {
+// Extracts the first location from a Google Geocoder Response body.
+func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
 	if len(res.Results) == 0 {
-		return 0, 0, googleZeroResultsError
+		return Point{}, googleZeroResultsError
 	}
 
 	lat := res.Results[0].Geometry.Location.Lat
 	lng := res.Results[0].Geometry.Location.Lng
 
-	return lat, lng, nil
+	return Point{lat, lng}, nil
 }
 
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches

@@ -14,13 +14,13 @@ func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	lat, lng, err := g.extractLatLngFromResponse(data)
+	point, err := g.extractLatLngFromResponse(data)
 	if err != nil {
 		t.Error("%v\n", err)
 	}
 
-	if lat != 37.62181845 || lng != -122.383992092462 {
-		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%f, %f]", lat, lng))
+	if point.lat != 37.62181845 || point.lng != -122.383992092462 {
+		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%f, %f]", point.lat, point.lng))
 	}
 }
 
@@ -33,7 +33,7 @@ func TestMapQuestExtractLatLngFromRequestZeroResults(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	_, _, err = g.extractLatLngFromResponse(data)
+	_, err = g.extractLatLngFromResponse(data)
 	if err != mapquestZeroResultsError {
 		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), mapquestZeroResultsError, err)
 	}

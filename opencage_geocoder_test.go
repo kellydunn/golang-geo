@@ -14,13 +14,13 @@ func TestOpenCageExtractLatLngFromRequest(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	lat, lng, err := g.extractLatLngFromResponse(data)
+	point, err := g.extractLatLngFromResponse(data)
 	if err != nil {
 		t.Error("%v\n", err)
 	}
 
-	if lat != -23.5373732 || lng != -46.8374628 {
-		t.Error(fmt.Sprintf("Expected: [-23.5373732, -46.8374628], Got: [%f, %f]", lat, lng))
+	if point.lat != -23.5373732 || point.lng != -46.8374628 {
+		t.Error(fmt.Sprintf("Expected: [-23.5373732, -46.8374628], Got: [%f, %f]", point.lat, point.lng))
 	}
 }
 
@@ -48,7 +48,7 @@ func TestOpenCageExtractLatLngFromRequestZeroResults(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	_, _, err = g.extractLatLngFromResponse(data)
+	_, err = g.extractLatLngFromResponse(data)
 	if err != opencageZeroResultsError {
 		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), opencageZeroResultsError, err)
 	}
