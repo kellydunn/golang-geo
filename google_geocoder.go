@@ -11,7 +11,9 @@ import (
 
 // This struct contains all the funcitonality
 // of interacting with the Google Maps Geocoding Service
-type GoogleGeocoder struct{}
+type GoogleGeocoder struct{
+	HttpClient *http.Client
+}
 
 // This struct contains selected fields from Google's Geocoding Service response
 type googleGeocodeResponse struct {
@@ -44,7 +46,11 @@ func SetGoogleGeocodeURL(newGeocodeURL string) {
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
-	client := &http.Client{}
+	if g.HttpClient == nil {
+		g.HttpClient = &http.Client{}
+	}
+
+	client := g.HttpClient
 
 	fullUrl := fmt.Sprintf("%s?sensor=false&%s", googleGeocodeURL, params)
 
