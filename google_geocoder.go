@@ -111,15 +111,23 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	resStr := g.extractAddressFromResponse(data)
+	resStr, err := g.extractAddressFromResponse(data)
 
-	return resStr, nil
+	return resStr, err
 }
 
 // Returns an Address from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
+func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) (string, error) {
 	res := &googleGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	err := json.Unmarshal(data, &res)
 
-	return res.Results[0].FormattedAddress
+	if err != nil {
+		return "", err
+	}
+	
+	if len(res.Results) == 0 {
+		return "", errors.New("ZERO_RESULTS")
+	}
+
+	return res.Results[0].FormattedAddress, nil
 }
