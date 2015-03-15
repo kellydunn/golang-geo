@@ -17,7 +17,7 @@ func TestExtractAddressFromResponse(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	address := g.extractAddressFromResponse(data)
+	address, err := g.extractAddressFromResponse(data)
 	if address != "285 Bedford Avenue, Brooklyn, NY 11211, USA" {
 		t.Error(fmt.Sprintf("Expected: 285 Bedford Avenue, Brooklyn, NY 11211 USA.  Got: %s", address))
 	}
@@ -31,9 +31,9 @@ func TestExtractAddressFromResponseZeroResults(t *testing.T) {
 		t.Error("%v\n", err)
 	}
 
-	address := g.extractAddressFromResponse(data)
-	if address != "ERROR: ZERO_RESULTS" {
-		t.Error(fmt.Sprintf("Expected: 'ERROR: ZERO_RESULTS'.  Got: '%s'", address))
+	address, err := g.extractAddressFromResponse(data)
+	if address != "" && err != nil {
+		t.Error(fmt.Sprintf("Expected: '' response and 'ERROR: ZERO_RESULTS'.  Got: '%s' response and '%s'", address, err.Error()))
 	}
 }
 
