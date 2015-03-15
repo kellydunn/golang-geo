@@ -121,5 +121,9 @@ func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
+	if len(res.Results) == 0 {
+		return "ERROR: ZERO_RESULTS"
+	}
+
 	return res.Results[0].FormattedAddress
 }

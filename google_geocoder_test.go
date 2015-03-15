@@ -23,6 +23,20 @@ func TestExtractAddressFromResponse(t *testing.T) {
 	}
 }
 
+func TestExtractAddressFromResponseZeroResults(t *testing.T) {
+	g := &GoogleGeocoder{}
+
+	data, err := GetMockResponse("test/data/google_geocode_zero_results.json")
+	if err != nil {
+		t.Error("%v\n", err)
+	}
+
+	address := g.extractAddressFromResponse(data)
+	if address != "ERROR: ZERO_RESULTS" {
+		t.Error(fmt.Sprintf("Expected: 'ERROR: ZERO_RESULTS'.  Got: '%s'", address))
+	}
+}
+
 // TODO Test extracting LatLng from Google Geocoding Response
 func TestExtractLatLngFromRequest(t *testing.T) {
 	g := &GoogleGeocoder{}
