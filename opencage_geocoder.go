@@ -79,8 +79,7 @@ func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 	if (OpenCageAPIKey != "") {
 		key = "key="+OpenCageAPIKey+"&"
 	}
-	thing := fmt.Sprintf("?%sq=%s&pretty=1", key, url_safe_query)
-	fmt.Println(opencageGeocodeURL+thing)
+
 	data, err := g.Request(fmt.Sprintf("?%sq=%s&pretty=1", key, url_safe_query))
 	if err != nil {
 		return nil, err
@@ -119,8 +118,7 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 	if (OpenCageAPIKey != "") {
 		key = "key="+OpenCageAPIKey+"&"
 	}
-	thing :=fmt.Sprintf("?%sq=lat=%f,lon=%f&pretty=1", key, p.lat, p.lng)
-	fmt.Println( opencageGeocodeURL+thing)
+
 	data, err := g.Request(fmt.Sprintf("?%sq=%f,%f&pretty=1", key, p.lat, p.lng))
 	if err != nil {
 		return "", err
