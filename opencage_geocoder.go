@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+
 )
 
 // This struct contains all the funcitonality
@@ -58,7 +59,8 @@ func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 	resp, requestErr := client.Do(req)
 
 	if requestErr != nil {
-		panic(requestErr)
+		return nil, requestErr
+
 	}
 
 	// TODO figure out a better typing for response

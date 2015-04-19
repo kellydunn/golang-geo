@@ -63,8 +63,8 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	resp, requestErr := client.Do(req)
 
 	if requestErr != nil {
-		panic(requestErr)
-	}
+		return nil, requestErr
+		}
 
 	// TODO figure out a better typing for response
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
