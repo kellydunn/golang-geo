@@ -35,9 +35,13 @@ type mapQuestReverseGeocodeResponse struct {
 // are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
+var MapquestAPIKey = ""
 // This contains the base URL for the Mapquest Geocoder API.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
+func SetMapquestAPIKey(newAPIKey string) {
+	MapquestAPIKey = newAPIKey
+}
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -75,7 +79,11 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 // if one occurs during the geocoding request.
 func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
-	data, err := g.Request(fmt.Sprintf("search.php?q=%s&format=json", url_safe_query))
+	key := ""
+	if (MapquestAPIKey != "") {
+		key = "key="+MapquestAPIKey
+	}
+	data, err := g.Request(fmt.Sprintf("search.php?"+key+"q=%s&format=json", url_safe_query ))
 	if err != nil {
 		return nil, err
 	}
