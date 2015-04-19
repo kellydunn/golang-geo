@@ -39,7 +39,7 @@ var MapquestAPIKey = ""
 // This contains the base URL for the Mapquest Geocoder API.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
-func SetMapquestAPIKey(newAPIKey string) {
+func (g *MapQuestGeocoder) SetMapquestAPIKey(newAPIKey string) {
 	MapquestAPIKey = newAPIKey
 }
 // Note:  In the next major revision (1.0.0), it is planned
@@ -52,6 +52,7 @@ func SetMapquestGeocodeURL(newGeocodeURL string) {
 
 // Issues a request to the open mapquest api geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
+// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one. 
 func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
 	fullUrl := fmt.Sprintf("%s/%s", mapquestGeocodeURL, url)
@@ -81,9 +82,9 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 	key := ""
 	if (MapquestAPIKey != "") {
-		key = "key="+MapquestAPIKey
+		key = "key="+MapquestAPIKey+"&"
 	}
-	data, err := g.Request(fmt.Sprintf("search.php?"+key+"q=%s&format=json", url_safe_query ))
+	data, err := g.Request(fmt.Sprintf("search.php?%sq=%s&format=json",key, url_safe_query ))
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +119,11 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 // Returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
-	data, err := g.Request(fmt.Sprintf("reverse.php?lat=%f&lon=%f&format=json", p.lat, p.lng))
+	key := ""
+	if (GoogleAPIKey != "") {
+		key = "&key="+GoogleAPIKey+"&"
+	}
+	data, err := g.Request(fmt.Sprintf("reverse.php?%slat=%f&lon=%f&format=json", key, p.lat, p.lng))
 	if err != nil {
 		return "", err
 	}

@@ -31,6 +31,8 @@ var opencageZeroResultsError = errors.New("ZERO_RESULTS")
 // This contains the base URL for the Mapquest Geocoder API.
 var opencageGeocodeURL = "http://api.opencagedata.com/geocode/v1/json"
 
+var OpenCageAPIKey = ""
+
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -39,8 +41,13 @@ func SetOpenCageGeocodeURL(newGeocodeURL string) {
 	opencageGeocodeURL = newGeocodeURL
 }
 
+func (g *OpenCageGeocoder) SetOpenCageAPIKey(newAPIKey string) {
+	OpenCageAPIKey = newAPIKey
+}
+
 // Issues a request to the open OpenCage API geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
+// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one. 
 func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
 	fullUrl := fmt.Sprintf("%s/%s", opencageGeocodeURL, url)
@@ -68,7 +75,13 @@ func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 // if one occurs during the geocoding request.
 func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
-	data, err := g.Request(fmt.Sprintf("?q=%s&pretty=1", url_safe_query))
+	key := ""
+	if (OpenCageAPIKey != "") {
+		key = "key="+OpenCageAPIKey+"&"
+	}
+	thing := fmt.Sprintf("?%sq=%s&pretty=1", key, url_safe_query)
+	fmt.Println(opencageGeocodeURL+thing)
+	data, err := g.Request(fmt.Sprintf("?%sq=%s&pretty=1", key, url_safe_query))
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +115,13 @@ func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error)
 // Returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
-	data, err := g.Request(fmt.Sprintf("?q=lat=%f,lon=%f&pretty=1", p.lat, p.lng))
+	key := ""
+	if (OpenCageAPIKey != "") {
+		key = "key="+OpenCageAPIKey+"&"
+	}
+	thing :=fmt.Sprintf("?%sq=lat=%f,lon=%f&pretty=1", key, p.lat, p.lng)
+	fmt.Println( opencageGeocodeURL+thing)
+	data, err := g.Request(fmt.Sprintf("?%sq=%f,%f&pretty=1", key, p.lat, p.lng))
 	if err != nil {
 		return "", err
 	}
@@ -115,8 +134,14 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 // Return sthe first address in the passed in byte array.
 func (g *OpenCageGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &opencageGeocodeResponse{}
-	json.Unmarshal(data, res)
-
-	resStr := res.Results[0].Formatted
+	err := json.Unmarshal(data, res)
+	if err != nil {
+		return ""
+	}
+	
+	var resStr = "NO RESULTS FROM OpenCage"
+	if (len(res.Results) > 0 ) {
+ 		resStr = res.Results[0].Formatted
+	}
 	return resStr
 }
