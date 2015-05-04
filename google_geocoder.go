@@ -91,7 +91,7 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 // Extracts the first location from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &googleGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	json.Unmarshal(data, res)
 
 	if len(res.Results) == 0 {
 		return Point{}, googleZeroResultsError

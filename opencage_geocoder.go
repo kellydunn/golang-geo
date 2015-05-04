@@ -115,7 +115,7 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 // Return sthe first address in the passed in byte array.
 func (g *OpenCageGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &opencageGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	json.Unmarshal(data, res)
 
 	resStr := res.Results[0].Formatted
 	return resStr
