@@ -14,6 +14,29 @@ import (
 // of interacting with the MapQuest Geocoding Service
 type MapQuestGeocoder struct{}
 
+type mapQuestGeocodeResponse struct {
+	Results []struct {
+		BoundingBox struct {
+			Box []string
+		} `json:"boundingbox"`
+		Lat string
+		Lng string `json:"lon"`
+		DisplayName string `json:"display_name"`
+	}
+}
+
+type mapQuestReverseGeocodeResponse struct {
+	Results []struct {
+		Address struct {
+			Road string
+			City string
+			State string
+			PostCode string `json:"postcode"`
+			CountryCode string `json:"country_code"`
+		}
+	}
+}
+
 // This is the error that consumers receive when there
 // are no results from the geocoding request.
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
@@ -63,27 +86,24 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	point, extractErr := g.extractLatLngFromResponse(data)
-	if extractErr != nil {
-		return nil, extractErr
-	}
-
-	return &point, nil
-}
-
-// Extracts the first location from a MapQuest response body.
-func (g *MapQuestGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
-	res := make([]map[string]interface{}, 0)
+	res := &mapQuestGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
-	if len(res) == 0 {
-		return Point{}, mapquestZeroResultsError
+	if len(res.Results) == 0 {
+		return &Point{}, mapquestZeroResultsError
+	}
+	
+	lat, err := strconv.ParseFloat(res.Results[0].Lat, 64)
+	if err != nil {
+		return nil, err
+	}
+	
+	lng, err := strconv.ParseFloat(res.Results[0].Lng, 64)
+	if err != nil {
+		return nil, err
 	}
 
-	lat, _ := strconv.ParseFloat(res[0]["lat"].(string), 64)
-	lng, _ := strconv.ParseFloat(res[0]["lon"].(string), 64)
-
-	return Point{lat, lng}, nil
+	return &Point{lat, lng}, nil	
 }
 
 // Returns the first most available address that corresponds to the passed in point.
@@ -94,24 +114,18 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	resStr := g.extractAddressFromResponse(data)
+	res := &mapQuestReverseGeocodeResponse{}
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return "", err
+	}
 
+	road := res.Results[0].Address.Road
+	city := res.Results[0].Address.City
+	state := res.Results[0].Address.State
+	postcode := res.Results[0].Address.PostCode
+	countryCode := res.Results[0].Address.CountryCode
+
+	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, countryCode)
 	return resStr, nil
-}
-
-// Return sthe first address in the passed in byte array.
-func (g *MapQuestGeocoder) extractAddressFromResponse(data []byte) string {
-	res := make(map[string]map[string]string)
-	json.Unmarshal(data, &res)
-
-	// TODO determine if it's better to have channels to receive this data on
-	//      Provides for concurrency during HTTP requests, etc ~
-	road, _ := res["address"]["road"]
-	city, _ := res["address"]["city"]
-	state, _ := res["address"]["state"]
-	postcode, _ := res["address"]["postcode"]
-	country_code, _ := res["address"]["country_code"]
-
-	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, country_code)
-	return resStr
 }
