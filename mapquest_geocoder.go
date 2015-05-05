@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // This struct contains all the funcitonality
@@ -14,9 +15,9 @@ import (
 type MapQuestGeocoder struct{}
 
 type mapQuestGeocodeResponse struct {
-	BoundingBox []float64 `json:"boundingbox"`
-	Lat         float64 
-	Lng         float64 `json:"lon"`
+	BoundingBox []string `json:"boundingbox"`
+	Lat         string 
+	Lng         string `json:"lon"`
 	DisplayName string  `json:"display_name"`
 }
 
@@ -79,6 +80,8 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
+	fmt.Printf("%s", data)
+	
 	res := []*mapQuestGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
@@ -86,9 +89,19 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return &Point{}, mapquestZeroResultsError
 	}
 
+	lat, err := strconv.ParseFloat(res[0].Lat, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	lng, err := strconv.ParseFloat(res[0].Lng, 64)
+	if err != nil {
+		return nil, err
+	}	
+	
 	p := &Point{
-		lat: res[0].Lat,
-		lng: res[0].Lng,
+		lat: lat,
+		lng: lng,
 	}
 
 	return p, nil

@@ -25,7 +25,7 @@ func TestMapQuestGeocodeFromRequest(t *testing.T) {
 		t.Error("Unexecpected amount of results for mapquest mock response")
 	}
 
-	if res[0].Lat != 37.62181845 || res[0].Lng != -122.383992092462 {
-		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%f, %f]", res[0].Lat, res[0].Lng))
+	if res[0].Lat != "37.62181845" || res[0].Lng != "-122.383992092462" {
+		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%s, %s]", res[0].Lat, res[0].Lng))
 	}
 }

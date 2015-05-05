@@ -5,13 +5,13 @@
     "osm_type": "way",
     "osm_id": "23718192",
     "boundingbox": [
-      37.6044343,
-      37.6392026,
-      -122.4026019,
-      -122.3549542
+      "37.6044343",
+      "37.6392026",
+      "-122.4026019",
+      "-122.3549542"
     ],
-    "lat": 37.62181845,
-    "lon": -122.383992092462,
+    "lat": "37.62181845",
+    "lon": "-122.383992092462",
     "display_name": "San Francisco International Airport, Walkway thru SFO Terminals, Millbrae, San Mateo County, California, 94128, United States of America",
     "class": "aeroway",
     "type": "aerodrome",
@@ -23,13 +23,13 @@
     "osm_type": "node",
     "osm_id": "1042081309",
     "boundingbox": [
-      -12.53305,
-      -12.53295,
-      -73.8000531,
-      -73.7999531
+      "-12.53305",
+      "-12.53295",
+      "-73.8000531",
+      "-73.7999531"
     ],
-    "lat": -12.533,
-    "lon": -73.8000031,
+    "lat": "-12.533",
+    "lon": "-73.8000031",
     "display_name": "San Francisco Airport, Pichari, La Convención, Department of Cusco, Peru",
     "class": "aeroway",
     "type": "aerodrome",
