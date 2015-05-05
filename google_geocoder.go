@@ -115,7 +115,7 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 // Returns an Address from a Google Geocoder Response body.
 func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) string {
 	res := &googleGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	json.Unmarshal(data, res)
 
 	return res.Results[0].FormattedAddress
 }
