@@ -84,7 +84,7 @@ func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 // Extracts the first location from a OpenCage response body.
 func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &opencageGeocodeResponse{}
-	json.Unmarshal(data, &res)
+	json.Unmarshal(data, res)
 
 	// fmt.Printf("%s\n", data)
 	// fmt.Printf("%v\n", res)
