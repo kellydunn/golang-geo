@@ -6,7 +6,9 @@ import (
 	"testing"
 )
 
-func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
+// Ensures that the Data Transfer Object used 
+// to get data from the Mapquest Geocoding API is well formed.
+func TestMapQuestGeocodeFromRequest(t *testing.T) {
 	data, err := GetMockResponse("test/data/mapquest_geocode_success.json")
 	if err != nil {
 		t.Error("%v\n", err)
