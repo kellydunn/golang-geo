@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 // This struct contains all the funcitonality
@@ -15,25 +14,19 @@ import (
 type MapQuestGeocoder struct{}
 
 type mapQuestGeocodeResponse struct {
-	Results []struct {
-		BoundingBox struct {
-			Box []string
-		} `json:"boundingbox"`
-		Lat string
-		Lng string `json:"lon"`
-		DisplayName string `json:"display_name"`
-	}
+	BoundingBox []float64 `json:"boundingbox"`
+	Lat         float64 
+	Lng         float64 `json:"lon"`
+	DisplayName string  `json:"display_name"`
 }
 
 type mapQuestReverseGeocodeResponse struct {
-	Results []struct {
-		Address struct {
-			Road string
-			City string
-			State string
-			PostCode string `json:"postcode"`
-			CountryCode string `json:"country_code"`
-		}
+	Address struct {
+		Road        string
+		City        string
+		State       string
+		PostCode    string `json:"postcode"`
+		CountryCode string `json:"country_code"`
 	}
 }
 
@@ -86,24 +79,19 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	res := &mapQuestGeocodeResponse{}
+	res := []*mapQuestGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
-	if len(res.Results) == 0 {
+	if len(res) == 0 {
 		return &Point{}, mapquestZeroResultsError
 	}
-	
-	lat, err := strconv.ParseFloat(res.Results[0].Lat, 64)
-	if err != nil {
-		return nil, err
-	}
-	
-	lng, err := strconv.ParseFloat(res.Results[0].Lng, 64)
-	if err != nil {
-		return nil, err
+
+	p := &Point{
+		lat: res[0].Lat,
+		lng: res[0].Lng,
 	}
 
-	return &Point{lat, lng}, nil	
+	return p, nil
 }
 
 // Returns the first most available address that corresponds to the passed in point.
@@ -114,17 +102,17 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	res := &mapQuestReverseGeocodeResponse{}
+	res := []*mapQuestReverseGeocodeResponse{}
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return "", err
 	}
 
-	road := res.Results[0].Address.Road
-	city := res.Results[0].Address.City
-	state := res.Results[0].Address.State
-	postcode := res.Results[0].Address.PostCode
-	countryCode := res.Results[0].Address.CountryCode
+	road := res[0].Address.Road
+	city := res[0].Address.City
+	state := res[0].Address.State
+	postcode := res[0].Address.PostCode
+	countryCode := res[0].Address.CountryCode
 
 	resStr := fmt.Sprintf("%s %s %s %s %s", road, city, state, postcode, countryCode)
 	return resStr, nil
