@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-
+	"bytes"
 )
 
 // This struct contains all the funcitonality
@@ -77,12 +77,26 @@ func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 // if one occurs during the geocoding request.
 func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
-	key := ""
+
+	var queryStr = bytes.NewBufferString("?")
+	_, err := queryStr.WriteString(fmt.Sprintf("q=%s", url_safe_query))
+	if err != nil {
+		return nil, err
+	}
+	
 	if (OpenCageAPIKey != "") {
-		key = "key="+OpenCageAPIKey+"&"
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", OpenCageAPIKey))
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	data, err := g.Request(fmt.Sprintf("?%sq=%s&pretty=1", key, url_safe_query))
+	_, err = queryStr.WriteString("&pretty=1")
+	if err != nil {
+		return nil, err
+	}
+	
+	data, err := g.Request(queryStr.String())
 	if err != nil {
 		return nil, err
 	}
@@ -100,9 +114,6 @@ func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error)
 	res := &opencageGeocodeResponse{}
 	json.Unmarshal(data, res)
 
-	// fmt.Printf("%s\n", data)
-	// fmt.Printf("%v\n", res)
-
 	if len(res.Results) == 0 {
 		return Point{}, opencageZeroResultsError
 	}
@@ -116,12 +127,25 @@ func (g *OpenCageGeocoder) extractLatLngFromResponse(data []byte) (Point, error)
 // Returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
-	key := ""
-	if (OpenCageAPIKey != "") {
-		key = "key="+OpenCageAPIKey+"&"
+	var queryStr = bytes.NewBufferString("?")
+	_, err := queryStr.WriteString(fmt.Sprintf("q=%f,%f", p.lat, p.lng))
+	if err != nil {
+		return "", err
 	}
 
-	data, err := g.Request(fmt.Sprintf("?%sq=%f,%f&pretty=1", key, p.lat, p.lng))
+	if (OpenCageAPIKey != "") {
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", OpenCageAPIKey))
+		if err != nil {
+			return "", err
+		}
+	}
+
+	_, err = queryStr.WriteString("&pretty=1")
+	if err != nil {
+		return "", err
+	}
+
+	data, err := g.Request(queryStr.String())
 	if err != nil {
 		return "", err
 	}
