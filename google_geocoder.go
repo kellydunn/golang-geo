@@ -35,6 +35,7 @@ var googleZeroResultsError = errors.New("ZERO_RESULTS")
 // This contains the base URL for the Google Geocoder API.
 var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
 
+var GoogleAPIKey = ""
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -42,9 +43,12 @@ var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
 func SetGoogleGeocodeURL(newGeocodeURL string) {
 	googleGeocodeURL = newGeocodeURL
 }
-
+func (g *GoogleGeocoder) SetGoogleAPIKey(newAPIKey string) {
+	GoogleAPIKey = newAPIKey
+}
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
+// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one. 
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	if g.HttpClient == nil {
 		g.HttpClient = &http.Client{}
@@ -75,7 +79,13 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 // Returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
-	data, err := g.Request(fmt.Sprintf("address=%s", url_safe_query))
+
+	key := ""
+	if (GoogleAPIKey != "") {
+		key = "&key="+GoogleAPIKey
+	}
+
+	data, err := g.Request(fmt.Sprintf("address=%s%s", url_safe_query, key))
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +116,11 @@ func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches
 // or returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
-	data, err := g.Request(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
+	key := ""
+	if (GoogleAPIKey != "") {
+		key = "&key="+GoogleAPIKey
+	}
+	data, err := g.Request(fmt.Sprintf("latlng=%f,%f%s", p.lat, p.lng, key))
 	if err != nil {
 		return "", err
 	}
