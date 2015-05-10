@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestSetMapquestAPIKey(t * testing.T) {
+func TestSetMapquestAPIKey(t *testing.T) {
 	SetMapquestAPIKey("foo")
 	if MapquestAPIKey != "foo" {
 		t.Errorf("Mismatched value for MapQuestAPIKey.  Expected: 'foo', Actual: %s", MapquestAPIKey)
@@ -22,7 +22,7 @@ func TestSetMapquestGeocodeURL(t *testing.T) {
 
 func TestMapquestGeocoderQueryStr(t *testing.T) {
 	// Empty API Key
-	SetMapquestAPIKey("") 
+	SetMapquestAPIKey("")
 	address := "123 fake st"
 	res, err := mapquestGeocodeQueryStr(address)
 	if err != nil {
@@ -34,23 +34,23 @@ func TestMapquestGeocoderQueryStr(t *testing.T) {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
 
-	// Set api key to some value	
-	SetMapquestAPIKey("foo") 
+	// Set api key to some value
+	SetMapquestAPIKey("foo")
 	res, err = mapquestGeocodeQueryStr(address)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
-	
-	expected = "search.php?q=123+fake+st&key=foo&format=json"	
+
+	expected = "search.php?q=123+fake+st&key=foo&format=json"
 	if res != expected {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
-	}	
+	}
 }
 
 func TestMapquestReverseGeocoderQueryStr(t *testing.T) {
 	// Empty API Key
-	SetMapquestAPIKey("") 
-	p := &Point{lat:123.45, lng:56.78}
+	SetMapquestAPIKey("")
+	p := &Point{lat: 123.45, lng: 56.78}
 	res, err := mapquestReverseGeocodeQueryStr(p)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
@@ -62,12 +62,12 @@ func TestMapquestReverseGeocoderQueryStr(t *testing.T) {
 	}
 
 	// Set api key to some value
-	SetMapquestAPIKey("foo") 
+	SetMapquestAPIKey("foo")
 	res, err = mapquestReverseGeocodeQueryStr(p)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
-	
+
 	expected = "reverse.php?lat=123.450000&lng=56.780000&key=foo&format=json"
 	if res != expected {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
@@ -97,4 +97,3 @@ func TestMapQuestGeocodeFromRequest(t *testing.T) {
 		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%s, %s]", res[0].Lat, res[0].Lng))
 	}
 }
-
