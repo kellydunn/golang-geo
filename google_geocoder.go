@@ -87,23 +87,13 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 
 // Geocodes the passed in query string and returns a pointer to a new Point struct.
 // Returns an error if the underlying request cannot complete.
-func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
-	url_safe_query := url.QueryEscape(query)
-
-	var queryStr = bytes.NewBufferString("")
-	_, err := queryStr.WriteString(fmt.Sprintf("address=%s", url_safe_query))
+func (g *GoogleGeocoder) Geocode(address string) (*Point, error) {
+	queryStr, err := googleGeocodeQueryStr(address)
 	if err != nil {
 		return nil, err
 	}
 
-	if GoogleAPIKey != "" {
-		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	data, err := g.Request(queryStr.String())
+	data, err := g.Request(queryStr)
 	if err != nil {
 		return nil, err
 	}
@@ -126,11 +116,11 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	return point, nil
 }
 
-// Reverse geocodes the pointer to a Point struct and returns the first address that matches
-// or returns an error if the underlying request cannot complete.
-func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
+func googleGeocodeQueryStr(address string) (string, error) {
+	url_safe_query := url.QueryEscape(address)
+
 	var queryStr = bytes.NewBufferString("")
-	_, err := queryStr.WriteString(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
+	_, err := queryStr.WriteString(fmt.Sprintf("address=%s", url_safe_query))
 	if err != nil {
 		return "", err
 	}
@@ -142,7 +132,18 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 		}
 	}
 
-	data, err := g.Request(queryStr.String())
+	return queryStr.String(), err
+}
+
+// Reverse geocodes the pointer to a Point struct and returns the first address that matches
+// or returns an error if the underlying request cannot complete.
+func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
+	queryStr, err := googleReverseGeocodeQueryStr(p)
+	if err != nil {
+		return "", err
+	}
+
+	data, err := g.Request(queryStr)
 	if err != nil {
 		return "", err
 	}
@@ -158,4 +159,21 @@ func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	}
 
 	return res.Results[0].FormattedAddress, err
+}
+
+func googleReverseGeocodeQueryStr(p *Point) (string, error) {
+	var queryStr = bytes.NewBufferString("")
+	_, err := queryStr.WriteString(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
+	if err != nil {
+		return "", err
+	}
+
+	if GoogleAPIKey != "" {
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return queryStr.String(), err
 }
