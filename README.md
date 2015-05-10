@@ -13,9 +13,10 @@
 ```
 [![Build Status](https://drone.io/github.com/kellydunn/golang-geo/status.png)](https://drone.io/github.com/kellydunn/golang-geo/latest)
 [![Coverage Status](https://coveralls.io/repos/kellydunn/golang-geo/badge.png?branch=develop)](https://coveralls.io/r/kellydunn/golang-geo?branch=develop)
-## what 
-
+[![GoDoc](https://godoc.org/github.com/kellydunn/golang-geo?status.svg)](http://godoc.org/github.com/kellydunn/golang-geo)
 [![Join the chat at https://gitter.im/kellydunn/golang-geo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kellydunn/golang-geo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## what 
 
 This library provides convenience functions for translating, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make working with geographical data a little bit easier in golang.
 
@@ -117,5 +118,3 @@ The `$DB` environment variable is used to specify which database you'd like to r
   - Pull Requests will then be reviewed by the maintainer and the community and hopefully merged!
 
 Thanks!
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kellydunn/golang-geo/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
