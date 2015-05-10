@@ -48,7 +48,7 @@ func SetOpenCageGeocodeURL(newGeocodeURL string) {
 	opencageGeocodeURL = newGeocodeURL
 }
 
-func (g *OpenCageGeocoder) SetOpenCageAPIKey(newAPIKey string) {
+func SetOpenCageAPIKey(newAPIKey string) {
 	OpenCageAPIKey = newAPIKey
 }
 

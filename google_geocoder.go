@@ -51,7 +51,8 @@ var GoogleAPIKey = ""
 func SetGoogleGeocodeURL(newGeocodeURL string) {
 	googleGeocodeURL = newGeocodeURL
 }
-func (g *GoogleGeocoder) SetGoogleAPIKey(newAPIKey string) {
+
+func SetGoogleAPIKey(newAPIKey string) {
 	GoogleAPIKey = newAPIKey
 }
 
