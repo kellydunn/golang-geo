@@ -81,28 +81,14 @@ func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 
 // Returns the first point returned by OpenCage's geocoding service or an error
 // if one occurs during the geocoding request.
-func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
-	url_safe_query := url.QueryEscape(query)
+func (g *OpenCageGeocoder) Geocode(address string) (*Point, error) {
 
-	var queryStr = bytes.NewBufferString("?")
-	_, err := queryStr.WriteString(fmt.Sprintf("q=%s", url_safe_query))
+	queryStr, err := opencageGeocodeQueryStr(address)
 	if err != nil {
 		return nil, err
 	}
-
-	if OpenCageAPIKey != "" {
-		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", OpenCageAPIKey))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	_, err = queryStr.WriteString("&pretty=1")
-	if err != nil {
-		return nil, err
-	}
-
-	data, err := g.Request(queryStr.String())
+	
+	data, err := g.Request(queryStr)
 	if err != nil {
 		return nil, err
 	}
@@ -125,9 +111,57 @@ func (g *OpenCageGeocoder) Geocode(query string) (*Point, error) {
 	return point, nil
 }
 
+func opencageGeocodeQueryStr(address string) (string, error) {
+	url_safe_query := url.QueryEscape(address)
+
+	var queryStr = bytes.NewBufferString("?")
+	_, err := queryStr.WriteString(fmt.Sprintf("q=%s", url_safe_query))
+	if err != nil {
+		return "", err
+	}
+
+	if OpenCageAPIKey != "" {
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", OpenCageAPIKey))
+		if err != nil {
+			return "", err
+		}
+	}
+
+	_, err = queryStr.WriteString("&pretty=1")
+	if err != nil {
+		return "", err
+	}
+
+	return queryStr.String(), err
+}
+
 // Returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
+	queryStr, err := opencageReverseGeocodeQueryStr(p)
+	if err != nil {
+		return "", err
+	}
+
+	data, err := g.Request(queryStr)
+	if err != nil {
+		return "", err
+	}
+
+	res := &opencageReverseGeocodeResponse{}
+	err = json.Unmarshal(data, res)
+	if err != nil {
+		return "", err
+	}
+
+	if len(res.Results) == 0 {
+		return "", opencageZeroResultsError
+	}
+
+	return res.Results[0].Formatted, nil
+}
+
+func opencageReverseGeocodeQueryStr(p * Point) (string, error) {
 	var queryStr = bytes.NewBufferString("?")
 	_, err := queryStr.WriteString(fmt.Sprintf("q=%f,%f", p.lat, p.lng))
 	if err != nil {
@@ -146,20 +180,5 @@ func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 		return "", err
 	}
 
-	data, err := g.Request(queryStr.String())
-	if err != nil {
-		return "", err
-	}
-
-	res := &opencageReverseGeocodeResponse{}
-	err = json.Unmarshal(data, res)
-	if err != nil {
-		return "", err
-	}
-
-	if len(res.Results) == 0 {
-		return "", opencageZeroResultsError
-	}
-
-	return res.Results[0].Formatted, nil
+	return queryStr.String(), err
 }
