@@ -20,6 +20,33 @@ func TestSetMapquestGeocodeURL(t *testing.T) {
 	}
 }
 
+func TestMapquestGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetMapquestAPIKey("") 
+	address := "123 fake st"
+	res, err := mapquestGeocodeQueryStr(address)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected := "search.php?q=123+fake+st&format=json"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value	
+	SetMapquestAPIKey("foo") 
+	res, err = mapquestGeocodeQueryStr(address)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+	
+	expected = "search.php?q=123+fake+st&key=foo&format=json"	
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}	
+}
+
 // Ensures that the Data Transfer Object used
 // to get data from the Mapquest Geocoding API is well formed.
 func TestMapQuestGeocodeFromRequest(t *testing.T) {
