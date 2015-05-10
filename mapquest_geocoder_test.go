@@ -47,6 +47,33 @@ func TestMapquestGeocoderQueryStr(t *testing.T) {
 	}	
 }
 
+func TestMapquestReverseGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetMapquestAPIKey("") 
+	p := &Point{lat:123.45, lng:56.78}
+	res, err := mapquestReverseGeocodeQueryStr(p)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected := "reverse.php?lat=123.450000&lng=56.780000&format=json"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value
+	SetMapquestAPIKey("foo") 
+	res, err = mapquestReverseGeocodeQueryStr(p)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+	
+	expected = "reverse.php?lat=123.450000&lng=56.780000&key=foo&format=json"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+}
+
 // Ensures that the Data Transfer Object used
 // to get data from the Mapquest Geocoding API is well formed.
 func TestMapQuestGeocodeFromRequest(t *testing.T) {
