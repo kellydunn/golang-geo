@@ -67,4 +67,6 @@ The following illustrates the proposed changes `Geocoders` will receive with the
 #### Methods
 
   - `Geocode(string) ([]Point, error)`: `Geocoder`s will now return a slice of `Point` or an `error` when geocoding.
-    - `ReverseGeocode(*Point) ([]string, err)`: `Geocoder`s will now return a slice of `string` or an `error` when reverse geocoding.
+    - Previously, Geocode would only ever return the first point from the response endpoint.  This would return all points.
+  - `ReverseGeocode(*Point) ([]string, err)`: `Geocoder`s will now return a slice of `string` or an `error` when reverse geocoding.
+    - Previously, ReverseGeocode would only ever return the first address from the response endpoint.  This would return all addresses.
