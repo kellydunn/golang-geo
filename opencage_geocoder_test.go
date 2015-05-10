@@ -5,51 +5,70 @@ import (
 	"testing"
 )
 
-// Test extracting LatLng from OpenCage Geocoding Response
-func TestOpenCageExtractLatLngFromRequest(t *testing.T) {
-	g := &OpenCageGeocoder{}
-
-	data, err := GetMockResponse("test/data/opencage_geocode_success.json")
-	if err != nil {
-		t.Error("%v\n", err)
-	}
-
-	point, err := g.extractLatLngFromResponse(data)
-	if err != nil {
-		t.Error("%v\n", err)
-	}
-
-	if point.lat != -23.5373732 || point.lng != -46.8374628 {
-		t.Error(fmt.Sprintf("Expected: [-23.5373732, -46.8374628], Got: [%f, %f]", point.lat, point.lng))
+func TestSetOpencageAPIKey(t *testing.T) {
+	SetOpenCageAPIKey("foo")
+	if OpenCageAPIKey != "foo" {
+		t.Errorf("Mismatched value for OpencageAPIKey.  Expected: 'foo', Actual: %s", OpenCageAPIKey)
 	}
 }
 
-func TestOpenCageExtractAddressFromRequest(t *testing.T) {
-	g := &OpenCageGeocoder{}
-
-	data, err := GetMockResponse("test/data/opencage_geocode_success.json")
-	if err != nil {
-		t.Error("%v\n", err)
-	}
-
-	address := g.extractAddressFromResponse(data)
-
-	if address != "Rua Cafelândia, Carapicuíba - SP, Brazil" {
-		t.Error(fmt.Sprintf("Expected: Rua Cafelândia, Carapicuíba - SP, Brazil, Got: [%s]", address))
+func TestSetOpenCageGeocodeURL(t *testing.T) {
+	SetOpenCageGeocodeURL("foo")
+	if opencageGeocodeURL != "foo" {
+		t.Errorf("Mismatched value for googleGeocoeURL.  Expected: 'foo', Actual: %s", opencageGeocodeURL)
 	}
 }
 
-// Test extracting LatLng from OpenCage Geocoding Response when no results are returned
-func TestOpenCageExtractLatLngFromRequestZeroResults(t *testing.T) {
-	g := &OpenCageGeocoder{}
-
-	data, err := GetMockResponse("test/data/opencage_geocode_zero_results.json")
+func TestOpencageGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetOpenCageAPIKey("")
+	address := "123 fake st"
+	res, err := opencageGeocodeQueryStr(address)
 	if err != nil {
-		t.Error("%v\n", err)
+		t.Errorf("Error creating query string: %v", err)
 	}
 
-	_, err = g.extractLatLngFromResponse(data)
-	if err != opencageZeroResultsError {
-		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), opencageZeroResultsError, err)
+	expected := "?q=123+fake+st&pretty=1"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value
+	SetOpenCageAPIKey("foo")
+	res, err = opencageGeocodeQueryStr(address)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected = "?q=123+fake+st&key=foo&pretty=1"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+}
+
+func TestOpencageReverseGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetOpenCageAPIKey("")
+	p := &Point{lat: 123.45, lng: 56.78}
+	res, err := opencageReverseGeocodeQueryStr(p)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected := "?q=123.450000,56.780000&pretty=1"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value
+	SetOpenCageAPIKey("foo")
+	res, err = opencageReverseGeocodeQueryStr(p)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected = "?q=123.450000,56.780000&key=foo&pretty=1"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
 }

@@ -8,66 +8,71 @@ import (
 	"testing"
 )
 
-/// TODO Test extracting Address from Google Reverse Geocoding Response
-func TestExtractAddressFromResponse(t *testing.T) {
-	g := &GoogleGeocoder{}
-
-	data, err := GetMockResponse("test/data/google_reverse_geocode_success.json")
-	if err != nil {
-		t.Error("%v\n", err)
-	}
-
-	address, err := g.extractAddressFromResponse(data)
-	if address != "285 Bedford Avenue, Brooklyn, NY 11211, USA" {
-		t.Error(fmt.Sprintf("Expected: 285 Bedford Avenue, Brooklyn, NY 11211 USA.  Got: %s", address))
+func TestSetGoogleAPIKey(t *testing.T) {
+	SetGoogleAPIKey("foo")
+	if GoogleAPIKey != "foo" {
+		t.Errorf("Mismatched value for GoogleAPIKey.  Expected: 'foo', Actual: %s", GoogleAPIKey)
 	}
 }
 
-func TestExtractAddressFromResponseZeroResults(t *testing.T) {
-	g := &GoogleGeocoder{}
-
-	data, err := GetMockResponse("test/data/google_geocode_zero_results.json")
-	if err != nil {
-		t.Error("%v\n", err)
-	}
-
-	address, err := g.extractAddressFromResponse(data)
-	if address != "" && err != nil {
-		t.Error(fmt.Sprintf("Expected: '' response and 'ERROR: ZERO_RESULTS'.  Got: '%s' response and '%s'", address, err.Error()))
+func TestSetGoogleGeocodeURL(t *testing.T) {
+	SetGoogleGeocodeURL("foo")
+	if googleGeocodeURL != "foo" {
+		t.Errorf("Mismatched value for googleGeocoeURL.  Expected: 'foo', Actual: %s", googleGeocodeURL)
 	}
 }
 
-// TODO Test extracting LatLng from Google Geocoding Response
-func TestExtractLatLngFromRequest(t *testing.T) {
-	g := &GoogleGeocoder{}
-
-	data, err := GetMockResponse("test/data/google_geocode_success.json")
+func TestGoogleGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetGoogleAPIKey("")
+	address := "123 fake st"
+	res, err := googleGeocodeQueryStr(address)
 	if err != nil {
-		t.Error("%v\n", err)
+		t.Errorf("Error creating query string: %v", err)
 	}
 
-	point, err := g.extractLatLngFromResponse(data)
-	if err != nil {
-		t.Error("%v\n", err)
+	expected := "address=123+fake+st"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
 
-	if point.lat != 37.615223 || point.lng != -122.389979 {
-		t.Error(fmt.Sprintf("Expected: [37.615223, -122.389979], Got: [%f, %f]", point.lat, point.lng))
+	// Set api key to some value
+	SetGoogleAPIKey("foo")
+	res, err = googleGeocodeQueryStr(address)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected = "address=123+fake+st&key=foo"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
 }
 
-// TODO Test extracting LatLng from Google Geocoding Response when no results are returned
-func TestExtractLatLngFromRequestZeroResults(t *testing.T) {
-	g := &GoogleGeocoder{}
-
-	data, err := GetMockResponse("test/data/google_geocode_zero_results.json")
+func TestGoogleReverseGeocoderQueryStr(t *testing.T) {
+	// Empty API Key
+	SetGoogleAPIKey("")
+	p := &Point{lat: 123.45, lng: 56.78}
+	res, err := googleReverseGeocodeQueryStr(p)
 	if err != nil {
-		t.Error("%v\n", err)
+		t.Errorf("Error creating query string: %v", err)
 	}
 
-	_, err = g.extractLatLngFromResponse(data)
-	if err != googleZeroResultsError {
-		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), googleZeroResultsError, err)
+	expected := "latlng=123.450000,56.780000"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value
+	SetGoogleAPIKey("foo")
+	res, err = googleReverseGeocodeQueryStr(p)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected = "latlng=123.450000,56.780000&key=foo"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
 }
 
