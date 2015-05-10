@@ -1,9 +1,23 @@
 # golang-geo changelog
 
+## [0.5.4](https://github.com/kellydunn/golang-geo/tree/v0.5.4) May 10, 2015
+
+  - Removes unneeded private methods that were a bit clunky to test
+  - Adding in resliency to Geocoding and Reverse Geocoding methods by testing query building methods
+  - API key support is now available for all geocoder providers
+
+## [0.5.3](https://github.com/kellydunn/golang-geo/tree/v0.5.3) May 10, 2015
+
+  - Implments a Mapquest Data Transfer Object for decoding JSON responses from the MapQuest API.
+
+## [0.5.2](https://github.com/kellydunn/golang-geo/tree/v0.5.2) May 10, 2015
+
+  - Removes some uncessary pointer logic when unmarshalling various structs from provider responses.
+
 ## [0.5.1](https://github.com/kellydunn/golang-geo/tree/v0.5.1) March 14, 2015
 
   - Resolves an issue with the Google Geocoder that would panic when attempting to Reverse Geocode some Points with no results.
-	
+
 ## [0.5.0](https://github.com/kellydunn/golang-geo/tree/v0.5.0) January 14, 2015
 
   - Exposes `GoogleGeocoder.HttpClient` so that clients may be able to swap out underlying http client implementations.
@@ -11,11 +25,11 @@
 ## [0.4.1](https://github.com/kellydunn/golang-geo/tree/v0.4.1) December 1, 2014
 
   - Improves geocoder testing.
-	
+
 ## [0.4.0](https://github.com/kellydunn/golang-geo/tree/v0.4.0) November 2, 2014
 
   - Introduces the OpenCage Geocoder
-	
+
 ## [0.3.3](https://github.com/kellydunn/golang-geo/tree/v0.3.3) September 1, 2014
 
   - Fixes some inconsistent documentation.
