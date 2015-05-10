@@ -15,6 +15,8 @@
 [![Coverage Status](https://coveralls.io/repos/kellydunn/golang-geo/badge.png?branch=develop)](https://coveralls.io/r/kellydunn/golang-geo?branch=develop)
 ## what 
 
+[![Join the chat at https://gitter.im/kellydunn/golang-geo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kellydunn/golang-geo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This library provides convenience functions for translating, geocoding, and calculating distances between geographical points.  It is inspired by ruby's `geokit` and `geokit-rails` gems, and aims to make working with geographical data a little bit easier in golang.
 
 ## documentation
