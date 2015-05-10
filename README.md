@@ -114,7 +114,7 @@ The `$DB` environment variable is used to specify which database you'd like to r
   - Fork the project
   - Create a topic branch (preferably the in the `gitflow` style of `feature/`, `hotfix/`, etc)
   - Make your changes and write complimentary tests to ensure coverage.
-  - Submit Pull Request (on develop) once the full test suite is passing.
+  - Submit Pull Request once the full test suite is passing.
   - Pull Requests will then be reviewed by the maintainer and the community and hopefully merged!
 
 Thanks!
