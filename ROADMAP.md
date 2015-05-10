@@ -28,12 +28,12 @@ Pull Requests to implement new `Geocoder`s are welcome, but not required to work
 
 There will be three default supported `Geocoder`s upon the release of `1.0.0`:
   - Google Geocoder
-    - Mapquest Geocoder
-      - Opencage Geocoder
+  - Mapquest Geocoder
+  - Opencage Geocoder
 
 <a href="indexers" />
 ### Indexers
-The `indexers` package provides implementation for various `Indexer`s.  `Indexer`s are analogous with `Mapper`s from previous packages; they have been re-named to illustrate their responsibility:  To index and find `Point`s with various types of Spatial Access patterns.
+The `indexers` package provides implementation for various `Indexer`s.  `Indexer`s are analogous with `Mapper`s from previous packages; they have been re-named to illustrate their responsibility:  To index and find `Point`s with various types of Spatial Access patterns.  This change is being introduced to address the use cases of indexing points with other types of spatial access patterns, like RTrees, GIS, or other methods.  This means that an `Indexer` interface will be introduced, which will be able to find points within a bounding box, radius, and search for a single point.
 
 There will be one supported `Indexer` upon the release of `1.0.0`:
   - `MySQLIndexer` (previously known as `SQLMapper`)
