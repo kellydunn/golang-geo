@@ -1,40 +1,31 @@
 package geo
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 )
 
-// TODO Test extracting LatLng from Mapquest Response
-func TestMapQuestExtractLatLngFromRequest(t *testing.T) {
-	g := &MapQuestGeocoder{}
-
+// Ensures that the Data Transfer Object used 
+// to get data from the Mapquest Geocoding API is well formed.
+func TestMapQuestGeocodeFromRequest(t *testing.T) {
 	data, err := GetMockResponse("test/data/mapquest_geocode_success.json")
 	if err != nil {
 		t.Error("%v\n", err)
 	}
 
-	point, err := g.extractLatLngFromResponse(data)
+	res := []*mapQuestGeocodeResponse{}
+
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		t.Error("%v\n", err)
 	}
 
-	if point.lat != 37.62181845 || point.lng != -122.383992092462 {
-		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%f, %f]", point.lat, point.lng))
-	}
-}
-
-// TODO Test extracting LatLng from Mapquest Response when no results are returned
-func TestMapQuestExtractLatLngFromRequestZeroResults(t *testing.T) {
-	g := &MapQuestGeocoder{}
-
-	data, err := GetMockResponse("test/data/mapquest_geocode_zero_results.json")
-	if err != nil {
-		t.Error("%v\n", err)
+	if len(res) <= 0 {
+		t.Error("Unexecpected amount of results for mapquest mock response")
 	}
 
-	_, err = g.extractLatLngFromResponse(data)
-	if err != mapquestZeroResultsError {
-		t.Error(fmt.Sprintf("Expected error: %v, Got: %v"), mapquestZeroResultsError, err)
+	if res[0].Lat != "37.62181845" || res[0].Lng != "-122.383992092462" {
+		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%s, %s]", res[0].Lat, res[0].Lng))
 	}
 }

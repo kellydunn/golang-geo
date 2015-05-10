@@ -11,7 +11,7 @@ import (
 
 // This struct contains all the funcitonality
 // of interacting with the Google Maps Geocoding Service
-type GoogleGeocoder struct{
+type GoogleGeocoder struct {
 	HttpClient *http.Client
 }
 
@@ -124,7 +124,7 @@ func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) (string, error)
 	if err != nil {
 		return "", err
 	}
-	
+
 	if len(res.Results) == 0 {
 		return "", errors.New("ZERO_RESULTS")
 	}
