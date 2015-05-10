@@ -1,13 +1,13 @@
 package geo
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"bytes"
 )
 
 // This struct contains all the funcitonality
@@ -29,6 +29,12 @@ type googleGeocodeResponse struct {
 	}
 }
 
+type googleReverseGeocodeResponse struct {
+	Results []struct {
+		FormattedAddress string `json:"formatted_address"`
+	}
+}
+
 // This is the error that consumers receive when there
 // are no results from the geocoding request.
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
@@ -37,6 +43,7 @@ var googleZeroResultsError = errors.New("ZERO_RESULTS")
 var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
 
 var GoogleAPIKey = ""
+
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -47,9 +54,10 @@ func SetGoogleGeocodeURL(newGeocodeURL string) {
 func (g *GoogleGeocoder) SetGoogleAPIKey(newAPIKey string) {
 	GoogleAPIKey = newAPIKey
 }
+
 // Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
-// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one. 
+// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	if g.HttpClient == nil {
 		g.HttpClient = &http.Client{}
@@ -87,7 +95,7 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	if (GoogleAPIKey != "") {
+	if GoogleAPIKey != "" {
 		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
 		if err != nil {
 			return nil, err
@@ -99,58 +107,54 @@ func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	point, err := g.extractLatLngFromResponse(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &point, nil
-}
-
-// Extracts the first location from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractLatLngFromResponse(data []byte) (Point, error) {
 	res := &googleGeocodeResponse{}
 	json.Unmarshal(data, res)
 
 	if len(res.Results) == 0 {
-		return Point{}, googleZeroResultsError
+		return nil, googleZeroResultsError
 	}
 
 	lat := res.Results[0].Geometry.Location.Lat
 	lng := res.Results[0].Geometry.Location.Lng
 
-	return Point{lat, lng}, nil
+	point := &Point{
+		lat: lat,
+		lng: lng,
+	}
+
+	return point, nil
 }
 
 // Reverse geocodes the pointer to a Point struct and returns the first address that matches
 // or returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
-	key := ""
-	if (GoogleAPIKey != "") {
-		key = "&key="+GoogleAPIKey
-	}
-	data, err := g.Request(fmt.Sprintf("latlng=%f,%f%s", p.lat, p.lng, key))
+	var queryStr = bytes.NewBufferString("")
+	_, err := queryStr.WriteString(fmt.Sprintf("latlng=%f,%f", p.lat, p.lng))
 	if err != nil {
 		return "", err
 	}
 
-	resStr, err := g.extractAddressFromResponse(data)
+	if GoogleAPIKey != "" {
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
+		if err != nil {
+			return "", err
+		}
+	}
 
-	return resStr, err
-}
+	data, err := g.Request(queryStr.String())
+	if err != nil {
+		return "", err
+	}
 
-// Returns an Address from a Google Geocoder Response body.
-func (g *GoogleGeocoder) extractAddressFromResponse(data []byte) (string, error) {
-	res := &googleGeocodeResponse{}
-	err := json.Unmarshal(data, res)
-
+	res := &googleReverseGeocodeResponse{}
+	err = json.Unmarshal(data, res)
 	if err != nil {
 		return "", err
 	}
 
 	if len(res.Results) == 0 {
-		return "", errors.New("ZERO_RESULTS")
+		return "", googleZeroResultsError
 	}
 
-	return res.Results[0].FormattedAddress, nil
+	return res.Results[0].FormattedAddress, err
 }

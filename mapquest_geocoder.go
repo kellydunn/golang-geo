@@ -1,6 +1,7 @@
 package geo
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"bytes"
 )
 
 // This struct contains all the funcitonality
@@ -17,9 +17,9 @@ type MapQuestGeocoder struct{}
 
 type mapQuestGeocodeResponse struct {
 	BoundingBox []string `json:"boundingbox"`
-	Lat         string 
+	Lat         string
 	Lng         string `json:"lon"`
-	DisplayName string  `json:"display_name"`
+	DisplayName string `json:"display_name"`
 }
 
 type mapQuestReverseGeocodeResponse struct {
@@ -37,12 +37,14 @@ type mapQuestReverseGeocodeResponse struct {
 var mapquestZeroResultsError = errors.New("ZERO_RESULTS")
 
 var MapquestAPIKey = ""
+
 // This contains the base URL for the Mapquest Geocoder API.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
 func (g *MapQuestGeocoder) SetMapquestAPIKey(newAPIKey string) {
 	MapquestAPIKey = newAPIKey
 }
+
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -53,7 +55,7 @@ func SetMapquestGeocodeURL(newGeocodeURL string) {
 
 // Issues a request to the open mapquest api geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
-// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one. 
+// Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one.
 func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	client := &http.Client{}
 	fullUrl := fmt.Sprintf("%s/%s", mapquestGeocodeURL, url)
@@ -65,7 +67,7 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 
 	if requestErr != nil {
 		return nil, requestErr
-		}
+	}
 
 	// TODO figure out a better typing for response
 	data, dataReadErr := ioutil.ReadAll(resp.Body)
@@ -88,18 +90,18 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	if (MapquestAPIKey != "") {
+	if MapquestAPIKey != "" {
 		_, err := queryBuf.WriteString(fmt.Sprintf("&key=%s", MapquestAPIKey))
 		if err != nil {
 			return nil, err
 		}
-	} 
+	}
 
 	_, err = queryBuf.WriteString("&format=json")
 	if err != nil {
 		return nil, err
 	}
-	
+
 	data, err := g.Request(queryBuf.String())
 	if err != nil {
 		return nil, err
@@ -120,8 +122,8 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	lng, err := strconv.ParseFloat(res[0].Lng, 64)
 	if err != nil {
 		return nil, err
-	}	
-	
+	}
+
 	p := &Point{
 		lat: lat,
 		lng: lng,
@@ -138,20 +140,20 @@ func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	_, err := queryBuf.WriteString(fmt.Sprintf("lat=%f&lng=%f", p.lat, p.lng))
 	if err != nil {
 		return "", err
-	}	
+	}
 
-	if (MapquestAPIKey != "") {
+	if MapquestAPIKey != "" {
 		_, err := queryBuf.WriteString(fmt.Sprintf("&key=%s", MapquestAPIKey))
 		if err != nil {
 			return "", err
 		}
-	} 
-	
+	}
+
 	_, err = queryBuf.WriteString("&format=json")
 	if err != nil {
 		return "", err
 	}
-	
+
 	data, err := g.Request(queryBuf.String())
 	if err != nil {
 		return "", err

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Ensures that the Data Transfer Object used 
+// Ensures that the Data Transfer Object used
 // to get data from the Mapquest Geocoding API is well formed.
 func TestMapQuestGeocodeFromRequest(t *testing.T) {
 	data, err := GetMockResponse("test/data/mapquest_geocode_success.json")
