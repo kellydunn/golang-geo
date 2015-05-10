@@ -41,7 +41,7 @@ var MapquestAPIKey = ""
 // This contains the base URL for the Mapquest Geocoder API.
 var mapquestGeocodeURL = "http://open.mapquestapi.com/nominatim/v1"
 
-func (g *MapQuestGeocoder) SetMapquestAPIKey(newAPIKey string) {
+func SetMapquestAPIKey(newAPIKey string) {
 	MapquestAPIKey = newAPIKey
 }
 

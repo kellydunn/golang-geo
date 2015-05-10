@@ -6,6 +6,20 @@ import (
 	"testing"
 )
 
+func TestSetMapquestAPIKey(t * testing.T) {
+	SetMapquestAPIKey("foo")
+	if MapquestAPIKey != "foo" {
+		t.Errorf("Mismatched value for MapQuestAPIKey.  Expected: 'foo', Actual: %s", MapquestAPIKey)
+	}
+}
+
+func TestSetMapquestGeocodeURL(t *testing.T) {
+	SetMapquestGeocodeURL("foo")
+	if mapquestGeocodeURL != "foo" {
+		t.Errorf("Mismatched value for MapQuestGeocoeURL.  Expected: 'foo', Actual: %s", mapquestGeocodeURL)
+	}
+}
+
 // Ensures that the Data Transfer Object used
 // to get data from the Mapquest Geocoding API is well formed.
 func TestMapQuestGeocodeFromRequest(t *testing.T) {
@@ -29,3 +43,4 @@ func TestMapQuestGeocodeFromRequest(t *testing.T) {
 		t.Error(fmt.Sprintf("Expected: [37.62181845, -122.383992092462], Got: [%s, %s]", res[0].Lat, res[0].Lng))
 	}
 }
+
