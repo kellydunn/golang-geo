@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"bytes"
 )
 
 // This struct contains all the funcitonality
@@ -80,11 +81,27 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 // if one occurs during the geocoding request.
 func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
-	key := ""
+
+	var queryBuf = bytes.NewBufferString("search.php?")
+
 	if (MapquestAPIKey != "") {
-		key = "key="+MapquestAPIKey+"&"
+		_, err := queryBuf.WriteString(fmt.Sprintf("key=%s&q=%s", MapquestAPIKey, url_safe_query))
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		_, err := queryBuf.WriteString(fmt.Sprintf("q=%s", url_safe_query))
+		if err != nil {
+			return nil, err
+		}
 	}
-	data, err := g.Request(fmt.Sprintf("search.php?%sq=%s&format=json",key, url_safe_query ))
+
+	_, err := queryBuf.WriteString("&format=json")
+	if err != nil {
+		return nil, err
+	}
+	
+	data, err := g.Request(queryBuf.String())
 	if err != nil {
 		return nil, err
 	}
@@ -119,11 +136,26 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 // Returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
-	key := ""
-	if (GoogleAPIKey != "") {
-		key = "&key="+GoogleAPIKey+"&"
+	var queryBuf = bytes.NewBufferString("reverse.php?")
+
+	if (MapquestAPIKey != "") {
+		_, err := queryBuf.WriteString(fmt.Sprintf("key=%s&lat=%f&lng=%f", MapquestAPIKey, p.lat, p.lng))
+		if err != nil {
+			return "", err
+		}
+	} else {
+		_, err := queryBuf.WriteString(fmt.Sprintf("lat=%f&lng=%f", p.lat, p.lng))
+		if err != nil {
+			return "", err
+		}
 	}
-	data, err := g.Request(fmt.Sprintf("reverse.php?%slat=%f&lon=%f&format=json", key, p.lat, p.lng))
+
+	_, err := queryBuf.WriteString("&format=json")
+	if err != nil {
+		return "", err
+	}
+	
+	data, err := g.Request(queryBuf.String())
 	if err != nil {
 		return "", err
 	}
