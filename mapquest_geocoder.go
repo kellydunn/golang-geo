@@ -83,20 +83,19 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 
 	var queryBuf = bytes.NewBufferString("search.php?")
-
-	if (MapquestAPIKey != "") {
-		_, err := queryBuf.WriteString(fmt.Sprintf("key=%s&q=%s", MapquestAPIKey, url_safe_query))
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		_, err := queryBuf.WriteString(fmt.Sprintf("q=%s", url_safe_query))
-		if err != nil {
-			return nil, err
-		}
+	_, err := queryBuf.WriteString(fmt.Sprintf("q=%s", url_safe_query))
+	if err != nil {
+		return nil, err
 	}
 
-	_, err := queryBuf.WriteString("&format=json")
+	if (MapquestAPIKey != "") {
+		_, err := queryBuf.WriteString(fmt.Sprintf("&key=%s", MapquestAPIKey))
+		if err != nil {
+			return nil, err
+		}
+	} 
+
+	_, err = queryBuf.WriteString("&format=json")
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +105,6 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 		return nil, err
 	}
 
-	fmt.Printf("%s", data)
-	
 	res := []*mapQuestGeocodeResponse{}
 	json.Unmarshal(data, &res)
 
@@ -138,19 +135,19 @@ func (g *MapQuestGeocoder) Geocode(query string) (*Point, error) {
 func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	var queryBuf = bytes.NewBufferString("reverse.php?")
 
-	if (MapquestAPIKey != "") {
-		_, err := queryBuf.WriteString(fmt.Sprintf("key=%s&lat=%f&lng=%f", MapquestAPIKey, p.lat, p.lng))
-		if err != nil {
-			return "", err
-		}
-	} else {
-		_, err := queryBuf.WriteString(fmt.Sprintf("lat=%f&lng=%f", p.lat, p.lng))
-		if err != nil {
-			return "", err
-		}
-	}
+	_, err := queryBuf.WriteString(fmt.Sprintf("lat=%f&lng=%f", p.lat, p.lng))
+	if err != nil {
+		return "", err
+	}	
 
-	_, err := queryBuf.WriteString("&format=json")
+	if (MapquestAPIKey != "") {
+		_, err := queryBuf.WriteString(fmt.Sprintf("&key=%s", MapquestAPIKey))
+		if err != nil {
+			return "", err
+		}
+	} 
+	
+	_, err = queryBuf.WriteString("&format=json")
 	if err != nil {
 		return "", err
 	}

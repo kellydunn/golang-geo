@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"bytes"
 )
 
 // This struct contains all the funcitonality
@@ -80,12 +81,20 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 func (g *GoogleGeocoder) Geocode(query string) (*Point, error) {
 	url_safe_query := url.QueryEscape(query)
 
-	key := ""
-	if (GoogleAPIKey != "") {
-		key = "&key="+GoogleAPIKey
+	var queryStr = bytes.NewBufferString("")
+	_, err := queryStr.WriteString(fmt.Sprintf("address=%s", url_safe_query))
+	if err != nil {
+		return nil, err
 	}
 
-	data, err := g.Request(fmt.Sprintf("address=%s%s", url_safe_query, key))
+	if (GoogleAPIKey != "") {
+		_, err := queryStr.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	data, err := g.Request(queryStr.String())
 	if err != nil {
 		return nil, err
 	}
