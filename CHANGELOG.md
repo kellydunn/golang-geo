@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.6.0](https://github.com/kellydunn/golang-geo/tree/v0.6.0) May 22, 2015
+
+  - Introduces the `(p *Point) MidpointTo(other *Point)` function.
+
 ## [0.5.4](https://github.com/kellydunn/golang-geo/tree/v0.5.4) May 10, 2015
 
   - Removes unneeded private methods that were a bit clunky to test
