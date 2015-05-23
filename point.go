@@ -100,6 +100,30 @@ func (p *Point) BearingTo(p2 *Point) float64 {
 	return brng
 }
 
+// Calculates the midpoint between 'this' point and the supplied point.
+// Original implementation from http://www.movable-type.co.uk/scripts/latlong.html
+func (p *Point) MidpointTo(p2 *Point) *Point {
+	lat1 := p.lat * math.Pi / 180.0
+	lat2 := p2.lat * math.Pi / 180.0
+
+	lon1 := p.lng * math.Pi / 180.0
+	dLon := (p2.lng - p.lng) * math.Pi / 180.0
+
+	bx := math.Cos(lat2) * math.Cos(dLon)
+	by := math.Cos(lat2) * math.Sin(dLon)
+
+	lat3Rad := math.Atan2(
+		math.Sin(lat1)+math.Sin(lat2),
+		math.Sqrt(math.Pow(math.Cos(lat1)+bx, 2)+math.Pow(by, 2)),
+	)
+	lon3Rad := lon1 + math.Atan2(by, math.Cos(lat1)+bx)
+
+	lat3 := lat3Rad * 180.0 / math.Pi
+	lon3 := lon3Rad * 180.0 / math.Pi
+
+	return NewPoint(lat3, lon3)
+}
+
 // Renders the current Point to valid JSON.
 // Implements the json.Marshaller Interface.
 func (p *Point) MarshalJSON() ([]byte, error) {
