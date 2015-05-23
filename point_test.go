@@ -90,6 +90,23 @@ func TestBearingTo(t *testing.T) {
 	}
 }
 
+func TestMidpointTo(t *testing.T) {
+	p1 := &Point{lat: 52.205, lng: 0.119}
+	p2 := &Point{lat: 48.857, lng: 2.351}
+
+	p := p1.MidpointTo(p2)
+
+	// Expected midpoint 50.5363°N, 001.2746°E
+	resultLat := 50.53632
+	resultLng := 1.274614
+
+	withinLatBounds := p.lat < resultLat+0.001 && p.lat > resultLat-0.001
+	withinLngBounds := p.lng < resultLng+0.001 && p.lng > resultLng-0.001
+	if !(withinLatBounds && withinLngBounds) {
+		t.Error("Unnacceptable result.", fmt.Sprintf("[%f, %f]", p.lat, p.lng))
+	}
+}
+
 // Enures that a point can be marhalled into JSON
 func TestMarshalJSON(t *testing.T) {
 	p := NewPoint(40.7486, -73.9864)
