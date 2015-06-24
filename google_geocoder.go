@@ -40,7 +40,7 @@ type googleReverseGeocodeResponse struct {
 var googleZeroResultsError = errors.New("ZERO_RESULTS")
 
 // This contains the base URL for the Google Geocoder API.
-var googleGeocodeURL = "http://maps.googleapis.com/maps/api/geocode/json"
+var googleGeocodeURL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 var GoogleAPIKey = ""
 
