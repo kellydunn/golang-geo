@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.6.1](https://github.com/kellydunn/golang-geo/tree/v0.6.1) June 24, 2015
+
+  - Ensures that the Google Geocoder operates over HTTPS.
+
 ## [0.6.0](https://github.com/kellydunn/golang-geo/tree/v0.6.0) May 22, 2015
 
   - Introduces the `(p *Point) MidpointTo(other *Point)` function.
