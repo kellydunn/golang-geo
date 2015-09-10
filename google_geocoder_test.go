@@ -22,55 +22,50 @@ func TestSetGoogleGeocodeURL(t *testing.T) {
 	}
 }
 
-func TestGoogleGeocoderQueryStr(t *testing.T) {
-	// Empty API Key
-	SetGoogleAPIKey("")
+func TestGoogleGeocodeQueryStr(t *testing.T) {
 	address := "123 fake st"
-	res, err := googleGeocodeQueryStr(address)
-	if err != nil {
-		t.Errorf("Error creating query string: %v", err)
-	}
+
+	res := googleGeocodeQueryStr(address)
 
 	expected := "address=123+fake+st"
 	if res != expected {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
-
-	// Set api key to some value
-	SetGoogleAPIKey("foo")
-	res, err = googleGeocodeQueryStr(address)
-	if err != nil {
-		t.Errorf("Error creating query string: %v", err)
-	}
-
-	expected = "address=123+fake+st&key=foo"
-	if res != expected {
-		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
-	}
 }
 
-func TestGoogleReverseGeocoderQueryStr(t *testing.T) {
-	// Empty API Key
-	SetGoogleAPIKey("")
+func TestGoogleReverseGeocodeQueryStr(t *testing.T) {
 	p := &Point{lat: 123.45, lng: 56.78}
-	res, err := googleReverseGeocodeQueryStr(p)
-	if err != nil {
-		t.Errorf("Error creating query string: %v", err)
-	}
+	res := googleReverseGeocodeQueryStr(p)
 
 	expected := "latlng=123.450000,56.780000"
 	if res != expected {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
+}
 
-	// Set api key to some value
-	SetGoogleAPIKey("foo")
-	res, err = googleReverseGeocodeQueryStr(p)
+func TestGoogleFormattedRequestStr(t *testing.T) {
+	// Empty API Key
+	SetGoogleAPIKey("")
+	params := "latlng=123.450000,56.780000"
+
+	res, err := googleFormattedRequestStr(params)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
 
-	expected = "latlng=123.450000,56.780000&key=foo"
+	expected := "sensor=false&latlng=123.450000,56.780000"
+	if res != expected {
+		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
+	}
+
+	// Set api key to some value
+	SetGoogleAPIKey("foo")
+	res, err = googleFormattedRequestStr(params)
+	if err != nil {
+		t.Errorf("Error creating query string: %v", err)
+	}
+
+	expected = "sensor=false&latlng=123.450000,56.780000&key=foo"
 	if res != expected {
 		t.Errorf(fmt.Sprintf("Mismatched query string.  Expected: %s.  Actual: %s", expected, res))
 	}
