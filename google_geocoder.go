@@ -2,6 +2,9 @@ package geo
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha1"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -44,6 +47,10 @@ var googleGeocodeURL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 var GoogleAPIKey = ""
 
+var GoogleClientID = ""
+var GooglePrivateKey = ""
+var GoogleChannel = ""
+
 // Note:  In the next major revision (1.0.0), it is planned
 //        That Geocoders should adhere to the `geo.Geocoder`
 //        interface and provide versioning of APIs accordingly.
@@ -54,6 +61,18 @@ func SetGoogleGeocodeURL(newGeocodeURL string) {
 
 func SetGoogleAPIKey(newAPIKey string) {
 	GoogleAPIKey = newAPIKey
+}
+
+func SetGoogleClientID(newGoogleClientID string) {
+	GoogleClientID = newGoogleClientID
+}
+
+func SetGooglePrivateKey(newGooglePrivateKey string) {
+	GooglePrivateKey = newGooglePrivateKey
+}
+
+func SetGoogleChannel(newGoogleChannel string) {
+	GoogleChannel = newGoogleChannel
 }
 
 // Issues a request to the google geocoding service and forwards the passed in params string
@@ -130,6 +149,39 @@ func googleFormattedRequestStr(params string) (string, error) {
 		}
 
 		return queryStrBuffer.String(), nil
+	} else if GoogleClientID != "" && GooglePrivateKey != "" {
+		queryStrBuffer := bytes.NewBufferString(queryStr)
+
+		if GoogleChannel != "" {
+			_, err := queryStrBuffer.WriteString(fmt.Sprintf("&channel=%s", GoogleChannel))
+			if err != nil {
+				return "", err
+			}
+		}
+
+		_, err := queryStrBuffer.WriteString(fmt.Sprintf("&client=%s", GoogleClientID))
+		if err != nil {
+			return "", err
+		}
+
+		u, err := url.Parse(fmt.Sprintf("%s?%s", googleGeocodeURL, queryStrBuffer.String()))
+		if err != nil {
+			return "", err
+		}
+
+		requestUri := u.RequestURI()
+
+		decodedKey, err := base64.URLEncoding.DecodeString(GooglePrivateKey)
+		if err != nil {
+			return "", err
+		}
+
+		mac := hmac.New(sha1.New, decodedKey)
+		_, err = mac.Write([]byte(requestUri))
+
+		encodedSignature := base64.URLEncoding.EncodeToString(mac.Sum(nil))
+
+		return fmt.Sprintf("%s&signature=%s", queryStrBuffer.String(), encodedSignature), nil
 	}
 
 	return queryStr, nil
