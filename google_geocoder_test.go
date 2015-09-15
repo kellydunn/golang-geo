@@ -70,7 +70,8 @@ func TestGoogleFormattedRequestStr(t *testing.T) {
 	SetGoogleClientID("")
 	params := "latlng=123.450000,56.780000"
 
-	res, err := googleFormattedRequestStr(params)
+	g := &GoogleGeocoder{}
+	res, err := g.googleFormattedRequestStr(params)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
@@ -82,7 +83,9 @@ func TestGoogleFormattedRequestStr(t *testing.T) {
 
 	// Set api key to some value
 	SetGoogleAPIKey("foo")
-	res, err = googleFormattedRequestStr(params)
+
+	g.AuthSchema = GoogleMapsAPIToken
+	res, err = g.googleFormattedRequestStr(params)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
@@ -99,7 +102,8 @@ func TestGoogleFormattedRequestStr(t *testing.T) {
 	SetGoogleChannel("")
 	params = "address=New+York"
 
-	res, err = googleFormattedRequestStr(params)
+	g.AuthSchema = GoogleMapsForWorkAuth
+	res, err = g.googleFormattedRequestStr(params)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}
@@ -111,7 +115,7 @@ func TestGoogleFormattedRequestStr(t *testing.T) {
 
 	// Set Channel
 	SetGoogleChannel("chan")
-	res, err = googleFormattedRequestStr(params)
+	res, err = g.googleFormattedRequestStr(params)
 	if err != nil {
 		t.Errorf("Error creating query string: %v", err)
 	}

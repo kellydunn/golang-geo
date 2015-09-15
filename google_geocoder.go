@@ -13,10 +13,19 @@ import (
 	"net/url"
 )
 
+type GoogleAuthSchema int
+
+const (
+	_ = iota
+	GoogleMapsAPIToken
+	GoogleMapsForWorkAuth
+)
+
 // This struct contains all the funcitonality
 // of interacting with the Google Maps Geocoding Service
 type GoogleGeocoder struct {
 	HttpClient *http.Client
+	AuthSchema GoogleAuthSchema
 }
 
 // This struct contains selected fields from Google's Geocoding Service response
@@ -109,7 +118,7 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 func (g *GoogleGeocoder) Geocode(address string) (*Point, error) {
 	params := googleGeocodeQueryStr(address)
 
-	queryStr, err := googleFormattedRequestStr(params)
+	queryStr, err := g.googleFormattedRequestStr(params)
 	if err != nil {
 		return nil, err
 	}
@@ -137,54 +146,67 @@ func (g *GoogleGeocoder) Geocode(address string) (*Point, error) {
 	return point, nil
 }
 
-func googleFormattedRequestStr(params string) (string, error) {
-	queryStr := fmt.Sprintf("%s&%s", "sensor=false", params)
+func (g *GoogleGeocoder) googleFormattedRequestStr(params string) (string, error) {
+	query := fmt.Sprintf("%s&%s", "sensor=false", params)
 
-	if GoogleAPIKey != "" {
-		queryStrBuffer := bytes.NewBufferString(queryStr)
+	switch g.AuthSchema {
+	case GoogleMapsAPIToken:
+		return buildGoogleMapsClientSideQuery(query)
+	case GoogleMapsForWorkAuth:
+		return buildGoogleMapsForWorkQuery(query)
+	default:
+		return buildDefaultGoogleMapsQuery(query)
+	}
+}
 
-		_, err := queryStrBuffer.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
-		if err != nil {
-			return "", err
-		}
+func buildGoogleMapsClientSideQuery(query string) (string, error) {
+	queryBuffer := bytes.NewBufferString(query)
 
-		return queryStrBuffer.String(), nil
-	} else if GoogleClientID != "" && GooglePrivateKey != "" {
-		queryStrBuffer := bytes.NewBufferString(queryStr)
-
-		if GoogleChannel != "" {
-			_, err := queryStrBuffer.WriteString(fmt.Sprintf("&channel=%s", GoogleChannel))
-			if err != nil {
-				return "", err
-			}
-		}
-
-		_, err := queryStrBuffer.WriteString(fmt.Sprintf("&client=%s", GoogleClientID))
-		if err != nil {
-			return "", err
-		}
-
-		u, err := url.Parse(fmt.Sprintf("%s?%s", googleGeocodeURL, queryStrBuffer.String()))
-		if err != nil {
-			return "", err
-		}
-
-		requestUri := u.RequestURI()
-
-		decodedKey, err := base64.URLEncoding.DecodeString(GooglePrivateKey)
-		if err != nil {
-			return "", err
-		}
-
-		mac := hmac.New(sha1.New, decodedKey)
-		_, err = mac.Write([]byte(requestUri))
-
-		encodedSignature := base64.URLEncoding.EncodeToString(mac.Sum(nil))
-
-		return fmt.Sprintf("%s&signature=%s", queryStrBuffer.String(), encodedSignature), nil
+	_, err := queryBuffer.WriteString(fmt.Sprintf("&key=%s", GoogleAPIKey))
+	if err != nil {
+		return "", err
 	}
 
-	return queryStr, nil
+	return queryBuffer.String(), nil
+}
+
+func buildGoogleMapsForWorkQuery(query string) (string, error) {
+	queryBuffer := bytes.NewBufferString(query)
+
+	if GoogleChannel != "" {
+		_, err := queryBuffer.WriteString(fmt.Sprintf("&channel=%s", GoogleChannel))
+		if err != nil {
+			return "", err
+		}
+	}
+
+	_, err := queryBuffer.WriteString(fmt.Sprintf("&client=%s", GoogleClientID))
+	if err != nil {
+		return "", err
+	}
+
+	u, err := url.Parse(fmt.Sprintf("%s?%s", googleGeocodeURL, queryBuffer.String()))
+	if err != nil {
+		return "", err
+	}
+
+	requestUri := u.RequestURI()
+
+	decodedKey, err := base64.URLEncoding.DecodeString(GooglePrivateKey)
+	if err != nil {
+		return "", err
+	}
+
+	mac := hmac.New(sha1.New, decodedKey)
+	_, err = mac.Write([]byte(requestUri))
+
+	encodedSignature := base64.URLEncoding.EncodeToString(mac.Sum(nil))
+
+	return fmt.Sprintf("%s&signature=%s", queryBuffer.String(), encodedSignature), nil
+}
+
+func buildDefaultGoogleMapsQuery(query string) (string, error) {
+	return query, nil
 }
 
 func googleGeocodeQueryStr(address string) string {
@@ -198,7 +220,7 @@ func googleGeocodeQueryStr(address string) string {
 func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	params := googleReverseGeocodeQueryStr(p)
 
-	queryStr, err := googleFormattedRequestStr(params)
+	queryStr, err := g.googleFormattedRequestStr(params)
 	if err != nil {
 		return "", err
 	}
