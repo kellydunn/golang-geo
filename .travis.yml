@@ -1,11 +1,13 @@
 language: go
-go: 1.2.1
+go: 1.4.2
+sudo: false
 
 before_install:
   - export PATH=/home/travis/gopath/bin:$PATH
 
 install:
-  - go get bitbucket.org/liamstask/goose/cmd/goose
+  - go get -d bitbucket.org/liamstask/goose/lib/goose
+  - go install bitbucket.org/liamstask/goose/cmd/goose
   - go get github.com/erikstmartin/go-testdb  
 
 env:
