@@ -2,6 +2,7 @@ package geo
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"log"
