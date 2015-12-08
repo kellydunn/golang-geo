@@ -1,5 +1,9 @@
 # golang-geo changelog
 
+## [0.7.0](https://github.com/kellydunn/golang-geo/tree/v0.7.0) December 8, 2015
+
+  - Adds the ability for points to be marshalled an unmarshalled via a binary protocol (gob).
+
 ## [0.6.1](https://github.com/kellydunn/golang-geo/tree/v0.6.1) June 24, 2015
 
   - Ensures that the Google Geocoder operates over HTTPS.
