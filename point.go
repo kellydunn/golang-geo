@@ -2,6 +2,7 @@ package geo
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -122,6 +123,42 @@ func (p *Point) MidpointTo(p2 *Point) *Point {
 	lon3 := lon3Rad * 180.0 / math.Pi
 
 	return NewPoint(lat3, lon3)
+}
+
+// Renders the current point to a byte slice.
+// Implements the encoding.BinaryMarshaler Interface.
+func (p *Point) MarshalBinary() ([]byte, error) {
+	var buf bytes.Buffer
+	err := binary.Write(&buf, binary.LittleEndian, p.lat)
+	if err != nil {
+		return nil, fmt.Errorf("unable to encode lat %v: %v", p.lat, err)
+	}
+	err = binary.Write(&buf, binary.LittleEndian, p.lng)
+	if err != nil {
+		return nil, fmt.Errorf("unable to encode lng %v: %v", p.lng, err)
+	}
+
+	return buf.Bytes(), nil
+}
+
+func (p *Point) UnmarshalBinary(data []byte) error {
+	buf := bytes.NewReader(data)
+
+	var lat float64
+	err := binary.Read(buf, binary.LittleEndian, &lat)
+	if err != nil {
+		return fmt.Errorf("binary.Read failed: %v", err)
+	}
+
+	var lng float64
+	err = binary.Read(buf, binary.LittleEndian, &lng)
+	if err != nil {
+		return fmt.Errorf("binary.Read failed: %v", err)
+	}
+
+	p.lat = lat
+	p.lng = lng
+	return nil
 }
 
 // Renders the current Point to valid JSON.
