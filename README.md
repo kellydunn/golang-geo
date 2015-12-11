@@ -48,7 +48,7 @@ func main() {
 Currently, `golang-geo` provides the following functionality:
 
   - Transposing a point for a given distance and bearing.
-  - Calculating the Great Circle Distance bewteen two points.
+  - Calculating the Great Circle Distance between two points.
   - Geocoding an address using Google Maps, Mapquest (OpenStreetMap data), OpenCage (OpenStreetMap, twofishes and other data sources) API.
   - Reverse Geocoding a Point using the same services.
   - Querying for points within a radius using your own SQL data tables.
