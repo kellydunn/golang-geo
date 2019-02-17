@@ -37,14 +37,14 @@ func sqlConfFromEnv() *SQLConf {
 	}
 }
 
-// Attempts to read config/geo.yml, and creates a SQLConf as described therein.
+// GetSQLConf: Attempts to read config/geo.yml, and creates a SQLConf as described therein.
 // Returns the DefaultSQLConf if no config/geo.yml is found, or an error
 // if one arises during the process of parsing the configuration file.
 func GetSQLConf() (*SQLConf, error) {
 	return GetSQLConfFromFile("config/geo.yml")
 }
 
-// Attempts to read from the passed in filename and creates a SQLconf as described therin.
+// GetSQLConfFromFile: Attempts to read from the passed in filename and creates a SQLconf as described therin.
 // Retruns the DefaultSQLConf if the file cannot be found, or an error
 // if one arises during the process of parsing the configuration file.
 func GetSQLConfFromFile(filename string) (*SQLConf, error) {

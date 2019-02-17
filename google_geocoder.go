@@ -56,7 +56,7 @@ func SetGoogleAPIKey(newAPIKey string) {
 	GoogleAPIKey = newAPIKey
 }
 
-// Issues a request to the google geocoding service and forwards the passed in params string
+// Request Issues a request to the google geocoding service and forwards the passed in params string
 // as a URL-encoded entity.  Returns an array of byes as a result, or an error if one occurs during the process.
 // Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one.
 func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
@@ -85,7 +85,7 @@ func (g *GoogleGeocoder) Request(params string) ([]byte, error) {
 	return data, nil
 }
 
-// Geocodes the passed in query string and returns a pointer to a new Point struct.
+// Geocode: Geocodes the passed in query string and returns a pointer to a new Point struct.
 // Returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) Geocode(address string) (*Point, error) {
 	queryStr, err := googleGeocodeQueryStr(address)
@@ -135,7 +135,7 @@ func googleGeocodeQueryStr(address string) (string, error) {
 	return queryStr.String(), err
 }
 
-// Reverse geocodes the pointer to a Point struct and returns the first address that matches
+// ReverseGeocode: Reverse geocodes the pointer to a Point struct and returns the first address that matches
 // or returns an error if the underlying request cannot complete.
 func (g *GoogleGeocoder) ReverseGeocode(p *Point) (string, error) {
 	queryStr, err := googleReverseGeocodeQueryStr(p)

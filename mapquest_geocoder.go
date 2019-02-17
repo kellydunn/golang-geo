@@ -53,7 +53,7 @@ func SetMapquestGeocodeURL(newGeocodeURL string) {
 	mapquestGeocodeURL = newGeocodeURL
 }
 
-// Issues a request to the open mapquest api geocoding services using the passed in url query.
+// Request Issues a request to the open mapquest api geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
 // Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one.
 func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
@@ -79,7 +79,7 @@ func (g *MapQuestGeocoder) Request(url string) ([]byte, error) {
 	return data, nil
 }
 
-// Returns the first point returned by MapQuest's geocoding service or an error
+// Geocode returns the first point returned by MapQuest's geocoding service or an error
 // if one occurs during the geocoding request.
 func (g *MapQuestGeocoder) Geocode(address string) (*Point, error) {
 
@@ -142,7 +142,7 @@ func mapquestGeocodeQueryStr(address string) (string, error) {
 	return queryBuf.String(), err
 }
 
-// Returns the first most available address that corresponds to the passed in point.
+// ReverseGeocode returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *MapQuestGeocoder) ReverseGeocode(p *Point) (string, error) {
 	queryStr, err := mapquestReverseGeocodeQueryStr(p)

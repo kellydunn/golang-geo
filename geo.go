@@ -7,7 +7,7 @@ import (
 	_ "github.com/ziutek/mymysql/godrv"
 )
 
-// Retrieves the SQL configuration specified in config.yml
+// HandleWithSQL retrieves the SQL configuration specified in config.yml
 // that resides at the root level of the project.
 // Returns a pointer to a SQLMapper if successful, or an error
 // if there is an issue opening a database connection.

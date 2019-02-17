@@ -20,22 +20,22 @@ const (
 	EARTH_RADIUS = 6371
 )
 
-// Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
+// NewPoint returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
 func NewPoint(lat float64, lng float64) *Point {
 	return &Point{lat: lat, lng: lng}
 }
 
-// Returns Point p's latitude.
+// Lat returns Point p's latitude.
 func (p *Point) Lat() float64 {
 	return p.lat
 }
 
-// Returns Point p's longitude.
+// Lng returns Point p's longitude.
 func (p *Point) Lng() float64 {
 	return p.lng
 }
 
-// Returns a Point populated with the lat and lng coordinates
+// PointAtDistanceAndBearing returns a Point populated with the lat and lng coordinates
 // by transposing the origin point the passed in distance (in kilometers)
 // by the passed in compass bearing (in degrees).
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
@@ -65,7 +65,7 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	return &Point{lat: lat2, lng: lng2}
 }
 
-// Calculates the Haversine distance between two points in kilometers.
+// GreatCircleDistance: Calculates the Haversine distance between two points in kilometers.
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 	dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
@@ -84,7 +84,7 @@ func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 	return EARTH_RADIUS * c
 }
 
-// Calculates the initial bearing (sometimes referred to as forward azimuth)
+// BearingTo: Calculates the initial bearing (sometimes referred to as forward azimuth)
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) BearingTo(p2 *Point) float64 {
 
@@ -101,7 +101,7 @@ func (p *Point) BearingTo(p2 *Point) float64 {
 	return brng
 }
 
-// Calculates the midpoint between 'this' point and the supplied point.
+// MidpointTo: Calculates the midpoint between 'this' point and the supplied point.
 // Original implementation from http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) MidpointTo(p2 *Point) *Point {
 	lat1 := p.lat * math.Pi / 180.0
@@ -125,7 +125,7 @@ func (p *Point) MidpointTo(p2 *Point) *Point {
 	return NewPoint(lat3, lon3)
 }
 
-// Renders the current point to a byte slice.
+// MarshalBinary renders the current point to a byte slice.
 // Implements the encoding.BinaryMarshaler Interface.
 func (p *Point) MarshalBinary() ([]byte, error) {
 	var buf bytes.Buffer
@@ -161,14 +161,14 @@ func (p *Point) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
-// Renders the current Point to valid JSON.
+// MarshalJSON renders the current Point to valid JSON.
 // Implements the json.Marshaller Interface.
 func (p *Point) MarshalJSON() ([]byte, error) {
 	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.lat, p.lng)
 	return []byte(res), nil
 }
 
-// Decodes the current Point from a JSON body.
+// UnmarshalJSON decodes the current Point from a JSON body.
 // Throws an error if the body of the point cannot be interpreted by the JSON body
 func (p *Point) UnmarshalJSON(data []byte) error {
 	// TODO throw an error if there is an issue parsing the body.

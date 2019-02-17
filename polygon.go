@@ -12,7 +12,7 @@ type Polygon struct {
 	points []*Point
 }
 
-// Creates and returns a new pointer to a Polygon
+// NewPolygon: Creates and returns a new pointer to a Polygon
 // composed of the passed in points.  Points are
 // considered to be in order such that the last point
 // forms an edge with the first point.
@@ -20,17 +20,17 @@ func NewPolygon(points []*Point) *Polygon {
 	return &Polygon{points: points}
 }
 
-// Returns the points of the current Polygon.
+// Points returns the points of the current Polygon.
 func (p *Polygon) Points() []*Point {
 	return p.points
 }
 
-// Appends the passed in contour to the current Polygon.
+// Add: Appends the passed in contour to the current Polygon.
 func (p *Polygon) Add(point *Point) {
 	p.points = append(p.points, point)
 }
 
-// Returns whether or not the polygon is closed.
+// IsClosed returns whether or not the polygon is closed.
 // TODO:  This can obviously be improved, but for now,
 //        this should be sufficient for detecting if points
 //        are contained using the raycast algorithm.
@@ -42,7 +42,7 @@ func (p *Polygon) IsClosed() bool {
 	return true
 }
 
-// Returns whether or not the current Polygon contains the passed in Point.
+// Contains returns whether or not the current Polygon contains the passed in Point.
 func (p *Polygon) Contains(point *Point) bool {
 	if !p.IsClosed() {
 		return false
