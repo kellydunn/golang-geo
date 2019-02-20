@@ -11,7 +11,7 @@ type SQLMapper struct {
 	sqlConn *sql.DB
 }
 
-// Creates and returns a pointer to a new geo.SQLMapper.
+// NewSQLMapper: Creates and returns a pointer to a new geo.SQLMapper.
 func NewSQLMapper(filename string, conn *sql.DB) (*SQLMapper, error) {
 	conf, confErr := GetSQLConfFromFile(filename)
 	if confErr != nil {
@@ -21,12 +21,12 @@ func NewSQLMapper(filename string, conn *sql.DB) (*SQLMapper, error) {
 	return &SQLMapper{conf: conf, sqlConn: conn}, nil
 }
 
-// Returns a pointer to the SQLMapper's SQL Database Connection.
+// SqlDbConn returns a pointer to the SQLMapper's SQL Database Connection.
 func (s *SQLMapper) SqlDbConn() *sql.DB {
 	return s.sqlConn
 }
 
-// Uses SQL to retrieve all points within the radius (in meters)
+// PointsWithinRadius: Uses SQL to retrieve all points within the radius (in meters)
 // passed in from the origin point passed in.
 // Original implemenation from : http://www.movable-type.co.uk/scripts/latlong-db.html
 // Returns a pointer to a sql.Rows as a result, or an error if one occurs during the query.

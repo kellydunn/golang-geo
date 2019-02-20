@@ -52,7 +52,7 @@ func SetOpenCageAPIKey(newAPIKey string) {
 	OpenCageAPIKey = newAPIKey
 }
 
-// Issues a request to the open OpenCage API geocoding services using the passed in url query.
+// Request Issues a request to the open OpenCage API geocoding services using the passed in url query.
 // Returns an array of bytes as the result of the api call or an error if one occurs during the process.
 // Note: Since this is an arbitrary request, you are responsible for passing in your API key if you want one.
 func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
@@ -79,7 +79,7 @@ func (g *OpenCageGeocoder) Request(url string) ([]byte, error) {
 	return data, nil
 }
 
-// Returns the first point returned by OpenCage's geocoding service or an error
+// Geocode returns the first point returned by OpenCage's geocoding service or an error
 // if one occurs during the geocoding request.
 func (g *OpenCageGeocoder) Geocode(address string) (*Point, error) {
 
@@ -135,7 +135,7 @@ func opencageGeocodeQueryStr(address string) (string, error) {
 	return queryStr.String(), err
 }
 
-// Returns the first most available address that corresponds to the passed in point.
+// ReverseGeocode returns the first most available address that corresponds to the passed in point.
 // It may also return an error if one occurs during execution.
 func (g *OpenCageGeocoder) ReverseGeocode(p *Point) (string, error) {
 	queryStr, err := opencageReverseGeocodeQueryStr(p)
