@@ -104,7 +104,7 @@ func TestEquatorGreenwichContains(t *testing.T) {
 	polygon, err := polygonFromFile("test/data/equator_greenwich.json")
 
 	if err != nil {
-		t.Errorf("error parsing polygon", err)
+		t.Errorf("error parsing polygon: %v", err)
 	}
 
 	if !polygon.Contains(point1) {

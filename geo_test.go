@@ -24,7 +24,7 @@ func TestPointsWithinRadiusIntegration(t *testing.T) {
 	s, sqlErr := HandleWithSQL()
 
 	if sqlErr != nil {
-		t.Error("ERROR: %s", sqlErr)
+		t.Errorf("ERROR: %s", sqlErr)
 	}
 
 	// SFO

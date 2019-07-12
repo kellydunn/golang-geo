@@ -33,7 +33,7 @@ func TestLat(t *testing.T) {
 	lat := p.Lat()
 
 	if lat != 40.5 {
-		t.Error("Expected a call to GetLat() to return the same lat value as was set before, but got %f instead", lat)
+		t.Errorf("Expected a call to GetLat() to return the same lat value as was set before, but got %f instead", lat)
 	}
 }
 
@@ -44,7 +44,7 @@ func TestLng(t *testing.T) {
 	lng := p.Lng()
 
 	if lng != 120.5 {
-		t.Error("Expected a call to GetLng() to return the same lat value as was set before, but got %f instead", lng)
+		t.Errorf("Expected a call to GetLng() to return the same lat value as was set before, but got %f instead", lng)
 	}
 }
 
