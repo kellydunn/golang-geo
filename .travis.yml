@@ -15,11 +15,9 @@ install:
 env:
   - DB=postgres GO_ENV=test
   - DB=mysql GO_ENV=test
-  - DB=mock GO_ENV=test
 
 before_script: 
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database points;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database points;'; fi"
-  - sh -c "if [ '$DB' != 'mock' ]; then goose -path db/$DB -env test up; fi"
 
 script: go test
