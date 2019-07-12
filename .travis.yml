@@ -8,7 +8,8 @@ before_install:
 install:
   - go get -u github.com/pressly/goose/cmd/goose
   - go get github.com/kylelemons/go-gypsy/yaml
-  - go get github.com/erikstmartin/go-testdb  
+  - go get github.com/erikstmartin/go-testdb
+  - go get github.com/lib/pq
 
 env:
   - DB=postgres GO_ENV=test
