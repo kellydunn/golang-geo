@@ -7,6 +7,7 @@ before_install:
 
 install:
   - go get -u github.com/pressly/goose/cmd/goose
+  - go get github.com/kylelemons/go-gypsy
   - go get github.com/erikstmartin/go-testdb  
 
 env:
