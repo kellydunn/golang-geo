@@ -10,6 +10,7 @@ install:
   - go get github.com/kylelemons/go-gypsy/yaml
   - go get github.com/erikstmartin/go-testdb
   - go get github.com/lib/pq
+  - go get github.com/ziutek/mymysql/godrv
 
 env:
   - DB=postgres GO_ENV=test
